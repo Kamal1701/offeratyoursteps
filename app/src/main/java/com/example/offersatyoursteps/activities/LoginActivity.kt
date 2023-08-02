@@ -8,13 +8,10 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.databinding.ActivityLoginBinding
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
 
@@ -22,7 +19,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var userEmail : TextView
     private lateinit var userPassword : TextView
-    private lateinit var loginProgressBar: ProgressBar
+    private lateinit var loginProBar: ProgressBar
     private lateinit var loginBtn: Button
 
     private lateinit var mAuth:FirebaseAuth
@@ -34,23 +31,25 @@ class LoginActivity : AppCompatActivity() {
 
         userEmail = loginBinding.loginUserEmailTxt
         userPassword = loginBinding.loginPasswordTxt
+        loginProBar = loginBinding.loginProgressBar
+        loginBtn = loginBinding.loginUserLoginBtn
         mAuth = FirebaseAuth.getInstance()
 
-        loginProgressBar.visibility = View.INVISIBLE
+        loginProBar.visibility = View.INVISIBLE
 
     }
 
-    fun onUserLoginBtnClicked(){
-        loginProgressBar.visibility = View.VISIBLE
+    fun onUserLoginBtnClicked(view:View){
+        loginProBar.visibility = View.VISIBLE
         loginBtn.visibility = View.INVISIBLE
 
         val email = userEmail.text.toString()
         val password = userPassword.text.toString()
 
         if(email.isEmpty() || password.isEmpty()){
-            Toast.makeText(this, "Please enter your credential", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Please enter your credential", Toast.LENGTH_LONG).show()
             loginBtn.visibility = View.VISIBLE
-            loginProgressBar.visibility = View.INVISIBLE
+            loginProBar.visibility = View.INVISIBLE
 
         } else{
             userSignIn(email, password)
@@ -61,13 +60,13 @@ class LoginActivity : AppCompatActivity() {
 
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task:Task<AuthResult> ->
             if(task.isSuccessful){
-                loginProgressBar.visibility = View.INVISIBLE
+                loginProBar.visibility = View.INVISIBLE
                 loginBtn.visibility = View.VISIBLE
                 updateUI()
             } else{
                 Toast.makeText(this, "Login failed, invalid credential", Toast.LENGTH_LONG).show()
 //                Toast.makeText(this, task.exception.toString(), Toast.LENGTH_LONG).show()
-                loginProgressBar.visibility = View.INVISIBLE
+                loginProBar.visibility = View.INVISIBLE
                 loginBtn.visibility = View.VISIBLE
             }
         }
