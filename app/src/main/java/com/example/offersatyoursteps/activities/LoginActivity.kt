@@ -75,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
 
 
     private fun updateUI(){
-        val homeActivityIntent = Intent(this, HomeActivity::class.java)
+        val homeActivityIntent = Intent(this, HomePageActivity::class.java)
         startActivity(homeActivityIntent)
         finish()
     }

@@ -9,4 +9,13 @@
 
     <style name="Theme.OffersAtYourSteps" parent="Base.Theme.OffersAtYourSteps" />
 
+    <style name="Theme.OffersAtYourSteps.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.OffersAtYourSteps.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.OffersAtYourSteps.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>

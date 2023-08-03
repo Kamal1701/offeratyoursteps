@@ -15,24 +15,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OffersAtYourSteps"
         tools:targetApi="31">
-
+        <activity
+            android:name=".activities.HomePageActivity"
+            android:exported="false"
+            android:label="@string/title_activity_home_page"
+            android:theme="@style/Theme.OffersAtYourSteps.NoActionBar" />
         <activity
             android:name=".activities.HomeActivity"
             android:exported="false" />
         <activity
             android:name=".activities.RegisterActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".activities.LoginActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
 
