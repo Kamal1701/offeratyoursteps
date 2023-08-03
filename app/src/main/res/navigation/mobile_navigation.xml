@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@id/nav_home_page">
 
     <fragment
         android:id="@+id/nav_home"
@@ -22,4 +22,24 @@
         android:name="com.example.offersatyoursteps.activities.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/nav_home_page"
+        android:name="com.example.offersatyoursteps.fragments.HomePageFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_homepage" />
+    <fragment
+        android:id="@+id/nav_offer_near_me"
+        android:name="com.example.offersatyoursteps.fragments.OfferNearMeFragment"
+        android:label="@string/menu_offer_near_me"
+        tools:layout="@layout/fragment_offer_near_me" />
+    <fragment
+        android:id="@+id/nav_all_offers"
+        android:name="com.example.offersatyoursteps.fragments.AllOffersFragment"
+        android:label="@string/menu_all_offers"
+        tools:layout="@layout/fragment_all_offers" />
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.example.offersatyoursteps.fragments.ProfileFragment"
+        android:label="@string/menu_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

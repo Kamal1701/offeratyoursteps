@@ -1,7 +1,9 @@
 package com.example.offersatyoursteps.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
@@ -12,8 +14,13 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.Navigation
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.databinding.ActivityHomePageBinding
+import com.example.offersatyoursteps.fragments.AllOffersFragment
+import com.example.offersatyoursteps.fragments.HomePageFragment
+import com.example.offersatyoursteps.fragments.OfferNearMeFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
@@ -36,10 +43,6 @@ class HomePageActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarHomePage.toolbar)
 
-        binding.appBarHomePage.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_home_page)
@@ -47,12 +50,30 @@ class HomePageActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+                R.id.nav_home_page, R.id.nav_offer_near_me, R.id.nav_all_offers, R.id.nav_profile
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         updateNavHeader()
+
+        navView.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.nav_home_page -> {
+                    val homeFrament = supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout1, HomePageFragment()).commit()
+                }
+                R.id.nav_offer_near_me -> {
+                    val homeFrament = supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout1, OfferNearMeFragment()).commit()
+                }
+                R.id.nav_all_offers -> {
+                    val homeFrament = supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout1, AllOffersFragment()).commit()
+                }
+            }
+            true
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -60,6 +81,21 @@ class HomePageActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.home_page, menu)
         return true
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when(item.itemId){
+            R.id.action_logout ->{
+                FirebaseAuth.getInstance().signOut()
+                val loginIntent = Intent(this, LoginActivity::class.java)
+                startActivity(loginIntent)
+                finish()
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_home_page)
