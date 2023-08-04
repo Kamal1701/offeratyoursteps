@@ -20,4 +20,26 @@
     <string name="menu_theme">Theme</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string-array name="CityList">
+        <item>Chennai</item>
+        <item>Tiruvallur</item>
+        <item>Chengalpattu</item>
+        <item>Kanchipuram</item>
+    </string-array>
+
+    <string-array name="DistrictList">
+        <item>Chennai</item>
+        <item>Tiruvallur</item>
+        <item>Chengalpattu</item>
+        <item>Kanchipuram</item>
+    </string-array>
+
+    <string-array name="StateList">
+        <item>Chennai</item>
+        <item>Tiruvallur</item>
+        <item>Chengalpattu</item>
+        <item>Kanchipuram</item>
+    </string-array>
 </resources>

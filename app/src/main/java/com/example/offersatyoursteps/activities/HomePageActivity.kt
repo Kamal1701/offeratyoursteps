@@ -57,23 +57,6 @@ class HomePageActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
         updateNavHeader()
 
-        navView.setNavigationItemSelectedListener {
-            when(it.itemId){
-                R.id.nav_home_page -> {
-                    val homeFrament = supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout1, HomePageFragment()).commit()
-                }
-                R.id.nav_offer_near_me -> {
-                    val homeFrament = supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout1, OfferNearMeFragment()).commit()
-                }
-                R.id.nav_all_offers -> {
-                    val homeFrament = supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout1, AllOffersFragment()).commit()
-                }
-            }
-            true
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
