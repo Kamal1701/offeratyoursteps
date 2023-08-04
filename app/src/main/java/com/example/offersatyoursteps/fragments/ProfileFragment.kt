@@ -41,9 +41,6 @@ class ProfileFragment : Fragment() {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        val list = resources.getStringArray(R.array.CityList)
-        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_list, list)
-        binding!!.profileCity.setAdapter(arrayAdapter)
 //        return inflater.inflate(R.layout.fragment_profile, container, false)
         return view
     }
@@ -66,5 +63,22 @@ class ProfileFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+    
+    override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    
+        val cityList = resources.getStringArray(R.array.CityList)
+        val cityAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_list, cityList)
+        binding!!.profileCity.setAdapter(cityAdapter)
+    
+        val districtList = resources.getStringArray(R.array.DistrictList)
+        val districtAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_list, districtList)
+        binding!!.profileDistrict.setAdapter(districtAdapter)
+    
+        val stateList = resources.getStringArray(R.array.StateList)
+        val stateAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_list, stateList)
+        binding!!.profileState.setAdapter(stateAdapter)
+        
     }
 }
