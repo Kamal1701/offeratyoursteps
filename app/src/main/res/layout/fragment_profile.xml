@@ -18,7 +18,7 @@
 
     <EditText
         android:id="@+id/profileAddress1"
-        android:layout_width="360dp"
+        android:layout_width="330dp"
         android:layout_height="44dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/register_edittext_sytle"
@@ -27,25 +27,26 @@
         android:hint="Door no, street"
         android:inputType="text"
         android:layout_marginTop="120dp"
-        android:layout_marginLeft="16dp"/>
+        android:layout_marginLeft="36dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/profileCityInputLayout"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="360dp"
+        android:layout_width="330dp"
         android:layout_height="54dp"
         android:layout_marginTop="180dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="36dp"
         android:layout_marginBottom="32dp">
 
         <AutoCompleteTextView
             android:id="@+id/profileCity"
-            android:layout_width="360dp"
+            android:layout_width="330dp"
             android:layout_height="54dp"
             android:layout_marginBottom="32dp"
             android:background="@drawable/register_edittext_sytle"
             android:ems="10"
             android:fontFamily="sans-serif"
+            android:textSize="18sp"
             android:hint=""
             android:inputType="text"
             android:text="Select city" />
@@ -54,7 +55,7 @@
 
     <EditText
         android:id="@+id/profileDistrict"
-        android:layout_width="360dp"
+        android:layout_width="330dp"
         android:layout_height="44dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/register_edittext_sytle"
@@ -63,11 +64,11 @@
         android:hint="District"
         android:inputType="text"
         android:layout_marginTop="260dp"
-        android:layout_marginLeft="16dp"/>
+        android:layout_marginLeft="36dp"/>
 
     <EditText
         android:id="@+id/profileState"
-        android:layout_width="360dp"
+        android:layout_width="330dp"
         android:layout_height="44dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/register_edittext_sytle"
@@ -76,11 +77,11 @@
         android:hint="State"
         android:inputType="text"
         android:layout_marginTop="320dp"
-        android:layout_marginLeft="16dp"/>
+        android:layout_marginLeft="36dp"/>
 
     <EditText
         android:id="@+id/profilePincode"
-        android:layout_width="360dp"
+        android:layout_width="330dp"
         android:layout_height="44dp"
         android:layout_marginBottom="48dp"
         android:background="@drawable/register_edittext_sytle"
@@ -89,7 +90,7 @@
         android:hint="Pincode"
         android:inputType="text"
         android:layout_marginTop="380dp"
-        android:layout_marginLeft="16dp"/>
+        android:layout_marginLeft="36dp"/>
 
     <Button
         android:id="@+id/updateProfileBtn"
@@ -101,7 +102,7 @@
         android:text="Update"
         android:textSize="18sp"
         android:layout_marginTop="480dp"
-        android:layout_marginLeft="90dp"/>
+        android:layout_marginLeft="100dp"/>
 
     <ProgressBar
         android:id="@+id/profileProgressBar"
@@ -109,7 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="480dp"
-        android:layout_marginLeft="160dp"/>
+        android:layout_marginLeft="170dp"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
