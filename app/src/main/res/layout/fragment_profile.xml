@@ -49,7 +49,7 @@
             android:textSize="18sp"
             android:hint=""
             android:inputType="text"
-            android:text="Select city" />
+            android:text="" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -118,6 +118,5 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="24dp" />
-
 
 </FrameLayout>

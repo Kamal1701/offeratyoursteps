@@ -24,22 +24,110 @@
 
     <string-array name="CityList">
         <item>Chennai</item>
-        <item>Tiruvallur</item>
-        <item>Chengalpattu</item>
-        <item>Kanchipuram</item>
+        <item>Coimbatore</item>
+        <item>Madurai</item>
+        <item>Tiruchirappalli</item>
+        <item>Salem</item>
+        <item>Ambattur</item>
+        <item>Tirunelveli</item>
+        <item>Tiruppur</item>
+        <item>Avadi</item>
+        <item>Tiruvottiyur</item>
+        <item>Thoothukkudi</item>
+        <item>Nagercoil</item>
+        <item>Thanjavur</item>
+        <item>Pallavaram</item>
+        <item>Dindigul</item>
+        <item>Vellore</item>
+        <item>Tambaram</item>
+        <item>Cuddalore</item>
+        <item>Kancheepuram</item>
+        <item>Alandur</item>
+        <item>Erode</item>
+        <item>Tiruvannamalai</item>
+        <item>Kumbakonam</item>
+        <item>Rajapalayam</item>
+        <item>Kurichi</item>
+        <item>Madavaram</item>
+        <item>Pudukkottai</item>
+        <item>Hosur</item>
+        <item>Ambur</item>
+        <item>Karaikkudi</item>
+        <item>Neyveli</item>
+        <item>Nagapattinam</item>
     </string-array>
 
     <string-array name="DistrictList">
         <item>Chennai</item>
-        <item>Tiruvallur</item>
-        <item>Chengalpattu</item>
-        <item>Kanchipuram</item>
+        <item>Coimbatore</item>
+        <item>Madurai</item>
+        <item>Tiruchirappalli</item>
+        <item>Salem</item>
+        <item>Chennai</item>
+        <item>Tirunelveli</item>
+        <item>Tiruppur</item>
+        <item>Chennai</item>
+        <item>Chennai</item>
+        <item>Thoothukkudi</item>
+        <item>Kanniyakumari</item>
+        <item>Thanjavur</item>
+        <item>Chennai</item>
+        <item>Dindigul</item>
+        <item>Vellore</item>
+        <item>Chennai</item>
+        <item>Cuddalore</item>
+        <item>Kancheepuram</item>
+        <item>Chennai</item>
+        <item>Erode</item>
+        <item>Tiruvannamalai</item>
+        <item>Thanjavur</item>
+        <item>Virudhunagar</item>
+        <item>Coimbatore</item>
+        <item>Chennai</item>
+        <item>Pudukkottai</item>
+        <item>Krishnagiri</item>
+        <item>Tirupattur</item>
+        <item>Sivagangai</item>
+        <item>Cuddalore</item>
+        <item>Nagapattinam</item>
     </string-array>
 
     <string-array name="StateList">
-        <item>Chennai</item>
-        <item>Tiruvallur</item>
-        <item>Chengalpattu</item>
-        <item>Kanchipuram</item>
+        <item>Andhra Pradesh</item>
+        <item>Arunachal Pradesh</item>
+        <item>Assam</item>
+        <item>Bihar</item>
+        <item>Chhattisgarh</item>
+        <item>Goa</item>
+        <item>Gujarat</item>
+        <item>Haryana</item>
+        <item>Himachal Pradesh</item>
+        <item>Jharkhand</item>
+        <item>Karnataka</item>
+        <item>Kerala</item>
+        <item>Madhya Pradesh</item>
+        <item>Maharashtra</item>
+        <item>Manipur</item>
+        <item>Meghalaya</item>
+        <item>Mizoram</item>
+        <item>Nagaland</item>
+        <item>Odisha</item>
+        <item>Punjab</item>
+        <item>Rajasthan</item>
+        <item>Sikkim</item>
+        <item>Tamil Nadu</item>
+        <item>Telangana</item>
+        <item>Tripura</item>
+        <item>Uttar Pradesh</item>
+        <item>Uttarakhand</item>
+        <item>West Bengal</item>
+        <item>Andaman and Nicobar Islands</item>
+        <item>Chandigarh</item>
+        <item>Dadra and Nagar Haveli and Daman and Diu</item>
+        <item>Jammu and Kashmir</item>
+        <item>Ladakh</item>
+        <item>Lakshadweep</item>
+        <item>Delhi</item>
+        <item>Puducherry</item>
     </string-array>
 </resources>

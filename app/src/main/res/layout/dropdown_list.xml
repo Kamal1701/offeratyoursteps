@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/itemsListText"
-        android:layout_width="360dp"
-        android:layout_height="44dp"
-        android:text="TextView"
- />
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/itemsListText"
+    android:layout_width="360dp"
+    android:layout_height="44dp"
+    android:text="TextView"
+    android:textSize="18sp"
+    android:fontFamily="sans-serif"/>

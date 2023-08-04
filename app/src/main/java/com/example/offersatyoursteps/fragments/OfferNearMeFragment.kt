@@ -5,7 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.offersatyoursteps.R
+import com.example.offersatyoursteps.activities.adapters.OfferAdapter
+import com.example.offersatyoursteps.activities.utilities.OfferConstants
+import com.example.offersatyoursteps.databinding.FragmentOfferNearMeBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +26,8 @@ class OfferNearMeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    
+    private lateinit var binding : FragmentOfferNearMeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +42,9 @@ class OfferNearMeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_offer_near_me, container, false)
+        binding = FragmentOfferNearMeBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
     }
 
     companion object {
@@ -56,5 +65,15 @@ class OfferNearMeFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+    
+    override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val offerList = OfferConstants.getOfferData()
+        val itemAdapter = OfferAdapter(this.requireContext(),offerList)
+        val offerRecycleView = binding.offerNearMeRecycleView
+        offerRecycleView.layoutManager = LinearLayoutManager(context)
+        offerRecycleView.adapter = itemAdapter
     }
 }
