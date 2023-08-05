@@ -1,14 +1,21 @@
 package com.example.offersatyoursteps.activities
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import com.example.offersatyoursteps.activities.utilities.SetTextColorSpan
 import com.example.offersatyoursteps.databinding.ActivityLoginBinding
+import com.example.offersatyoursteps.fragments.OfferNearMeFragment
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -36,6 +43,10 @@ class LoginActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
 
         loginProBar.visibility = View.INVISIBLE
+        
+        val registerBtn = loginBinding.loginRegisterBtn
+        val colorSpan = SetTextColorSpan(registerBtn.text.toString())
+        registerBtn.text = colorSpan.setTextColorSpan()
 
     }
 
@@ -71,6 +82,12 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+    }
+    
+    fun onRegisterBtnClicked(view : View){
+        val registerIntent = Intent(this, RegisterActivity::class.java)
+        startActivity(registerIntent)
+        finish()
     }
 
 

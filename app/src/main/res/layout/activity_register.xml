@@ -4,88 +4,116 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/backgroundcolor"
     tools:context=".activities.RegisterActivity">
+
 
     <EditText
         android:id="@+id/regUserNameTxt"
         android:layout_width="256dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/register_edittext_sytle"
         android:ems="10"
         android:fontFamily="sans-serif"
         android:hint="username"
         android:inputType="text"
-        android:background="@drawable/register_edittext_sytle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias=".5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <AutoCompleteTextView
+        android:id="@+id/registerCity"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/register_edittext_sytle"
+        android:ems="10"
+        android:fontFamily="sans-serif"
+        android:hint="city"
+        android:inputType="text"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/regPasswordTxt" />
+
+    <AutoCompleteTextView
+        android:id="@+id/registerState"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/register_edittext_sytle"
+        android:ems="10"
+        android:fontFamily="sans-serif"
+        android:hint="state"
+        android:inputType="text"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerCity" />
 
     <EditText
         android:id="@+id/regUserEmailTxt"
         android:layout_width="256dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:background="@drawable/register_edittext_sytle"
         android:ems="10"
         android:fontFamily="sans-serif"
         android:hint="email address"
         android:inputType="text"
-        android:background="@drawable/register_edittext_sytle"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/regUserNameTxt" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
 
     <EditText
         android:id="@+id/regPasswordTxt"
         android:layout_width="256dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:background="@drawable/register_edittext_sytle"
         android:ems="10"
         android:fontFamily="sans-serif"
         android:hint="password"
         android:inputType="textPassword"
-        android:background="@drawable/register_edittext_sytle"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
+        app:layout_constraintTop_toBottomOf="@+id/regUserEmailTxt" />
 
     <Button
         android:id="@+id/regUserRegisterBtn"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="sans-serif"
         android:onClick="onUserRegisterBtnClicked"
         android:text="Register"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias=".5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/regPasswordTxt" />
+        app:layout_constraintTop_toBottomOf="@+id/registerState" />
 
-    <TextView
-        android:id="@+id/navHeaderEmailTxt"
+    <Button
+        android:id="@+id/regLoginBtn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="sans-serif"
-        android:text="Login Here"
-        android:textSize="16sp"
+        android:layout_height="40dp"
+        android:onClick="onRegLoginBtnClicked"
+        android:text="Alreay have a Account? Sign In"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        app:backgroundTint="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias=".5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/regUserRegisterBtn"
-        app:layout_constraintVertical_bias="0.03" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <ProgressBar
         android:id="@+id/regProgressBar"

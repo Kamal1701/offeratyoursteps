@@ -1,13 +1,21 @@
 package com.example.offersatyoursteps.activities
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import com.example.offersatyoursteps.R
+import com.example.offersatyoursteps.activities.utilities.SetTextColorSpan
 import com.example.offersatyoursteps.databinding.ActivityRegisterBinding
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -23,6 +31,8 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var userPassword : TextView
     private lateinit var progressBar: ProgressBar
     private lateinit var registerBtn: Button
+    private lateinit var autoCompleteCity : AutoCompleteTextView
+    private lateinit var autoCompleteState : AutoCompleteTextView
 
     private lateinit var mAuth: FirebaseAuth
 
@@ -37,11 +47,23 @@ class RegisterActivity : AppCompatActivity() {
         userPassword = binding.regPasswordTxt
         registerBtn = binding.regUserRegisterBtn
         progressBar = binding.regProgressBar
+        autoCompleteCity = binding.registerCity
+        
+        val cityList = resources.getStringArray(R.array.CityList)
+        val cityAdapter = ArrayAdapter(this, R.layout.dropdown_list, cityList)
+        binding!!.registerCity.setAdapter(cityAdapter)
+    
+        val stateList = resources.getStringArray(R.array.StateList)
+        val stateAdapter = ArrayAdapter(this, R.layout.dropdown_list, stateList)
+        binding!!.registerState.setAdapter(stateAdapter)
 
         progressBar.visibility = View.INVISIBLE
 
         mAuth = FirebaseAuth.getInstance()
-
+        
+        val loginBtn = binding.regLoginBtn
+        val colorSpan = SetTextColorSpan(loginBtn.text.toString())
+        loginBtn.text = colorSpan.setTextColorSpan()
     }
 
     fun onUserRegisterBtnClicked(view : View){
@@ -85,6 +107,12 @@ class RegisterActivity : AppCompatActivity() {
     private fun updateUI(){
         val homeActivityIntent = Intent(this, HomePageActivity::class.java)
         startActivity(homeActivityIntent)
+        finish()
+    }
+    
+    fun onRegLoginBtnClicked(view : View){
+        val loginIntent = Intent(this, LoginActivity::class.java)
+        startActivity(loginIntent)
         finish()
     }
 }

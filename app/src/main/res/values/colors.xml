@@ -5,4 +5,5 @@
     <color name="appColor">#FF32A8A0</color>
     <color name="appColorVariant">#FF45CFD1</color>
     <color name="edittextcolor">#6032A8A0</color>
+    <color name="backgroundcolor">#2032A8A0</color>
 </resources>

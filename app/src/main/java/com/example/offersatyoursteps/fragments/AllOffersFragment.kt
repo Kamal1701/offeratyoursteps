@@ -5,7 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.offersatyoursteps.R
+import com.example.offersatyoursteps.activities.adapters.OfferAdapter
+import com.example.offersatyoursteps.activities.utilities.OfferConstants
+import com.example.offersatyoursteps.databinding.FragmentAllOffersBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +26,7 @@ class AllOffersFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var binding : FragmentAllOffersBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +40,12 @@ class AllOffersFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        
+        binding = FragmentAllOffersBinding.inflate(inflater, container, false)
+        val view = binding.root
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_all_offers, container, false)
+        return view
+//        return inflater.inflate(R.layout.fragment_all_offers, container, false)
     }
 
     companion object {
@@ -56,5 +66,15 @@ class AllOffersFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+    
+    override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    
+        val offerList = OfferConstants.getOfferData()
+        val itemAdapter = OfferAdapter(this.requireContext(),offerList)
+        val offerRecycleView = binding.offerAllRecycleView
+        offerRecycleView.layoutManager = LinearLayoutManager(context)
+        offerRecycleView.adapter = itemAdapter
     }
 }

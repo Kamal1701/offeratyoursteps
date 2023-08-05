@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListAdapter
+import android.widget.ProgressBar
 import androidx.navigation.fragment.findNavController
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.databinding.FragmentProfileBinding
@@ -26,10 +27,11 @@ class ProfileFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var binding: FragmentProfileBinding
+    
+    private lateinit var profileProgress: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -40,6 +42,9 @@ class ProfileFragment : Fragment() {
 
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         val view = binding.root
+    
+        profileProgress = binding.profileProgressBar
+        profileProgress.visibility = View.INVISIBLE
 
 //        return inflater.inflate(R.layout.fragment_profile, container, false)
         return view
@@ -67,7 +72,7 @@ class ProfileFragment : Fragment() {
     
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-    
+
         val cityList = resources.getStringArray(R.array.CityList)
         val cityAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_list, cityList)
         binding!!.profileCity.setAdapter(cityAdapter)
@@ -81,4 +86,6 @@ class ProfileFragment : Fragment() {
         binding!!.profileState.setAdapter(stateAdapter)
         
     }
+    
+    
 }
