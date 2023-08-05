@@ -7,12 +7,27 @@
     android:background="@color/backgroundcolor"
     tools:context=".activities.RegisterActivity">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/offers_at_your_step"            />
+    </RelativeLayout>
 
     <EditText
         android:id="@+id/regUserNameTxt"
         android:layout_width="256dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="200dp"
         android:background="@drawable/register_edittext_sytle"
         android:ems="10"
         android:fontFamily="sans-serif"
