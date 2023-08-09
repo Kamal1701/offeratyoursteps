@@ -13,7 +13,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import com.example.offersatyoursteps.activities.utilities.SetTextColorSpan
+import com.example.offersatyoursteps.utilities.SetTextColorSpan
 import com.example.offersatyoursteps.databinding.ActivityLoginBinding
 import com.example.offersatyoursteps.fragments.OfferNearMeFragment
 import com.google.android.gms.tasks.Task
@@ -85,8 +85,9 @@ class LoginActivity : AppCompatActivity() {
     }
     
     fun onRegisterBtnClicked(view : View){
-        val registerIntent = Intent(this, RegisterActivity::class.java)
-        startActivity(registerIntent)
+//        val registerIntent = Intent(this, RegisterActivity::class.java)
+        val registrationIntent = Intent(this, RegistrationActivity::class.java)
+        startActivity(registrationIntent)
         finish()
     }
 

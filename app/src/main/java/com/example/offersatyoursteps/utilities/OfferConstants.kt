@@ -1,6 +1,6 @@
-package com.example.offersatyoursteps.activities.utilities
+package com.example.offersatyoursteps.utilities
 
-import com.example.offersatyoursteps.activities.models.OfferDetails
+import com.example.offersatyoursteps.models.OfferDetails
 
 object OfferConstants {
 

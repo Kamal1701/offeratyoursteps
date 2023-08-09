@@ -1,4 +1,4 @@
-package com.example.offersatyoursteps.activities.utilities
+package com.example.offersatyoursteps.utilities
 
 import android.graphics.Color
 import android.text.Spannable

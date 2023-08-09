@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/backgroundcolor"
+    tools:context=".fragments.MerchantFragment">
+
+
+    <EditText
+        android:id="@+id/regMercUserNameTxt"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/register_edittext_sytle"
+        android:ems="10"
+        android:fontFamily="sans-serif"
+        android:hint="username"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <EditText
+        android:id="@+id/regMercUserEmailTxt"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/register_edittext_sytle"
+        android:ems="10"
+        android:fontFamily="sans-serif"
+        android:hint="email address"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/regMercUserNameTxt" />
+
+    <EditText
+        android:id="@+id/regMercPasswordTxt"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/register_edittext_sytle"
+        android:ems="10"
+        android:fontFamily="sans-serif"
+        android:hint="password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/regMercUserEmailTxt" />
+
+
+    <EditText
+        android:id="@+id/regMercShopNameTxt"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/register_edittext_sytle"
+        android:ems="10"
+        android:fontFamily="sans-serif"
+        android:hint="shop name"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/regMercPasswordTxt" />
+
+    <AutoCompleteTextView
+        android:id="@+id/registerMercCity"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/register_edittext_sytle"
+        android:ems="10"
+        android:fontFamily="sans-serif"
+        android:hint="city"
+        android:inputType="text"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/regMercShopNameTxt" />
+
+    <AutoCompleteTextView
+        android:id="@+id/registerMercState"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/register_edittext_sytle"
+        android:ems="10"
+        android:fontFamily="sans-serif"
+        android:hint="state"
+        android:inputType="text"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerMercCity" />
+
+
+    <Button
+        android:id="@+id/regMercUserRegisterBtn"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="sans-serif"
+        android:onClick="onMercUserRegisterBtnClicked"
+        android:text="Register"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerMercState" />
+
+    <Button
+        android:id="@+id/regMercLoginBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="Alreay have a Account? Sign In"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        app:backgroundTint="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/regMercUserRegisterBtn"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ProgressBar
+        android:id="@+id/regMercProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/regMercUserRegisterBtn"
+        app:layout_constraintEnd_toEndOf="@+id/regMercUserRegisterBtn"
+        app:layout_constraintStart_toStartOf="@+id/regMercUserRegisterBtn"
+        app:layout_constraintTop_toTopOf="@+id/regMercUserRegisterBtn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

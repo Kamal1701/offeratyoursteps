@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.Adapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.offersatyoursteps.R
-import com.example.offersatyoursteps.activities.adapters.OfferAdapter
-import com.example.offersatyoursteps.activities.utilities.OfferConstants
+import com.example.offersatyoursteps.adapters.OfferAdapter
+import com.example.offersatyoursteps.utilities.OfferConstants
 import com.example.offersatyoursteps.databinding.FragmentOfferNearMeBinding
 
 // TODO: Rename parameter arguments, choose names that match

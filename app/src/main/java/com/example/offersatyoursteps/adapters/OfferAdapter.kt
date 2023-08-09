@@ -1,10 +1,10 @@
-package com.example.offersatyoursteps.activities.adapters
+package com.example.offersatyoursteps.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.offersatyoursteps.activities.models.OfferDetails
+import com.example.offersatyoursteps.models.OfferDetails
 import com.example.offersatyoursteps.databinding.OfferListViewBinding
 
 class OfferAdapter(val context:Context, val offerDetails : ArrayList<OfferDetails>):RecyclerView.Adapter<OfferAdapter.ViewHolder>() {
@@ -26,12 +26,12 @@ class OfferAdapter(val context:Context, val offerDetails : ArrayList<OfferDetail
         }
     }
     
-    override fun onCreateViewHolder(parent : ViewGroup, viewType : Int) : OfferAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent : ViewGroup, viewType : Int) : ViewHolder {
         val binding = OfferListViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
     
-    override fun onBindViewHolder(holder : OfferAdapter.ViewHolder, position : Int) {
+    override fun onBindViewHolder(holder : ViewHolder, position : Int) {
         holder?.bindingOffers(context,offerDetails[position])
     }
     
