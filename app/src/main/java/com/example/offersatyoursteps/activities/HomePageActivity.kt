@@ -47,9 +47,9 @@ class HomePageActivity : AppCompatActivity() {
         currentUser = mAuth.currentUser!!
         
         userModel = intent.getParcelableExtra<UserModel>(USER_INFO)!!
-        Log.d("DEBUG", "HomePageActivity")
-        Log.d("DEBUG", userModel.cName.toString())
-        Log.d("DEBUG", userModel.cEmail.toString())
+//        Log.d("DEBUG", "HomePageActivity")
+//        Log.d("DEBUG", userModel.cName.toString())
+//        Log.d("DEBUG", userModel.cEmail.toString())
 
         setSupportActionBar(binding.appBarHomePage.toolbar)
 
@@ -100,9 +100,9 @@ class HomePageActivity : AppCompatActivity() {
         val headerView = navView.getHeaderView(0)
         val navUserName = headerView.findViewById<TextView>(R.id.navHeaderUsernameTxt)
         val navUserEmail = headerView.findViewById<TextView>(R.id.navHeaderEmailTxt)
-
-        
-        navUserEmail.text = userModel.cEmail
+    
         navUserName.text = userModel.cName
+        navUserEmail.text = userModel.cEmail
+        
     }
 }
