@@ -60,6 +60,11 @@ class RegisterActivity : AppCompatActivity() {
         progressBar.visibility = View.INVISIBLE
 
         mAuth = FirebaseAuth.getInstance()
+        if(mAuth.currentUser==null){
+            Toast.makeText(this,"mAuth user is null", Toast.LENGTH_LONG).show()
+        }else{
+            Toast.makeText(this,"mAuth user is not null", Toast.LENGTH_LONG).show()
+        }
         
         val loginBtn = binding.regLoginBtn
         val colorSpan = SetTextColorSpan(loginBtn.text.toString())

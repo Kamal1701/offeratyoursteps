@@ -2,6 +2,7 @@ package com.example.offersatyoursteps.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
@@ -21,6 +22,8 @@ import com.example.offersatyoursteps.databinding.ActivityHomePageBinding
 import com.example.offersatyoursteps.fragments.AllOffersFragment
 import com.example.offersatyoursteps.fragments.HomePageFragment
 import com.example.offersatyoursteps.fragments.OfferNearMeFragment
+import com.example.offersatyoursteps.models.UserModel
+import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
@@ -31,6 +34,8 @@ class HomePageActivity : AppCompatActivity() {
 
     private lateinit var mAuth : FirebaseAuth
     private lateinit var currentUser : FirebaseUser
+    
+    private lateinit var userModel : UserModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +45,11 @@ class HomePageActivity : AppCompatActivity() {
 
         mAuth = FirebaseAuth.getInstance()
         currentUser = mAuth.currentUser!!
+        
+        userModel = intent.getParcelableExtra<UserModel>(USER_INFO)!!
+        Log.d("DEBUG", "HomePageActivity")
+        Log.d("DEBUG", userModel.cName.toString())
+        Log.d("DEBUG", userModel.cEmail.toString())
 
         setSupportActionBar(binding.appBarHomePage.toolbar)
 
@@ -91,7 +101,8 @@ class HomePageActivity : AppCompatActivity() {
         val navUserName = headerView.findViewById<TextView>(R.id.navHeaderUsernameTxt)
         val navUserEmail = headerView.findViewById<TextView>(R.id.navHeaderEmailTxt)
 
-        navUserEmail.text = currentUser.email
-        navUserName.text = currentUser.displayName
+        
+        navUserEmail.text = userModel.cEmail
+        navUserName.text = userModel.cName
     }
 }
