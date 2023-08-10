@@ -47,9 +47,9 @@ class HomePageActivity : AppCompatActivity() {
         currentUser = mAuth.currentUser!!
         
         userModel = intent.getParcelableExtra<UserModel>(USER_INFO)!!
-//        Log.d("DEBUG", "HomePageActivity")
-//        Log.d("DEBUG", userModel.cName.toString())
-//        Log.d("DEBUG", userModel.cEmail.toString())
+        Log.d("DEBUG", "HomePageActivity")
+        Log.d("DEBUG", userModel.cName.toString())
+        Log.d("DEBUG", userModel.cEmail.toString())
 
         setSupportActionBar(binding.appBarHomePage.toolbar)
 

@@ -19,7 +19,9 @@ import com.example.offersatyoursteps.activities.HomePageActivity
 import com.example.offersatyoursteps.activities.LoginActivity
 import com.example.offersatyoursteps.databinding.FragmentCustomerBinding
 import com.example.offersatyoursteps.models.UserModel
+import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.SetTextColorSpan
+import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -37,10 +39,12 @@ class CustomerFragment : Fragment() {
     private lateinit var custState : AutoCompleteTextView
     private lateinit var progressBar : ProgressBar
     private lateinit var registerBtn : Button
-    private lateinit var customerData : UserModel
+//    private lateinit var customerData : UserModel
     
     private lateinit var mAuth : FirebaseAuth
-    private lateinit var fStore : FirebaseFirestore
+//    private lateinit var fStore : FirebaseFirestore
+    
+    private var userModel = UserModel("", "", "", "", "", "")
     
     
     override fun onCreateView(
@@ -62,13 +66,13 @@ class CustomerFragment : Fragment() {
         progressBar.visibility = View.INVISIBLE
         
         mAuth = FirebaseAuth.getInstance()
-        if(mAuth.currentUser==null){
-            Toast.makeText(activity,"mAuth user is null", Toast.LENGTH_LONG).show()
-        }else{
-            Toast.makeText(activity,"mAuth user is not null", Toast.LENGTH_LONG).show()
-        }
-        
-        fStore = FirebaseFirestore.getInstance()
+//        if(mAuth.currentUser==null){
+//            Toast.makeText(activity,"mAuth user is null", Toast.LENGTH_LONG).show()
+//        }else{
+//            Toast.makeText(activity,"mAuth user is not null", Toast.LENGTH_LONG).show()
+//        }
+
+//        fStore = FirebaseFirestore.getInstance()
         
         return view
     }
@@ -87,7 +91,6 @@ class CustomerFragment : Fragment() {
         val backToLogin = binding.regCustLoginBtn
         val colorSpan = SetTextColorSpan(backToLogin.text.toString())
         backToLogin.text = colorSpan.setTextColorSpan()
-        
 
 //        val backToLogin = binding.regCustLoginBtn
         backToLogin.setOnClickListener {
@@ -96,71 +99,27 @@ class CustomerFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
         
-  
-        
-        
         registerBtn.setOnClickListener {
-    
+
 //            if(mAuth.currentUser!=null){
-                var cName = custName.text.toString()
-                val cEmail = custEmail.text.toString()
-                val cPassword = custPassword.text.toString()
-                val cCity = custCity.text.toString()
-                val cState = custState.text.toString()
+            var cName = custName.text.toString()
+            val cEmail = custEmail.text.toString()
+            val cPassword = custPassword.text.toString()
+            val cCity = custCity.text.toString()
+            val cState = custState.text.toString()
 
 //            mAuth = FirebaseAuth.getInstance()
 //            fStore = FirebaseFirestore.getInstance()
-    
-                Log.d("DEBUG", cName)
-                Log.d("DEBUG", cEmail)
-    
-                Log.d("DEBUG", cCity)
-                Log.d("DEBUG", cState)
-
-//            if (TextUtils.isEmpty(cName)) {
-//                Toast.makeText(
-//                    activity,
-//                    "Please fill user name field",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
-//
-//            if (TextUtils.isEmpty(cEmail)) {
-//                Toast.makeText(
-//                    activity,
-//                    "Please fill email field",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
-//
-//            if (TextUtils.isEmpty(cPassword)) {
-//                Toast.makeText(
-//                    activity,
-//                    "Please fill password field",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
-//
-//            if (TextUtils.isEmpty(cCity)) {
-//                Toast.makeText(
-//                    activity,
-//                    "Please fill city field",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
-//
-//            if (TextUtils.isEmpty(cState)) {
-//                Toast.makeText(
-//                    activity,
-//                    "Please fill state field",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
-//
-                registerBtn.visibility = View.INVISIBLE
-                progressBar.visibility = View.VISIBLE
+            
+            registerBtn.visibility = View.INVISIBLE
+            progressBar.visibility = View.VISIBLE
 //            customerData = UserModel(cName, cEmail, cPassword, "NA", "N", cCity, cState)
 //            val customerMap = customerData.customerJson()
+            
+            if (cName.isNotEmpty() && cEmail.isNotEmpty() && cPassword.isNotEmpty() &&
+                cCity.isNotEmpty() && cState.isNotEmpty()
+            ) {
+                
                 val customerMap = HashMap<String, String>()
                 customerMap["User_Name"] = cName
                 customerMap["User_EmailId"] = cEmail
@@ -169,66 +128,51 @@ class CustomerFragment : Fragment() {
                 customerMap["IsMerchant"] = "N"
                 customerMap["City"] = cCity
                 customerMap["State"] = cState
-    
-
-    
-                if (cName.isNotEmpty() && cEmail.isNotEmpty() && cPassword.isNotEmpty() &&
-                    cCity.isNotEmpty() && cState.isNotEmpty()
-                ) {
-                    mAuth.createUserWithEmailAndPassword(cEmail, cPassword)
-                        .addOnCompleteListener { task : Task<AuthResult> ->
-                            if (task.isSuccessful) {
-                                Log.d("ERROR", mAuth.currentUser!!.uid)
-                                val userId = mAuth.currentUser!!.uid
-                                Log.d("DEBUG", userId)
-                                fStore.collection("CustomerInfo").document(userId).set(customerMap)
-                                    .addOnCompleteListener {
-                                        Toast.makeText(
-                                            activity,
-                                            "User registered successfully",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-//                                    custName.text = ""
-//                                    custEmail.text = ""
-//                                    custPassword.text = ""
-//                                    custCity.text.clear()
-//                                    custState.text.clear()
+                
+                userModel.cName = cName
+                userModel.cEmail = cEmail
+                userModel.cShopName = "NA"
+                userModel.isMerchant = "N"
+                userModel.cCity = cCity
+                userModel.cState = cState
+                
+                mAuth.createUserWithEmailAndPassword(cEmail, cPassword)
+                    .addOnCompleteListener { task : Task<AuthResult> ->
+                        if (task.isSuccessful) {
+//                            Log.d("ERROR", mAuth.currentUser!!.uid)
+                            val userId = mAuth.currentUser!!.uid
+                            Log.d("DEBUG", userId)
+                            DatabaseServices.setCustomerInfoRecord(
+                                "CustomerInfo",
+                                userId,
+                                customerMap
+                            ) { isSetComplete ->
+                                if (isSetComplete) {
+                                    Toast.makeText(
+                                        activity,
+                                        "User registered successfully",
+                                        Toast.LENGTH_LONG
+                                    ).show()
                                     loadHomePage()
-//                                        getDatafromFirestore()
-                            
-                                    }
-                                    .addOnFailureListener {
-                                        Toast.makeText(
-                                            activity,
-                                            "Unable to register, please try again",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                        Log.d("EXEC", it.localizedMessage)
-                                    }
+                                } else {
+                                    Toast.makeText(
+                                        activity,
+                                        "Unable to register, please try again",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    
+                                }
                             }
-//                            else {
-//                                Toast.makeText(activity, task.exception.toString(), Toast.LENGTH_SHORT)
-//                                    .show()
-//                                Log.d("EXEC", task.exception.toString())
-////                                Log.d("EXEC", task.result.toString())
-//                                registerBtn.visibility = View.VISIBLE
-//                                progressBar.visibility = View.INVISIBLE
-//                            }
                         }
-                        .addOnFailureListener {
-                            Toast.makeText(activity, it.localizedMessage, Toast.LENGTH_SHORT).show()
-                            Log.d("EXEC", it.localizedMessage)
-                            registerBtn.visibility = View.VISIBLE
-                            progressBar.visibility = View.INVISIBLE
-                        }
-                } else {
-                    Toast.makeText(activity, "Please fill all the fields", Toast.LENGTH_SHORT)
-                        .show()
-    
-                    registerBtn.visibility = View.VISIBLE
-                    progressBar.visibility = View.INVISIBLE
-                }
-        
+                    }
+            } else {
+                Toast.makeText(activity, "Please fill all the fields", Toast.LENGTH_SHORT)
+                    .show()
+                
+                registerBtn.visibility = View.VISIBLE
+                progressBar.visibility = View.INVISIBLE
+            }
+
 //            } else{
 //                Toast.makeText(activity,"Current user is null", Toast.LENGTH_LONG).show()
 //            }
@@ -237,24 +181,25 @@ class CustomerFragment : Fragment() {
     
     private fun loadHomePage() {
         val homeActivityIntent = Intent(activity, HomePageActivity::class.java)
+        homeActivityIntent.putExtra(USER_INFO, userModel)
         startActivity(homeActivityIntent)
 //        finish()
 //        activity?.supportFragmentManager?.popBackStack()
     }
     
-    private fun getDatafromFirestore(){
-        val userId = mAuth.currentUser!!.uid
-        fStore.collection("CustomerInfo").document(userId)
-            .get().addOnSuccessListener { customerDocument ->
-                if(customerDocument != null){
-                    val name = customerDocument.get("User_Name")
-                    Log.d("DEBUG", name.toString())
-                } else{
-                    Log.d("DEBUG", "No such document")
-                }
-            }
-            .addOnFailureListener {
-                Log.d("DEBUG", it.localizedMessage)
-            }
-    }
+//    private fun getDatafromFirestore() {
+//        val userId = mAuth.currentUser!!.uid
+//        fStore.collection("CustomerInfo").document(userId)
+//            .get().addOnSuccessListener { customerDocument ->
+//                if (customerDocument != null) {
+//                    val name = customerDocument.get("User_Name")
+//                    Log.d("DEBUG", name.toString())
+//                } else {
+//                    Log.d("DEBUG", "No such document")
+//                }
+//            }
+//            .addOnFailureListener {
+//                Log.d("DEBUG", it.localizedMessage)
+//            }
+//    }
 }

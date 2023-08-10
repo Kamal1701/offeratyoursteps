@@ -19,6 +19,7 @@ import com.example.offersatyoursteps.utilities.SetTextColorSpan
 import com.example.offersatyoursteps.databinding.ActivityLoginBinding
 import com.example.offersatyoursteps.fragments.OfferNearMeFragment
 import com.example.offersatyoursteps.models.UserModel
+import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -65,7 +66,7 @@ class LoginActivity : AppCompatActivity() {
         loginProBar = loginBinding.loginProgressBar
         loginBtn = loginBinding.loginUserLoginBtn
         mAuth = FirebaseAuth.getInstance()
-        fStore = FirebaseFirestore.getInstance()
+//        fStore = FirebaseFirestore.getInstance()
         
         loginProBar.visibility = View.INVISIBLE
         
@@ -107,8 +108,18 @@ class LoginActivity : AppCompatActivity() {
                     loginProBar.visibility = View.INVISIBLE
                     loginBtn.visibility = View.VISIBLE
                     
-                    getDatafromFirestore { returnSuccess ->
-                        if (returnSuccess) {
+//                    getDatafromFirestore { dbSuccess ->
+//                        if (dbSuccess) {
+//                            loadHomePage()
+//                        }
+//                    }
+                    
+                    val userId = mAuth.currentUser!!.uid
+                    DatabaseServices.getCustomerInfoRecord("CustomerInfo", userId, userModel){dbSuccess ->
+//                        Log.d("DEBUG", "LoginActivity")
+//                        Log.d("DEBUG", userModel.cName.toString())
+//                        Log.d("DEBUG", userModel.cEmail.toString())
+                        if(dbSuccess){
                             loadHomePage()
                         }
                     }
@@ -141,31 +152,31 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
     
-    private fun getDatafromFirestore(complete : (Boolean) -> Unit) {
-        val userId = mAuth.currentUser!!.uid
-        fStore.collection("CustomerInfo").document(userId)
-            .get().addOnSuccessListener { customerDocument ->
-                if (customerDocument != null) {
-//                    val name = customerDocument.get("User_Name")
-                    userModel.cName = customerDocument.get("User_Name").toString()
-                    userModel.cEmail = customerDocument.get("User_EmailId").toString()
-                    userModel.isMerchant = customerDocument.get("IsMerchant").toString()
-                    userModel.cCity = customerDocument.get("City").toString()
-                    userModel.cState = customerDocument.get("State").toString()
-//                    Log.d("DEBUG", name.toString())
-//                    Log.d("DEBUG", customerDocument.get("User_EmailId").toString())
-//                    Log.d("DEBUG", customerDocument.get("IsMerchant").toString())
-                    complete(true)
-                } else {
-                    Log.d("DEBUG", "No such document")
-                    complete(true)
-                }
-            }
-            .addOnFailureListener {
-                Log.d("DEBUG", it.localizedMessage)
-                complete(false)
-            }
-    }
+//    private fun getDatafromFirestore(complete : (Boolean) -> Unit) {
+//        val userId = mAuth.currentUser!!.uid
+//        fStore.collection("CustomerInfo").document(userId)
+//            .get().addOnSuccessListener { customerDocument ->
+//                if (customerDocument != null) {
+////                    val name = customerDocument.get("User_Name")
+//                    userModel.cName = customerDocument.get("User_Name").toString()
+//                    userModel.cEmail = customerDocument.get("User_EmailId").toString()
+//                    userModel.isMerchant = customerDocument.get("IsMerchant").toString()
+//                    userModel.cCity = customerDocument.get("City").toString()
+//                    userModel.cState = customerDocument.get("State").toString()
+////                    Log.d("DEBUG", name.toString())
+////                    Log.d("DEBUG", customerDocument.get("User_EmailId").toString())
+////                    Log.d("DEBUG", customerDocument.get("IsMerchant").toString())
+//                    complete(true)
+//                } else {
+//                    Log.d("DEBUG", "No such document")
+//                    complete(true)
+//                }
+//            }
+//            .addOnFailureListener {
+//                Log.d("DEBUG", it.localizedMessage)
+//                complete(false)
+//            }
+//    }
 
 //    override fun onStart() {
 //        super.onStart()
