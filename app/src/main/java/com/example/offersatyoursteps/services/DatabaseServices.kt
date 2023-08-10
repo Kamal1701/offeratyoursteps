@@ -37,7 +37,7 @@ object DatabaseServices {
     fun setCustomerInfoRecord(collectPath:String, userId:String, userMap : HashMap<String, String>,complete : (Boolean) -> Unit){
         fStore = FirebaseFirestore.getInstance()
     
-        fStore.collection("CustomerInfo").document(userId).set(userMap)
+        fStore.collection(collectPath).document(userId).set(userMap)
             .addOnSuccessListener {
                 complete(true)
             }
