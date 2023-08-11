@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:background="@color/backgroundcolor"
         android:fitsSystemWindows="true"
-        tools:context=".fragments.CustomerFragment">
+        tools:context=".fragments.CustomerRegisterFragment">
 
         <EditText
             android:id="@+id/regCustUserNameTxt"

@@ -11,6 +11,8 @@ import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.adapters.OfferAdapter
 import com.example.offersatyoursteps.utilities.OfferConstants
 import com.example.offersatyoursteps.databinding.FragmentAllOffersBinding
+import com.example.offersatyoursteps.models.UserModel
+import com.example.offersatyoursteps.utilities.USER_INFO
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,15 +26,15 @@ private const val ARG_PARAM2 = "param2"
  */
 class AllOffersFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    
     private lateinit var binding : FragmentAllOffersBinding
+    
+    private var userModel = UserModel("", "", "", "", "", "")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            userModel = it?.getParcelable<UserModel>(USER_INFO)!!
         }
     }
 
@@ -59,11 +61,10 @@ class AllOffersFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(userModel : UserModel) =
             AllOffersFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putParcelable(USER_INFO,userModel)
                 }
             }
     }

@@ -16,7 +16,7 @@ import android.widget.Toast
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.activities.HomePageActivity
 import com.example.offersatyoursteps.activities.LoginActivity
-import com.example.offersatyoursteps.databinding.FragmentMerchantBinding
+import com.example.offersatyoursteps.databinding.FragmentCustomerRegisterBinding
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.SetTextColorSpan
@@ -25,44 +25,51 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 
-class MerchantFragment : Fragment() {
+
+class CustomerRegisterFragment : Fragment() {
     
-    private lateinit var binding: FragmentMerchantBinding
-    private lateinit var merchantName : TextView
-    private lateinit var merchantEmail : TextView
-    private lateinit var merchantPassword : TextView
-    private lateinit var merchantShopName : TextView
-    private lateinit var merchantCity : AutoCompleteTextView
-    private lateinit var merchantDistrict : AutoCompleteTextView
-    private lateinit var merchantState : AutoCompleteTextView
-    private lateinit var progressBar: ProgressBar
-    private lateinit var registerBtn: Button
+    private lateinit var binding : FragmentCustomerRegisterBinding
+    private lateinit var custName : TextView
+    private lateinit var custEmail : TextView
+    private lateinit var custPassword : TextView
+    private lateinit var custCity : AutoCompleteTextView
+    private lateinit var custState : AutoCompleteTextView
+    private lateinit var progressBar : ProgressBar
+    private lateinit var registerBtn : Button
+//    private lateinit var customerData : UserModel
     
-    private  lateinit var mAuth : FirebaseAuth
+    private lateinit var mAuth : FirebaseAuth
+//    private lateinit var fStore : FirebaseFirestore
     
     private var userModel = UserModel("", "", "", "", "", "")
+    
     
     override fun onCreateView(
         inflater : LayoutInflater, container : ViewGroup?,
         savedInstanceState : Bundle?
     ) : View? {
         // Inflate the layout for this fragment
-        binding = FragmentMerchantBinding.inflate(inflater, container, false)
+        binding = FragmentCustomerRegisterBinding.inflate(inflater, container, false)
         val view = binding.root
         
-        merchantName = binding.regMercUserNameTxt
-        merchantEmail = binding.regMercUserEmailTxt
-        merchantPassword = binding.regMercPasswordTxt
-        merchantShopName = binding.regMercShopNameTxt
-        merchantCity = binding.registerMercCity
-        merchantDistrict = binding.registerMercDistrict
-        merchantState = binding.registerMercState
-        progressBar = binding.regMercProgressBar
-        registerBtn = binding.regMercUserRegisterBtn
+        custName = binding.regCustUserNameTxt
+        custEmail = binding.regCustUserEmailTxt
+        custPassword = binding.regCustPasswordTxt
+        custCity = binding.registerCustCity
+        custState = binding.registerCustState
+        progressBar = binding.regCustProgressBar
+        registerBtn = binding.regCustUserRegisterBtn
         
         progressBar.visibility = View.INVISIBLE
         
         mAuth = FirebaseAuth.getInstance()
+//        if(mAuth.currentUser==null){
+//            Toast.makeText(activity,"mAuth user is null", Toast.LENGTH_LONG).show()
+//        }else{
+//            Toast.makeText(activity,"mAuth user is not null", Toast.LENGTH_LONG).show()
+//        }
+
+//        fStore = FirebaseFirestore.getInstance()
         
         return view
     }
@@ -72,21 +79,21 @@ class MerchantFragment : Fragment() {
         
         val cityList = resources.getStringArray(R.array.CityList)
         val cityAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_list, cityList)
-        binding!!.registerMercCity.setAdapter(cityAdapter)
-    
+        binding!!.registerCustCity.setAdapter(cityAdapter)
+        
         val districtList = resources.getStringArray(R.array.DistrictList)
         val districtAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_list, districtList)
-        binding!!.registerMercDistrict.setAdapter(districtAdapter)
+        binding!!.registerCustDistrict.setAdapter(districtAdapter)
         
         val stateList = resources.getStringArray(R.array.StateList)
         val stateAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_list, stateList)
-        binding!!.registerMercState.setAdapter(stateAdapter)
-    
-        val backToLogin = binding.regMercLoginBtn
+        binding!!.registerCustState.setAdapter(stateAdapter)
+        
+        val backToLogin = binding.regCustLoginBtn
         val colorSpan = SetTextColorSpan(backToLogin.text.toString())
         backToLogin.text = colorSpan.setTextColorSpan()
-    
-//        val backToLogin = binding.regMercLoginBtn
+
+//        val backToLogin = binding.regCustLoginBtn
         backToLogin.setOnClickListener {
             val loginActivity = Intent(activity, LoginActivity::class.java)
             startActivity(loginActivity)
@@ -94,38 +101,38 @@ class MerchantFragment : Fragment() {
         }
         
         registerBtn.setOnClickListener {
-            
-            val mName = merchantName.text.toString()
-            val mEmail = merchantEmail.text.toString()
-            val mPassword = merchantPassword.text.toString()
-            var mShopName = merchantShopName.text.toString()
-            val mCity = merchantCity.text.toString()
-            var mDistrict = merchantDistrict.text.toString()
-            val mState = merchantState.text.toString()
+
+//            if(mAuth.currentUser!=null){
+            var cName = custName.text.toString()
+            val cEmail = custEmail.text.toString()
+            val cPassword = custPassword.text.toString()
+            val cCity = custCity.text.toString()
+            val cState = custState.text.toString()
             
             registerBtn.visibility = View.INVISIBLE
             progressBar.visibility = View.VISIBLE
             
-            if(mName.isNotEmpty()||mEmail.isNotEmpty()||mPassword.isNotEmpty()
-                ||mShopName.isNotEmpty()||mCity.isNotEmpty()||mState.isNotEmpty()){
-    
-                val merchantMap = HashMap<String, String>()
-                merchantMap["User_Name"] = mName
-                merchantMap["User_EmailId"] = mEmail
-                merchantMap["User_Password"] = mPassword
-                merchantMap["Shop_Name"] = mShopName
-                merchantMap["IsMerchant"] = "Y"
-                merchantMap["City"] = mCity
-                merchantMap["State"] = mState
-    
-                userModel.cName = mName
-                userModel.cEmail = mEmail
-                userModel.cShopName = mShopName
-                userModel.isMerchant = "Y"
-                userModel.cCity = mCity
-                userModel.cState = mState
-    
-                mAuth.createUserWithEmailAndPassword(mEmail, mPassword)
+            if (cName.isNotEmpty() && cEmail.isNotEmpty() && cPassword.isNotEmpty() &&
+                cCity.isNotEmpty() && cState.isNotEmpty()
+            ) {
+                
+                val customerMap = HashMap<String, String>()
+                customerMap["User_Name"] = cName
+                customerMap["User_EmailId"] = cEmail
+                customerMap["User_Password"] = cPassword
+                customerMap["Shop_Name"] = "NA"
+                customerMap["IsMerchant"] = "N"
+                customerMap["City"] = cCity
+                customerMap["State"] = cState
+                
+                userModel.cName = cName
+                userModel.cEmail = cEmail
+                userModel.cShopName = "NA"
+                userModel.isMerchant = "N"
+                userModel.cCity = cCity
+                userModel.cState = cState
+                
+                mAuth.createUserWithEmailAndPassword(cEmail, cPassword)
                     .addOnCompleteListener { task : Task<AuthResult> ->
                         if (task.isSuccessful) {
 //                            Log.d("ERROR", mAuth.currentUser!!.uid)
@@ -134,7 +141,7 @@ class MerchantFragment : Fragment() {
                             DatabaseServices.createCustomerInfoRecord(
                                 "CustomerInfo",
                                 userId,
-                                merchantMap
+                                customerMap
                             ) { isSetComplete ->
                                 if (isSetComplete) {
                                     Toast.makeText(
@@ -149,7 +156,7 @@ class MerchantFragment : Fragment() {
                                         "Unable to register, please try again",
                                         Toast.LENGTH_LONG
                                     ).show()
-                        
+                                    
                                 }
                             }
                         }
@@ -157,11 +164,10 @@ class MerchantFragment : Fragment() {
             } else {
                 Toast.makeText(activity, "Please fill all the fields", Toast.LENGTH_SHORT)
                     .show()
-    
+                
                 registerBtn.visibility = View.VISIBLE
                 progressBar.visibility = View.INVISIBLE
             }
-            
         }
     }
     
@@ -170,4 +176,5 @@ class MerchantFragment : Fragment() {
         homeActivityIntent.putExtra(USER_INFO, userModel)
         startActivity(homeActivityIntent)
     }
+    
 }

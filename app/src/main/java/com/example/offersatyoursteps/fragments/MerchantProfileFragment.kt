@@ -10,10 +10,9 @@ import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.ProgressBar
 import com.example.offersatyoursteps.R
-import com.example.offersatyoursteps.databinding.FragmentMerchantBinding
 import com.example.offersatyoursteps.databinding.FragmentMerchantProfileBinding
 import com.example.offersatyoursteps.models.UserModel
-import com.example.offersatyoursteps.services.DatabaseServices
+import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -34,7 +33,9 @@ class MerchantProfileFragment : Fragment() {
     
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
-
+        arguments?.let {
+            userModel = it?.getParcelable<UserModel>(USER_INFO)!!
+        }
     }
     
     override fun onCreateView(
@@ -73,19 +74,23 @@ class MerchantProfileFragment : Fragment() {
         val stateList = resources.getStringArray(R.array.StateList)
         val stateAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_list, stateList)
         binding!!.mprofileState.setAdapter(stateAdapter)
+        
+        mtShopName.setText(userModel.cShopName)
+        mtUserName.setText(userModel.cName)
+        mtCity.setText(userModel.cCity)
+        mtState.setText(userModel.cState)
     
     
-        val userId = mAuth.currentUser!!.uid
-        DatabaseServices.getCustomerInfoRecord("CustomerInfo", userId, userModel){ dbSuccess ->
-//                        Log.d("DEBUG", "LoginActivity")
-//                        Log.d("DEBUG", userModel.cName.toString())
-//                        Log.d("DEBUG", userModel.cEmail.toString())
-            if(dbSuccess){
-                mtUserName.setText(userModel.cName)
-                mtCity.setText(userModel.cCity,false)
-                mtState.setText(userModel.cState,false)
+    }
+    
+    companion object{
+        @JvmStatic
+        fun newInstance(userModel : UserModel) =
+            MerchantProfileFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(USER_INFO, userModel)
+                }
             }
-        }
     }
     
 }
