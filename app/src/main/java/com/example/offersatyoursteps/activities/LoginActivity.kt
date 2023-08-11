@@ -44,9 +44,10 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var userPassword : TextView
     private lateinit var loginProBar : ProgressBar
     private lateinit var loginBtn : Button
+    private lateinit var registerBtn : Button
     
     private lateinit var mAuth : FirebaseAuth
-    private lateinit var fStore : FirebaseFirestore
+//    private lateinit var fStore : FirebaseFirestore
     
     private var userModel = UserModel("", "", "", "", "", "")
     
@@ -65,6 +66,7 @@ class LoginActivity : AppCompatActivity() {
         userPassword = loginBinding.loginPasswordTxt
         loginProBar = loginBinding.loginProgressBar
         loginBtn = loginBinding.loginUserLoginBtn
+        registerBtn = loginBinding.loginRegisterBtn
         mAuth = FirebaseAuth.getInstance()
 //        fStore = FirebaseFirestore.getInstance()
         
@@ -86,6 +88,8 @@ class LoginActivity : AppCompatActivity() {
     fun onUserLoginBtnClicked(view : View) {
         loginProBar.visibility = View.VISIBLE
         loginBtn.visibility = View.INVISIBLE
+        registerBtn.visibility = View.INVISIBLE
+        
         
         val email = userEmail.text.toString()
         val password = userPassword.text.toString()
@@ -94,6 +98,7 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this, "Please enter your credential", Toast.LENGTH_LONG).show()
             loginBtn.visibility = View.VISIBLE
             loginProBar.visibility = View.INVISIBLE
+            registerBtn.visibility = View.VISIBLE
             
         } else {
             userSignIn(email, password)
@@ -106,7 +111,8 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener { task : Task<AuthResult> ->
                 if (task.isSuccessful) {
                     loginProBar.visibility = View.INVISIBLE
-                    loginBtn.visibility = View.VISIBLE
+                    loginBtn.visibility = View.INVISIBLE
+                    registerBtn.visibility = View.INVISIBLE
                     
 //                    getDatafromFirestore { dbSuccess ->
 //                        if (dbSuccess) {
@@ -129,6 +135,7 @@ class LoginActivity : AppCompatActivity() {
 //                Toast.makeText(this, task.exception.toString(), Toast.LENGTH_LONG).show()
                     loginProBar.visibility = View.INVISIBLE
                     loginBtn.visibility = View.VISIBLE
+                    registerBtn.visibility = View.VISIBLE
                 }
             }
         

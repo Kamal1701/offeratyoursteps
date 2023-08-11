@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/nav_offer_near_me">
+    app:startDestination="@id/nav_home_page">
 
     <fragment
         android:id="@+id/nav_home"
@@ -42,4 +42,9 @@
         android:name="com.example.offersatyoursteps.fragments.ProfileFragment"
         android:label="@string/menu_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/nav_merchant_profile"
+        android:name="com.example.offersatyoursteps.fragments.MerchantProfileFragment"
+        android:label="@string/menu_merchant_profile"
+        tools:layout="@layout/fragment_merchant_profile" />
 </navigation>

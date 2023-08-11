@@ -2,7 +2,6 @@ package com.example.offersatyoursteps.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -25,8 +24,6 @@ import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
 
 
 class CustomerFragment : Fragment() {
@@ -83,6 +80,10 @@ class CustomerFragment : Fragment() {
         val cityList = resources.getStringArray(R.array.CityList)
         val cityAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_list, cityList)
         binding!!.registerCustCity.setAdapter(cityAdapter)
+    
+        val districtList = resources.getStringArray(R.array.DistrictList)
+        val districtAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_list, districtList)
+        binding!!.registerCustDistrict.setAdapter(districtAdapter)
         
         val stateList = resources.getStringArray(R.array.StateList)
         val stateAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_list, stateList)
@@ -142,7 +143,7 @@ class CustomerFragment : Fragment() {
 //                            Log.d("ERROR", mAuth.currentUser!!.uid)
                             val userId = mAuth.currentUser!!.uid
                             Log.d("DEBUG", userId)
-                            DatabaseServices.setCustomerInfoRecord(
+                            DatabaseServices.createCustomerInfoRecord(
                                 "CustomerInfo",
                                 userId,
                                 customerMap

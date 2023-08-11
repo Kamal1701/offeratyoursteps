@@ -13,11 +13,6 @@
         android:fitsSystemWindows="true"
         tools:context=".fragments.CustomerFragment">
 
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
         <EditText
             android:id="@+id/regCustUserNameTxt"
             android:layout_width="256dp"
@@ -81,6 +76,22 @@
             app:layout_constraintTop_toBottomOf="@+id/regCustPasswordTxt" />
 
         <AutoCompleteTextView
+            android:id="@+id/registerCustDistrict"
+            android:layout_width="256dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/register_edittext_sytle"
+            android:ems="10"
+            android:fontFamily="sans-serif"
+            android:hint="district"
+            android:inputType="text"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias=".5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registerCustCity" />
+
+        <AutoCompleteTextView
             android:id="@+id/registerCustState"
             android:layout_width="256dp"
             android:layout_height="wrap_content"
@@ -94,7 +105,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias=".5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerCustCity" />
+            app:layout_constraintTop_toBottomOf="@+id/registerCustDistrict" />
 
 
         <Button

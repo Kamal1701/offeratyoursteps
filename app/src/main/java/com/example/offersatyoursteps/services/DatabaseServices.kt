@@ -2,7 +2,6 @@ package com.example.offersatyoursteps.services
 
 import android.util.Log
 import com.example.offersatyoursteps.models.UserModel
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 object DatabaseServices {
@@ -34,7 +33,7 @@ object DatabaseServices {
             }
     }
     
-    fun setCustomerInfoRecord(collectPath:String, userId:String, userMap : HashMap<String, String>,complete : (Boolean) -> Unit){
+    fun createCustomerInfoRecord(collectPath:String, userId:String, userMap : HashMap<String, String>, complete : (Boolean) -> Unit){
         fStore = FirebaseFirestore.getInstance()
     
         fStore.collection(collectPath).document(userId).set(userMap)
