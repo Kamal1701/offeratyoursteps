@@ -15,8 +15,11 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
+import androidx.fragment.app.commit
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.databinding.ActivityHomePageBinding
+import com.example.offersatyoursteps.fragments.AddOfferFragment
 import com.example.offersatyoursteps.fragments.AllOffersFragment
 import com.example.offersatyoursteps.fragments.MerchantProfileFragment
 import com.example.offersatyoursteps.fragments.OfferNearMeFragment
@@ -62,6 +65,7 @@ class HomePageActivity : AppCompatActivity() {
         val drawerLayout : DrawerLayout = binding.drawerLayout
         val navView : NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_home_page)
+//        val fragmentContainerView  = findViewById<FragmentContainerView>(R.id.mainFragmentContainer)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
@@ -70,7 +74,8 @@ class HomePageActivity : AppCompatActivity() {
                 R.id.nav_offer_near_me,
                 R.id.nav_all_offers,
                 R.id.nav_merchant_profile,
-                R.id.nav_profile
+                R.id.nav_profile,
+                
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -82,48 +87,81 @@ class HomePageActivity : AppCompatActivity() {
             val fragment : Fragment
             when (item!!.itemId) {
                 R.id.nav_offer_near_me -> {
-            
-                    fragment = OfferNearMeFragment.newInstance(userModel)
-                    if (fragment != null) {
-                
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.mainFrame, fragment).commit()
-                        drawerLayout.closeDrawer(GravityCompat.START)
-                        supportActionBar?.title = "Offers Near Me"
+                    if(savedInstanceState == null) {
+    
+                        fragment = OfferNearMeFragment.newInstance(userModel)
+                        if (fragment != null) {
+                            supportFragmentManager.commit {
+                                setReorderingAllowed(true)
+                                replace(R.id.mainFragmentContainer, fragment)
+                            }
+//                            supportFragmentManager.beginTransaction()
+//                                .replace(R.id.mainFrame, fragment).commit()
+                            drawerLayout.closeDrawer(GravityCompat.START)
+                            supportActionBar?.title = "Offers Near Me"
+                        }
                     }
                 }
         
                 R.id.nav_all_offers -> {
-                    fragment = AllOffersFragment.newInstance(userModel)
-                    if (fragment != null) {
-                
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.mainFrame, fragment).commit()
-                        drawerLayout.closeDrawer(GravityCompat.START)
-                        supportActionBar?.title = "All Offers"
+                    if(savedInstanceState == null) {
+                        fragment = AllOffersFragment.newInstance(userModel)
+                        if (fragment != null) {
+                            supportFragmentManager.commit {
+                                setReorderingAllowed(true)
+                                replace(R.id.mainFragmentContainer, fragment)
+                            }
+//                            supportFragmentManager.beginTransaction()
+//                                .replace(R.id.mainFrame, fragment).commit()
+                            drawerLayout.closeDrawer(GravityCompat.START)
+                            supportActionBar?.title = "All Offers"
+                        }
                     }
                 }
         
                 R.id.nav_profile -> {
-                    fragment = CustomerProfileFragment.newInstance(userModel)
-                    if (fragment != null) {
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.mainFrame, fragment).commit()
-                        drawerLayout.closeDrawer(GravityCompat.START)
-                        supportActionBar?.title = "Profile"
+                    if(savedInstanceState == null) {
+                        fragment = CustomerProfileFragment.newInstance(userModel)
+                        if (fragment != null) {
+                            supportFragmentManager.commit {
+                                setReorderingAllowed(true)
+                                replace(R.id.mainFragmentContainer, fragment)
+                            }
+//                            supportFragmentManager.beginTransaction()
+//                                .replace(R.id.mainFrame, fragment).commit()
+                            drawerLayout.closeDrawer(GravityCompat.START)
+                            supportActionBar?.title = "Profile"
+                        }
                     }
                 }
         
                 R.id.nav_merchant_profile -> {
-                    fragment = MerchantProfileFragment.newInstance(userModel)
-                    if (fragment != null) {
-                        supportFragmentManager.beginTransaction().replace(R.id.mainFrame, fragment)
-                            .commit()
-                        drawerLayout.closeDrawer(GravityCompat.START)
-                        supportActionBar?.title = "Profile"
+                    if(savedInstanceState == null) {
+                        fragment = MerchantProfileFragment.newInstance(userModel)
+                        if (fragment != null) {
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.mainFragmentContainer, fragment)
+                                .commit()
+                            drawerLayout.closeDrawer(GravityCompat.START)
+                            supportActionBar?.title = "Profile"
+                        }
+                    }
+                }
+    
+                R.id.addOfferProduct -> {
+                    if(savedInstanceState == null) {
+                        fragment = AddOfferFragment.newInstance(userModel)
+                        if (fragment != null) {
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.mainFragmentContainer, fragment)
+                                .commit()
+                            drawerLayout.closeDrawer(GravityCompat.START)
+                            supportActionBar?.title = "Add Product"
+                        }
                     }
                 }
             }
+            
             true
         }
         navView.setCheckedItem(R.id.nav_offer_near_me)
@@ -166,17 +204,19 @@ class HomePageActivity : AppCompatActivity() {
         
         val profileMenu = navView.menu.findItem(R.id.nav_profile)
         val merchantProfileMenu = navView.menu.findItem(R.id.nav_merchant_profile)
+        val merchantProductMenu = navView.menu.findItem(R.id.merchantProductMenu)
         if (userModel.isMerchant == "N") {
             profileMenu.setVisible(true)
         } else {
             merchantProfileMenu.setVisible(true)
+            merchantProductMenu.setVisible(true)
         }
         
         val fragment = OfferNearMeFragment.newInstance(userModel)
         if (fragment != null) {
         
             supportFragmentManager.beginTransaction()
-                .replace(R.id.mainFrame, fragment).commit()
+                .replace(R.id.mainFragmentContainer, fragment).commit()
             supportActionBar?.title = "Offers Near Me"
         }
         
