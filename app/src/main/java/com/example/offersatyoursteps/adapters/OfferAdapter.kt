@@ -1,6 +1,7 @@
 package com.example.offersatyoursteps.adapters
 
 import android.content.Context
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,7 @@ class OfferAdapter(val context:Context, val offerDetails : ArrayList<OfferDetail
             offerImage.setImageResource(resourceId)
             prodName.text =offerDetails.productName
             actPrice.text = offerDetails.actualPrice
+            actPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             discPrice.text = offerDetails.discountPrice
             discPercentage.text = offerDetails.discountPercentage
         }

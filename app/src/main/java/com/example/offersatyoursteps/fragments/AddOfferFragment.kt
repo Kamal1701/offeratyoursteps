@@ -15,7 +15,9 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.offersatyoursteps.databinding.FragmentAddOfferBinding
 import com.example.offersatyoursteps.models.UserModel
@@ -39,6 +41,8 @@ class AddOfferFragment : Fragment() {
     
     private var storageRef = Firebase.storage
     private lateinit var uri : Uri
+    
+//    private lateinit var imagePickerLauncher : ActivityResultLauncher<String>
     
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,10 +80,25 @@ class AddOfferFragment : Fragment() {
 //            Log.d("DEBUG", uri.toString())
 //        }
         
+        
+//        imagePickerLauncher = registerForActivityResult(
+//            ActivityResultContracts.GetContent(),
+//            {
+//                result: ActivityResult ->
+//                if(result.resultCode == RESULT_OK){
+//                    uri = result.data?.data!!
+//                }
+//            }
+//        )
+        
         productImage.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, GALLERY_REQUEST_CODE)
         }
+    
+//        productImage.setOnClickListener {
+//            imagePickerLauncher.launch("image/*")
+//        }
         
         addProductBtn.setOnClickListener {
             storageRef.getReference("productImages").child(System.currentTimeMillis().toString())

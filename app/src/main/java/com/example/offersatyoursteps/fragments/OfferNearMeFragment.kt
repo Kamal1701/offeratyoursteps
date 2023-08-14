@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Adapter
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.adapters.OfferAdapter
 import com.example.offersatyoursteps.utilities.OfferConstants
 import com.example.offersatyoursteps.databinding.FragmentOfferNearMeBinding
 import com.example.offersatyoursteps.models.UserModel
+import com.example.offersatyoursteps.utilities.SPAN_COUNT
 import com.example.offersatyoursteps.utilities.USER_INFO
 
 
@@ -19,6 +21,7 @@ class OfferNearMeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1 : String? = null
     private var param2 : String? = null
+    
     private lateinit var userModel : UserModel
     
     private lateinit var binding : FragmentOfferNearMeBinding
@@ -65,7 +68,7 @@ class OfferNearMeFragment : Fragment() {
         val offerList = OfferConstants.getOfferData()
         val itemAdapter = OfferAdapter(this.requireContext(), offerList)
         val offerRecycleView = binding.offerNearMeRecycleView
-        offerRecycleView.layoutManager = LinearLayoutManager(context)
+        offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
         offerRecycleView.adapter = itemAdapter
     }
 }
