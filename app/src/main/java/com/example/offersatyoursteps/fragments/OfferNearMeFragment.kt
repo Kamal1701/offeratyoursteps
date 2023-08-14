@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.adapters.OfferAdapter
+import com.example.offersatyoursteps.adapters.ProductSubcategoryAdapter
 import com.example.offersatyoursteps.utilities.OfferConstants
 import com.example.offersatyoursteps.databinding.FragmentOfferNearMeBinding
 import com.example.offersatyoursteps.models.UserModel
+import com.example.offersatyoursteps.services.Dataservices
 import com.example.offersatyoursteps.utilities.SPAN_COUNT
 import com.example.offersatyoursteps.utilities.USER_INFO
 
@@ -66,7 +68,7 @@ class OfferNearMeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         val offerList = OfferConstants.getOfferData()
-        val itemAdapter = OfferAdapter(this.requireContext(), offerList)
+        val itemAdapter = OfferAdapter(this.requireContext(), Dataservices.getProducts(userModel.prodSubcategory))
         val offerRecycleView = binding.offerNearMeRecycleView
         offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
         offerRecycleView.adapter = itemAdapter

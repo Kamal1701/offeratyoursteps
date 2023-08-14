@@ -40,7 +40,7 @@ class MerchantRegisterFragment : Fragment() {
     
     private  lateinit var mAuth : FirebaseAuth
     
-    private var userModel = UserModel("", "", "", "", "", "")
+    private var userModel = UserModel("", "", "", "", "", "","")
     
     override fun onCreateView(
         inflater : LayoutInflater, container : ViewGroup?,

@@ -34,7 +34,7 @@ class AddOfferFragment : Fragment() {
     // TODO: Rename and change types of parameters
     
     private lateinit var binding : FragmentAddOfferBinding
-    private var userModel = UserModel("", "", "", "", "", "")
+    private var userModel = UserModel("", "", "", "", "", "","")
     
     private lateinit var productImage : ImageView
     private lateinit var addProductBtn : Button

@@ -6,25 +6,38 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.offersatyoursteps.databinding.SubcategoryListViewBinding
 import com.example.offersatyoursteps.models.OfferDetails
+import com.example.offersatyoursteps.models.ProductSubcategory
 
-class ProductSubcategoryAdapter(val context : Context, val subcategoryList : ArrayList<OfferDetails>) :
+class ProductSubcategoryAdapter(val context : Context, val subcategoryList : List<ProductSubcategory>,val itemClick : (ProductSubcategory)->Unit) :
     RecyclerView.Adapter<ProductSubcategoryAdapter.SubcategoryViewHolder>() {
     
-    inner class SubcategoryViewHolder(binding : SubcategoryListViewBinding) :
+    inner class SubcategoryViewHolder(val binding : SubcategoryListViewBinding,val itemClick : (ProductSubcategory)->Unit) :
         RecyclerView.ViewHolder(binding.root) {
         var productImage = binding.productSubcategoryImage
-        val productSubcat = binding.productSubCategoryTxt
-        val productOfferDesc = binding.offerDescriptionTxt
+        var productSubcat = binding.productSubCategoryTxt
+        var productOfferDesc = binding.offerDescriptionTxt
         
-        fun bindingViewHolder(context : Context, offerDetails : OfferDetails) {
+        fun bindingViewHolder(context : Context, subcategory : ProductSubcategory) {
             val resourceId = context.resources.getIdentifier(
-                offerDetails.imgName,
+                subcategory.subcategoryImg,
                 "drawable",
                 context.packageName
             )
             productImage.setImageResource(resourceId)
-            productSubcat.text = offerDetails.productName
-            productOfferDesc.text = "Offers"
+            productSubcat.text = subcategory.title
+            productOfferDesc.text = subcategory.discountDesc
+    
+            binding.productSubcategoryImage.setOnClickListener {
+                itemClick(subcategory)
+            }
+//
+//            binding.productSubCategoryTxt.setOnClickListener {
+//                itemClick(offerDetails)
+//            }
+//
+//            binding.offerDescriptionTxt.setOnClickListener {
+//                itemClick(offerDetails)
+//            }
             
         }
         
@@ -33,7 +46,7 @@ class ProductSubcategoryAdapter(val context : Context, val subcategoryList : Arr
     override fun onCreateViewHolder(parent : ViewGroup, viewType : Int) : SubcategoryViewHolder {
         val binding =
             SubcategoryListViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return SubcategoryViewHolder(binding)
+        return SubcategoryViewHolder(binding, itemClick)
     }
     
     override fun getItemCount() : Int {

@@ -29,7 +29,7 @@ class MerchantProfileFragment : Fragment() {
     private lateinit var profileProgress : ProgressBar
     
     private lateinit var mAuth : FirebaseAuth
-    private var userModel = UserModel("", "", "", "", "", "")
+    private var userModel = UserModel("", "", "", "", "", "","")
     
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)

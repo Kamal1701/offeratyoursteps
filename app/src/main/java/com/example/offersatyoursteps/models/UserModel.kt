@@ -5,8 +5,9 @@ import android.os.Parcelable
 
 class UserModel constructor(var cName:String?,var cEmail:String?,
                             var cShopName:String?, var isMerchant:String?,
-                            var cCity:String?, var cState:String?):Parcelable{
+                            var cCity:String?, var cState:String?, var prodSubcategory:String?):Parcelable{
     constructor(parcel : Parcel) : this(
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -23,6 +24,7 @@ class UserModel constructor(var cName:String?,var cEmail:String?,
         parcel.writeString(isMerchant)
         parcel.writeString(cCity)
         parcel.writeString(cState)
+        parcel.writeString(prodSubcategory)
     }
     
     override fun describeContents() : Int {

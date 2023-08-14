@@ -49,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var mAuth : FirebaseAuth
 //    private lateinit var fStore : FirebaseFirestore
     
-    private var userModel = UserModel("", "", "", "", "", "")
+    private var userModel = UserModel("", "", "", "", "", "","")
     
     override fun onSaveInstanceState(outState : Bundle) {
         super.onSaveInstanceState(outState)

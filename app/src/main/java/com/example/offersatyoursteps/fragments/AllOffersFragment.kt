@@ -31,7 +31,7 @@ class AllOffersFragment : Fragment() {
     
     private lateinit var binding : FragmentAllOffersBinding
     
-    private var userModel = UserModel("", "", "", "", "", "")
+    private var userModel = UserModel("", "", "", "", "", "","")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
