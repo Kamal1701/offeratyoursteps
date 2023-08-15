@@ -158,6 +158,7 @@ class AddOfferFragment : Fragment() {
                 prodMap["Product_Weight"] = prodWeight
                 prodMap["Product_Desc"] = prodDesc
                 prodMap["Location"] = userModel.cCity.toString()
+                prodMap["Shop_Name"] = userModel.cShopName.toString()
                 
                 storageRef.getReference("productImages")
                     .child(System.currentTimeMillis().toString())

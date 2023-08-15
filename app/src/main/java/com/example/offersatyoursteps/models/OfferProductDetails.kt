@@ -14,5 +14,6 @@ data class OfferProductDetails(
     var prodWeight : String,
     var prodDesc : String,
     var location : String
+//    var shopName : String
 ) {
 }

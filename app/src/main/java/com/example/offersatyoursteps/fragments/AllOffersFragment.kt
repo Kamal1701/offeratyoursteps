@@ -1,6 +1,7 @@
 package com.example.offersatyoursteps.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +13,12 @@ import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.adapters.OfferAdapter
 import com.example.offersatyoursteps.utilities.OfferConstants
 import com.example.offersatyoursteps.databinding.FragmentAllOffersBinding
+import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
+import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.SPAN_COUNT
 import com.example.offersatyoursteps.utilities.USER_INFO
+import com.google.firebase.auth.FirebaseAuth
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,6 +34,8 @@ class AllOffersFragment : Fragment() {
     // TODO: Rename and change types of parameters
     
     private lateinit var binding : FragmentAllOffersBinding
+    private lateinit var mAuth : FirebaseAuth
+    private var productList : MutableList<OfferProductDetails> = mutableListOf()
     
     private var userModel = UserModel("", "", "", "", "", "","")
 
@@ -43,25 +49,13 @@ class AllOffersFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        
-        binding = FragmentAllOffersBinding.inflate(inflater, container, false)
-        val view = binding.root
+    ): View {
         // Inflate the layout for this fragment
-        return view
-//        return inflater.inflate(R.layout.fragment_all_offers, container, false)
+        binding = FragmentAllOffersBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AllOffersFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(userModel : UserModel) =
             AllOffersFragment().apply {
@@ -74,10 +68,19 @@ class AllOffersFragment : Fragment() {
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     
-//        val offerList = OfferConstants.getOfferData()
-//        val itemAdapter = OfferAdapter(this.requireContext(),offerList)
-//        val offerRecycleView = binding.offerAllRecycleView
-//        offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
-//        offerRecycleView.adapter = itemAdapter
+        mAuth = FirebaseAuth.getInstance()
+        val userId = mAuth.currentUser!!.uid
+    
+        DatabaseServices.getProductDetailsRecord("Product_Details",userId,productList){
+                isGetComplete ->
+            if(isGetComplete){
+                val itemAdapter = OfferAdapter(this.requireContext(), productList)
+                val offerRecycleView = binding.offerAllRecycleView
+                offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
+                offerRecycleView.adapter = itemAdapter
+            } else{
+                Log.d("DEBUG", "OfferNearMe - no record returned")
+            }
+        }
     }
 }

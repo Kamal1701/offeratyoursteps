@@ -96,7 +96,14 @@ class HomePageActivity : AppCompatActivity() {
                 }
                 
                 R.id.nav_all_offers -> {
-                    getProductSubcategoryFragment()
+//                    getProductSubcategoryFragment()
+                    val fragment = AllOffersFragment.newInstance(userModel)
+                    if (fragment != null) {
+                        supportFragmentManager.commit {
+                            setReorderingAllowed(true)
+                            replace(R.id.mainFragmentContainer, fragment)
+                        }
+                    }
                     drawerLayout.closeDrawer(GravityCompat.START)
                     supportActionBar?.title = "All Offers"
                 }

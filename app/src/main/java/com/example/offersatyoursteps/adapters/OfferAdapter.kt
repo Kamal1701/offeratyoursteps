@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.offersatyoursteps.models.OfferDetails
 import com.example.offersatyoursteps.databinding.OfferListViewBinding
 import com.example.offersatyoursteps.models.OfferProductDetails
@@ -20,10 +21,12 @@ class OfferAdapter(val context:Context, val offerDetails : MutableList<OfferProd
         val discPercentage = binding.offerSavePercentage
         
         fun bindingOffers(context : Context, offerDetails : OfferProductDetails){
-            val resourceId = context.resources.getIdentifier(offerDetails.imgName, "drawable", context.packageName)
-            Log.d("DEBUG", "image name from offer adapter")
-            Log.d("DEBUG", offerDetails.imgName)
-            offerImage.setImageResource(resourceId)
+//            val resourceId = context.resources.getIdentifier(offerDetails.imgName, "drawable", context.packageName)
+//            Log.d("DEBUG", "image name from offer adapter")
+//            Log.d("DEBUG", offerDetails.imgName)
+//            offerImage.setImageResource(resourceId)
+            
+            Glide.with(context).load(offerDetails.imgName).into(offerImage)
             prodName.text =offerDetails.productName
             actPrice.text = offerDetails.actualPrice
             actPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG

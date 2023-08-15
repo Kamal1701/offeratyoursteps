@@ -82,39 +82,72 @@ object DatabaseServices {
     
     fun getProductDetailsRecord(
         collectPath : String, userId : String,
-        opd : OfferProductDetails,
-        productList:MutableList<OfferProductDetails>,
+        productList : MutableList<OfferProductDetails>,
         complete : (Boolean) -> Unit
     ) {
         fStore = FirebaseFirestore.getInstance()
-        val parentDocRef = fStore.collection(collectPath).document()
-        
+        val parentDocRef = fStore.collection(collectPath).document(userId)
+        println(parentDocRef.id)
         
         
         parentDocRef.collection("OfferProductDetails")
             .get().addOnSuccessListener { querySnapshot ->
-
-                    for (doc in querySnapshot){
+                println(querySnapshot.isEmpty)
+                if (!querySnapshot.isEmpty) {
+                    var prodCount = 0
+                    for (doc in querySnapshot) {
                         val data = doc.data
-                        opd.imgName = data.get("Product_Image").toString()
-                        opd.brandName = data.get("Product_Brand").toString()
-                        opd.productName = data.get("Product_Name").toString()
-                        opd.prodCategory = data.get("Product_Category").toString()
-                        opd.prodSubcategory = data.get("Product_Subcategory").toString()
-                        opd.actualPrice = data.get("Product_ActualPrice").toString()
-                        opd.discountPrice = data.get("Product_DiscountPrice").toString()
-                        opd.offerStDate = data.get("Offer_StartDate").toString()
-                        opd.offerEdDate = data.get("Offer_EndDate").toString()
-                        opd.location = data.get("Location").toString()
-                        opd.prodWeight = data.get("Product_Weight").toString()
-                        opd.prodDesc = data.get("Product_Desc").toString()
-                        opd.discountPercentage = "2%"
-                        Log.d("DEBUG", "Database Services")
-                        Log.d("DEBUG", opd.imgName)
-                        productList.add(opd)
-                    
+//                        opd.imgName = data.get("Product_Image").toString()
+//                        opd.brandName = data.get("Product_Brand").toString()
+//                        opd.productName = data.get("Product_Name").toString()
+//                        opd.prodCategory = data.get("Product_Category").toString()
+//                        opd.prodSubcategory = data.get("Product_Subcategory").toString()
+//                        opd.actualPrice = data.get("Product_ActualPrice").toString()
+//                        opd.discountPrice = data.get("Product_DiscountPrice").toString()
+//                        opd.offerStDate = data.get("Offer_StartDate").toString()
+//                        opd.offerEdDate = data.get("Offer_EndDate").toString()
+//                        opd.location = data.get("Location").toString()
+//                        opd.prodWeight = data.get("Product_Weight").toString()
+//                        opd.prodDesc = data.get("Product_Desc").toString()
+//                        opd.discountPercentage = "2%"
+                        
+                        var imgName = data.get("Product_Image").toString()
+                        var brandName = data.get("Product_Brand").toString()
+                        var productName = data.get("Product_Name").toString()
+                        var prodCategory = data.get("Product_Category").toString()
+                        var prodSubcategory = data.get("Product_Subcategory").toString()
+                        var actualPrice = data.get("Product_ActualPrice").toString()
+                        var discountPrice = data.get("Product_DiscountPrice").toString()
+                        var offerStDate = data.get("Offer_StartDate").toString()
+                        var offerEdDate = data.get("Offer_EndDate").toString()
+                        var location = data.get("Location").toString()
+                        var prodWeight = data.get("Product_Weight").toString()
+                        var prodDesc = data.get("Product_Desc").toString()
+//                        var shopName = data.get("Shop_Name").toString()
+                        var discountPercentage = "2%"
+                        
+                        productList.add(
+                            prodCount, OfferProductDetails(
+                                imgName,
+                                productName,
+                                brandName,
+                                prodCategory,
+                                prodSubcategory,
+                                actualPrice,
+                                discountPrice,
+                                offerStDate,
+                                offerEdDate,
+                                discountPercentage,
+                                prodWeight,
+                                prodDesc,
+                                location
+//                            shopName
+                            )
+                        )
+                        prodCount++
                     }
                     complete(true)
+                }
                 
             }
             .addOnFailureListener {

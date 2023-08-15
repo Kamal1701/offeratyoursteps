@@ -26,21 +26,12 @@ import com.google.firebase.auth.FirebaseUser
 
 
 class OfferNearMeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1 : String? = null
-    private var param2 : String? = null
     
     private lateinit var userModel : UserModel
-    
     private lateinit var binding : FragmentOfferNearMeBinding
-    
     private lateinit var mAuth : FirebaseAuth
-//    private lateinit var currentUser : FirebaseUser
-    
-    private var opd = OfferProductDetails("","","","","",
-        "","","","","","","","")
-    private var productList = mutableListOf<OfferProductDetails>()
-    
+    private var productList : MutableList<OfferProductDetails> = mutableListOf()
+
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -59,15 +50,6 @@ class OfferNearMeFragment : Fragment() {
     }
     
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment OfferNearMeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(userModel : UserModel) =
             OfferNearMeFragment().apply {
@@ -83,11 +65,10 @@ class OfferNearMeFragment : Fragment() {
         mAuth = FirebaseAuth.getInstance()
         val userId = mAuth.currentUser!!.uid
         
-        
-        val offerList = OfferConstants.getOfferData()
-        DatabaseServices.getProductDetailsRecord("Product_Details",userId,opd,productList){
+        DatabaseServices.getProductDetailsRecord("Product_Details",userId,productList){
             isGetComplete ->
             if(isGetComplete){
+//                println(productList)
                 val itemAdapter = OfferAdapter(this.requireContext(), productList)
                 val offerRecycleView = binding.offerNearMeRecycleView
                 offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
@@ -95,7 +76,6 @@ class OfferNearMeFragment : Fragment() {
             } else{
                 Log.d("DEBUG", "OfferNearMe - no record returned")
             }
-            Log.d("DEBUG", "OfferNearMe - no record returned" + isGetComplete)
         }
 //        val itemAdapter = OfferAdapter(this.requireContext(), Dataservices.getProducts(userModel.prodSubcategory))
 //        val offerRecycleView = binding.offerNearMeRecycleView
