@@ -183,24 +183,6 @@ class AddOfferFragment : Fragment() {
                                         Toast.makeText(activity, "Unable to add product now, please try again", Toast.LENGTH_LONG).show()
                                     }
                                 }
-//                                Log.d("DEBUG", "Image upload to firestore")
-//                                val mapImage = mapOf(
-//                                    "url" to it.toString()
-//                                )
-//                                val dbRef =
-//                                    FirebaseFirestore.getInstance().collection("productImage")
-//                                dbRef.document(userId).set(mapImage)
-//                                    .addOnSuccessListener {
-//                                        Toast.makeText(
-//                                            activity,
-//                                            "Image uploaded successfully",
-//                                            Toast.LENGTH_LONG
-//                                        ).show()
-//                                    }
-//                                    .addOnFailureListener { error ->
-//                                        Toast.makeText(activity, it.toString(), Toast.LENGTH_LONG)
-//                                            .show()
-//                                    }
                             }
                         
                     }
