@@ -124,8 +124,6 @@ class AddOfferFragment : Fragment() {
             addProductBtn.visibility = View.INVISIBLE
             cancelProductBtn.visibility = View.INVISIBLE
             
-//            Toast.makeText(activity, productImage.drawable.toString(), Toast.LENGTH_LONG).show()
-            
             val prodImage = productImage.tag.toString()
             val prodName = productName.text.toString()
             val prodBrand = productBrand.text.toString()

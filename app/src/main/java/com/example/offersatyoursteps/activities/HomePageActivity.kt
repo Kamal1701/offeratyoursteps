@@ -55,9 +55,6 @@ class HomePageActivity : AppCompatActivity() {
         currentUser = mAuth.currentUser!!
         
         userModel = intent.getParcelableExtra<UserModel>(USER_INFO)!!
-//        Log.d("DEBUG", "HomePageActivity")
-//        Log.d("DEBUG", userModel.cName.toString())
-//        Log.d("DEBUG", userModel.cEmail.toString())
         
         setSupportActionBar(binding.appBarHomePage.toolbar)
         
@@ -86,76 +83,49 @@ class HomePageActivity : AppCompatActivity() {
             val fragment : Fragment
             when (item!!.itemId) {
                 R.id.nav_offer_near_me -> {
-//                    if(savedInstanceState == null) {
-                    getProductSubcategoryFragment()
-//                        fragment = OfferNearMeFragment.newInstance(userModel)
-                    fragment = ProductSubcategoryFragment.newInstance(userModel)
-//                    if (fragment != null) {
-//                        supportFragmentManager.commit {
-//                            setReorderingAllowed(true)
-//                            replace(R.id.mainFragmentContainer, fragment)
-//                        }
-//                            supportFragmentManager.beginTransaction()
-//                                .replace(R.id.mainFrame, fragment).commit()
-                        drawerLayout.closeDrawer(GravityCompat.START)
-                        supportActionBar?.title = "Offers Near Me"
-//                    }
-//                    }
+//                    getProductSubcategoryFragment()
+                    val fragment = OfferNearMeFragment.newInstance(userModel)
+                    if (fragment != null) {
+                        supportFragmentManager.commit {
+                            setReorderingAllowed(true)
+                            replace(R.id.mainFragmentContainer, fragment)
+                        }
+                    }
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                    supportActionBar?.title = "Offers Near Me"
                 }
                 
                 R.id.nav_all_offers -> {
-//                    if(savedInstanceState == null) {
-//                        fragment = AllOffersFragment.newInstance(userModel)
                     getProductSubcategoryFragment()
-//                    fragment = ProductSubcategoryFragment.newInstance(userModel)
-//                    if (fragment != null) {
-//                        supportFragmentManager.commit {
-//                            setReorderingAllowed(true)
-//                            replace(R.id.mainFragmentContainer, fragment)
-//                        }
-//                            supportFragmentManager.beginTransaction()
-//                                .replace(R.id.mainFrame, fragment).commit()
-                        drawerLayout.closeDrawer(GravityCompat.START)
-                        supportActionBar?.title = "All Offers"
-//                    }
-//                    }
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                    supportActionBar?.title = "All Offers"
                 }
                 
                 R.id.nav_profile -> {
-//                    if(savedInstanceState == null) {
                     fragment = CustomerProfileFragment.newInstance(userModel)
                     if (fragment != null) {
                         supportFragmentManager.commit {
                             setReorderingAllowed(true)
                             replace(R.id.mainFragmentContainer, fragment)
                         }
-//                            supportFragmentManager.beginTransaction()
-//                                .replace(R.id.mainFrame, fragment).commit()
                         drawerLayout.closeDrawer(GravityCompat.START)
                         supportActionBar?.title = "Profile"
                     }
-//                    }
                 }
                 
                 R.id.nav_merchant_profile -> {
-//                    if(savedInstanceState == null) {
                     fragment = MerchantProfileFragment.newInstance(userModel)
                     if (fragment != null) {
                         supportFragmentManager.commit {
                             setReorderingAllowed(true)
                             replace(R.id.mainFragmentContainer, fragment)
                         }
-//                            supportFragmentManager.beginTransaction()
-//                                .replace(R.id.mainFragmentContainer, fragment)
-//                                .commit()
                         drawerLayout.closeDrawer(GravityCompat.START)
                         supportActionBar?.title = "Profile"
                     }
-//                    }
                 }
                 
                 R.id.addOfferProduct -> {
-//                    if(savedInstanceState == null) {
                     
                     fragment = AddOfferFragment.newInstance(userModel)
                     if (fragment != null) {
@@ -163,13 +133,10 @@ class HomePageActivity : AppCompatActivity() {
                             setReorderingAllowed(true)
                             replace(R.id.mainFragmentContainer, fragment)
                         }
-//                            supportFragmentManager.beginTransaction()
-//                                .replace(R.id.mainFragmentContainer, fragment)
-//                                .commit()
                         drawerLayout.closeDrawer(GravityCompat.START)
                         supportActionBar?.title = "Add Product"
                     }
-//                    }
+                    
                 }
             }
             
@@ -222,17 +189,8 @@ class HomePageActivity : AppCompatActivity() {
             merchantProfileMenu.setVisible(true)
             merchantProductMenu.setVisible(true)
         }
-
-//        val fragment = OfferNearMeFragment.newInstance(userModel)
-//        val fragment = ProductSubcategoryFragment.newInstance(userModel)
-//        if (fragment != null) {
-//            supportFragmentManager.commit {
-//                setReorderingAllowed(true)
-//                replace(R.id.mainFragmentContainer, fragment)
-//            }
+        
         getProductSubcategoryFragment()
-//            supportFragmentManager.beginTransaction()
-//                .replace(R.id.mainFragmentContainer, fragment).commit()
         supportActionBar?.title = "Offers Near Me"
     }
     

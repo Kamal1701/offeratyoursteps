@@ -74,10 +74,10 @@ class AllOffersFragment : Fragment() {
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     
-        val offerList = OfferConstants.getOfferData()
-        val itemAdapter = OfferAdapter(this.requireContext(),offerList)
-        val offerRecycleView = binding.offerAllRecycleView
-        offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
-        offerRecycleView.adapter = itemAdapter
+//        val offerList = OfferConstants.getOfferData()
+//        val itemAdapter = OfferAdapter(this.requireContext(),offerList)
+//        val offerRecycleView = binding.offerAllRecycleView
+//        offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
+//        offerRecycleView.adapter = itemAdapter
     }
 }

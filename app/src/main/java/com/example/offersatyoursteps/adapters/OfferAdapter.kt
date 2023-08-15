@@ -8,8 +8,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.offersatyoursteps.models.OfferDetails
 import com.example.offersatyoursteps.databinding.OfferListViewBinding
+import com.example.offersatyoursteps.models.OfferProductDetails
 
-class OfferAdapter(val context:Context, val offerDetails : List<OfferDetails>):RecyclerView.Adapter<OfferAdapter.ViewHolder>() {
+class OfferAdapter(val context:Context, val offerDetails : MutableList<OfferProductDetails>):RecyclerView.Adapter<OfferAdapter.ViewHolder>() {
     
     inner class ViewHolder(val binding : OfferListViewBinding):RecyclerView.ViewHolder(binding.root){
         val offerImage = binding.offerProductImg
@@ -18,7 +19,7 @@ class OfferAdapter(val context:Context, val offerDetails : List<OfferDetails>):R
         val discPrice = binding.offerDiscountPrice
         val discPercentage = binding.offerSavePercentage
         
-        fun bindingOffers(context : Context, offerDetails : OfferDetails){
+        fun bindingOffers(context : Context, offerDetails : OfferProductDetails){
             val resourceId = context.resources.getIdentifier(offerDetails.imgName, "drawable", context.packageName)
             Log.d("DEBUG", "image name from offer adapter")
             Log.d("DEBUG", offerDetails.imgName)

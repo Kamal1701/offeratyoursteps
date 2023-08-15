@@ -1,6 +1,8 @@
 package com.example.offersatyoursteps.fragments
 
 import android.os.Bundle
+import android.provider.ContactsContract.Data
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +15,14 @@ import com.example.offersatyoursteps.adapters.OfferAdapter
 import com.example.offersatyoursteps.adapters.ProductSubcategoryAdapter
 import com.example.offersatyoursteps.utilities.OfferConstants
 import com.example.offersatyoursteps.databinding.FragmentOfferNearMeBinding
+import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
+import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.services.Dataservices
 import com.example.offersatyoursteps.utilities.SPAN_COUNT
 import com.example.offersatyoursteps.utilities.USER_INFO
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 
 class OfferNearMeFragment : Fragment() {
@@ -27,6 +33,13 @@ class OfferNearMeFragment : Fragment() {
     private lateinit var userModel : UserModel
     
     private lateinit var binding : FragmentOfferNearMeBinding
+    
+    private lateinit var mAuth : FirebaseAuth
+//    private lateinit var currentUser : FirebaseUser
+    
+    private var opd = OfferProductDetails("","","","","",
+        "","","","","","","","")
+    private var productList = mutableListOf<OfferProductDetails>()
     
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,11 +79,27 @@ class OfferNearMeFragment : Fragment() {
     
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    
+        mAuth = FirebaseAuth.getInstance()
+        val userId = mAuth.currentUser!!.uid
+        
         
         val offerList = OfferConstants.getOfferData()
-        val itemAdapter = OfferAdapter(this.requireContext(), Dataservices.getProducts(userModel.prodSubcategory))
-        val offerRecycleView = binding.offerNearMeRecycleView
-        offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
-        offerRecycleView.adapter = itemAdapter
+        DatabaseServices.getProductDetailsRecord("Product_Details",userId,opd,productList){
+            isGetComplete ->
+            if(isGetComplete){
+                val itemAdapter = OfferAdapter(this.requireContext(), productList)
+                val offerRecycleView = binding.offerNearMeRecycleView
+                offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
+                offerRecycleView.adapter = itemAdapter
+            } else{
+                Log.d("DEBUG", "OfferNearMe - no record returned")
+            }
+            Log.d("DEBUG", "OfferNearMe - no record returned" + isGetComplete)
+        }
+//        val itemAdapter = OfferAdapter(this.requireContext(), Dataservices.getProducts(userModel.prodSubcategory))
+//        val offerRecycleView = binding.offerNearMeRecycleView
+//        offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
+//        offerRecycleView.adapter = itemAdapter
     }
 }
