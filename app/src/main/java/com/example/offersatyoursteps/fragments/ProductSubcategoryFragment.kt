@@ -78,7 +78,7 @@ class ProductSubcategoryFragment : Fragment() {
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     
-        val offerList = OfferConstants.getOfferData()
+//        val offerList = OfferConstants.getOfferData()
         val itemAdapter = ProductSubcategoryAdapter(this.requireContext(), Dataservices.subcategories){
             productSubcategory ->
             userModel.prodSubcategory = productSubcategory.title

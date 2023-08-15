@@ -35,8 +35,6 @@ class HomePageActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration : AppBarConfiguration
     private lateinit var binding : ActivityHomePageBinding
     
-    
-    
     private lateinit var mAuth : FirebaseAuth
     private lateinit var currentUser : FirebaseUser
     
@@ -77,7 +75,7 @@ class HomePageActivity : AppCompatActivity() {
                 R.id.nav_merchant_profile,
                 R.id.nav_profile,
                 
-            ), drawerLayout
+                ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
@@ -89,84 +87,88 @@ class HomePageActivity : AppCompatActivity() {
             when (item!!.itemId) {
                 R.id.nav_offer_near_me -> {
 //                    if(savedInstanceState == null) {
-    
-                        fragment = OfferNearMeFragment.newInstance(userModel)
-                        if (fragment != null) {
-                            supportFragmentManager.commit {
-                                setReorderingAllowed(true)
-                                replace(R.id.mainFragmentContainer, fragment)
-                            }
+                    getProductSubcategoryFragment()
+//                        fragment = OfferNearMeFragment.newInstance(userModel)
+                    fragment = ProductSubcategoryFragment.newInstance(userModel)
+//                    if (fragment != null) {
+//                        supportFragmentManager.commit {
+//                            setReorderingAllowed(true)
+//                            replace(R.id.mainFragmentContainer, fragment)
+//                        }
 //                            supportFragmentManager.beginTransaction()
 //                                .replace(R.id.mainFrame, fragment).commit()
-                            drawerLayout.closeDrawer(GravityCompat.START)
-                            supportActionBar?.title = "Offers Near Me"
-                        }
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                        supportActionBar?.title = "Offers Near Me"
+//                    }
 //                    }
                 }
-        
+                
                 R.id.nav_all_offers -> {
 //                    if(savedInstanceState == null) {
-                        fragment = AllOffersFragment.newInstance(userModel)
-                        if (fragment != null) {
-                            supportFragmentManager.commit {
-                                setReorderingAllowed(true)
-                                replace(R.id.mainFragmentContainer, fragment)
-                            }
+//                        fragment = AllOffersFragment.newInstance(userModel)
+                    getProductSubcategoryFragment()
+//                    fragment = ProductSubcategoryFragment.newInstance(userModel)
+//                    if (fragment != null) {
+//                        supportFragmentManager.commit {
+//                            setReorderingAllowed(true)
+//                            replace(R.id.mainFragmentContainer, fragment)
+//                        }
 //                            supportFragmentManager.beginTransaction()
 //                                .replace(R.id.mainFrame, fragment).commit()
-                            drawerLayout.closeDrawer(GravityCompat.START)
-                            supportActionBar?.title = "All Offers"
-                        }
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                        supportActionBar?.title = "All Offers"
+//                    }
 //                    }
                 }
-        
+                
                 R.id.nav_profile -> {
 //                    if(savedInstanceState == null) {
-                        fragment = CustomerProfileFragment.newInstance(userModel)
-                        if (fragment != null) {
-                            supportFragmentManager.commit {
-                                setReorderingAllowed(true)
-                                replace(R.id.mainFragmentContainer, fragment)
-                            }
+                    fragment = CustomerProfileFragment.newInstance(userModel)
+                    if (fragment != null) {
+                        supportFragmentManager.commit {
+                            setReorderingAllowed(true)
+                            replace(R.id.mainFragmentContainer, fragment)
+                        }
 //                            supportFragmentManager.beginTransaction()
 //                                .replace(R.id.mainFrame, fragment).commit()
-                            drawerLayout.closeDrawer(GravityCompat.START)
-                            supportActionBar?.title = "Profile"
-                        }
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                        supportActionBar?.title = "Profile"
+                    }
 //                    }
                 }
-        
+                
                 R.id.nav_merchant_profile -> {
 //                    if(savedInstanceState == null) {
-                        fragment = MerchantProfileFragment.newInstance(userModel)
-                        if (fragment != null) {
-                            supportFragmentManager.commit {
-                                setReorderingAllowed(true)
-                                replace(R.id.mainFragmentContainer, fragment)
-                            }
+                    fragment = MerchantProfileFragment.newInstance(userModel)
+                    if (fragment != null) {
+                        supportFragmentManager.commit {
+                            setReorderingAllowed(true)
+                            replace(R.id.mainFragmentContainer, fragment)
+                        }
 //                            supportFragmentManager.beginTransaction()
 //                                .replace(R.id.mainFragmentContainer, fragment)
 //                                .commit()
-                            drawerLayout.closeDrawer(GravityCompat.START)
-                            supportActionBar?.title = "Profile"
-                        }
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                        supportActionBar?.title = "Profile"
+                    }
 //                    }
                 }
-    
+                
                 R.id.addOfferProduct -> {
 //                    if(savedInstanceState == null) {
-                        fragment = AddOfferFragment.newInstance(userModel)
-                        if (fragment != null) {
-                            supportFragmentManager.commit {
-                                setReorderingAllowed(true)
-                                replace(R.id.mainFragmentContainer, fragment)
-                            }
+                    
+                    fragment = AddOfferFragment.newInstance(userModel)
+                    if (fragment != null) {
+                        supportFragmentManager.commit {
+                            setReorderingAllowed(true)
+                            replace(R.id.mainFragmentContainer, fragment)
+                        }
 //                            supportFragmentManager.beginTransaction()
 //                                .replace(R.id.mainFragmentContainer, fragment)
 //                                .commit()
-                            drawerLayout.closeDrawer(GravityCompat.START)
-                            supportActionBar?.title = "Add Product"
-                        }
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                        supportActionBar?.title = "Add Product"
+                    }
 //                    }
                 }
             }
@@ -220,18 +222,28 @@ class HomePageActivity : AppCompatActivity() {
             merchantProfileMenu.setVisible(true)
             merchantProductMenu.setVisible(true)
         }
-        
+
 //        val fragment = OfferNearMeFragment.newInstance(userModel)
+//        val fragment = ProductSubcategoryFragment.newInstance(userModel)
+//        if (fragment != null) {
+//            supportFragmentManager.commit {
+//                setReorderingAllowed(true)
+//                replace(R.id.mainFragmentContainer, fragment)
+//            }
+        getProductSubcategoryFragment()
+//            supportFragmentManager.beginTransaction()
+//                .replace(R.id.mainFragmentContainer, fragment).commit()
+        supportActionBar?.title = "Offers Near Me"
+    }
+    
+    
+    private fun getProductSubcategoryFragment() {
         val fragment = ProductSubcategoryFragment.newInstance(userModel)
         if (fragment != null) {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
                 replace(R.id.mainFragmentContainer, fragment)
             }
-//            supportFragmentManager.beginTransaction()
-//                .replace(R.id.mainFragmentContainer, fragment).commit()
-            supportActionBar?.title = "Offers Near Me"
         }
-        
     }
 }

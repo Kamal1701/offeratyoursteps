@@ -42,7 +42,7 @@ class AddOfferFragment : Fragment() {
     private var storageRef = Firebase.storage
     private lateinit var uri : Uri
     
-//    private lateinit var imagePickerLauncher : ActivityResultLauncher<String>
+    private lateinit var imagePickerLauncher : ActivityResultLauncher<Intent>
     
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,24 +81,29 @@ class AddOfferFragment : Fragment() {
 //        }
         
         
-//        imagePickerLauncher = registerForActivityResult(
-//            ActivityResultContracts.GetContent(),
-//            {
-//                result: ActivityResult ->
-//                if(result.resultCode == RESULT_OK){
-//                    uri = result.data?.data!!
-//                }
-//            }
-//        )
+        imagePickerLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult())
+            {
+                result: ActivityResult ->
+                if(result.resultCode == RESULT_OK){
+                    val data: Intent? = result.data
+                    uri = data?.data!!
+                    productImage.setImageURI(uri)
+                }
+            }
+
         
-        productImage.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, GALLERY_REQUEST_CODE)
-        }
-    
 //        productImage.setOnClickListener {
-//            imagePickerLauncher.launch("image/*")
+//            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+//            startActivityForResult(intent, GALLERY_REQUEST_CODE)
 //        }
+    
+        productImage.setOnClickListener {
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                type = "image/*"
+            }
+            imagePickerLauncher.launch(intent)
+        }
         
         addProductBtn.setOnClickListener {
             storageRef.getReference("productImages").child(System.currentTimeMillis().toString())
@@ -134,16 +139,16 @@ class AddOfferFragment : Fragment() {
         
     }
     
-    override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        
-        if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK) {
-            uri = data?.data!!
-            productImage.setImageURI(uri)
-            Log.d("DEBUG", "Image from gallery")
-            Log.d("DEBUG", uri.toString())
-        }
-    }
+//    override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK) {
+//            uri = data?.data!!
+//            productImage.setImageURI(uri)
+//            Log.d("DEBUG", "Image from gallery")
+//            Log.d("DEBUG", uri.toString())
+//        }
+//    }
     
     companion object {
         @JvmStatic

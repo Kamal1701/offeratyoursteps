@@ -46,4 +46,21 @@ object DatabaseServices {
             }
     }
     
+    fun createProductDetailsRecord(collectPath : String, userId : String, productMap : HashMap<String, String>, complete : (Boolean) -> Unit){
+        fStore = FirebaseFirestore.getInstance()
+    
+        fStore.collection(collectPath)
+            .document(userId)
+            .collection("OfferProductDetails")
+            .document()
+            .set(productMap)
+            .addOnSuccessListener {
+                complete(true)
+            }
+            .addOnFailureListener {
+                Log.d("DEBUG", it.localizedMessage)
+                complete(false)
+            }
+    }
+    
 }
