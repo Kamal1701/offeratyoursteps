@@ -65,10 +65,11 @@ class OfferNearMeFragment : Fragment() {
         mAuth = FirebaseAuth.getInstance()
         val userId = mAuth.currentUser!!.uid
         
+//        DatabaseServices.getParentDocument()
+        
         DatabaseServices.getProductDetailsRecord("Product_Details",userId,productList){
             isGetComplete ->
             if(isGetComplete){
-//                println(productList)
                 val itemAdapter = OfferAdapter(this.requireContext(), productList)
                 val offerRecycleView = binding.offerNearMeRecycleView
                 offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)

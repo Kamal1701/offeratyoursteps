@@ -14,7 +14,7 @@ import kotlinx.coroutines.tasks.await
 
 object DatabaseServices {
     
-    private lateinit var fStore : FirebaseFirestore
+    private var fStore = FirebaseFirestore.getInstance()
     
     fun getCustomerInfoRecord(
         collectPath : String,
@@ -22,7 +22,7 @@ object DatabaseServices {
         userModel : UserModel,
         complete : (Boolean) -> Unit
     ) {
-        fStore = FirebaseFirestore.getInstance()
+//        fStore = FirebaseFirestore.getInstance()
         fStore.collection(collectPath).document(userId)
             .get().addOnSuccessListener { custDoc ->
                 if (custDoc != null) {
@@ -52,7 +52,7 @@ object DatabaseServices {
         userMap : HashMap<String, String>,
         complete : (Boolean) -> Unit
     ) {
-        fStore = FirebaseFirestore.getInstance()
+//        fStore = FirebaseFirestore.getInstance()
         
         fStore.collection(collectPath).document(userId).set(userMap)
             .addOnSuccessListener {
@@ -70,7 +70,10 @@ object DatabaseServices {
         productMap : HashMap<String, String>,
         complete : (Boolean) -> Unit
     ) {
-        fStore = FirebaseFirestore.getInstance()
+//        fStore = FirebaseFirestore.getInstance()
+        
+        fStore.collection(collectPath)
+            .document(userId).set(mapOf("_id" to userId))
         
         fStore.collection(collectPath)
             .document(userId)
@@ -91,100 +94,75 @@ object DatabaseServices {
         productList : MutableList<OfferProductDetails>,
         complete : (Boolean) -> Unit
     ) {
-        fStore = FirebaseFirestore.getInstance()
-//        println(collectPath)
-        
-//        val documents = async {
-//            val collectRef = fStore.collection(collectPath)
-//            val querySnapshot = collectRef.get()
-//            return@async querySnapshot.result
-//        }
-//
-//        runBlocking {
-//            val result = documents.await()
-//            for(doc in result){
-//                println(doc.data)
-//            }
-//        }
-        
+//        fStore = FirebaseFirestore.getInstance()
         
         val parentCollectionRef = fStore.collection(collectPath)
-        println(parentCollectionRef.id)
-        GlobalScope.launch(Dispatchers.Main) {
-            val parentDocRef = parentCollectionRef.get().await().documents
-            for (parentDoc in parentDocRef){
-                val parentDocId = parentDoc.id
-                println(parentDocId)
-            }
-        }
-        
-        parentCollectionRef.get().addOnSuccessListener {
-            parentCollectionSnapshot ->
-            for (parentDoc in parentCollectionSnapshot.documents){
-                val parentDocId = parentDoc.id
-                println(parentDocId)
-                val subcollectionRef = parentDoc.reference.collection("OfferProductDetails")
-    
-//                parentDocId.collection("OfferProductDetails")
-                subcollectionRef
-                    .get().addOnSuccessListener { querySnapshot ->
-                        println(querySnapshot.isEmpty)
-                        if (!querySnapshot.isEmpty) {
-                            var prodCount = 0
-                            for (doc in querySnapshot) {
-                                val data = doc.data
-                    
-                                var imgName = data["Product_Image"].toString()
-                                var brandName = data["Product_Brand"].toString()
-                                var productName = data["Product_Name"].toString()
-                                var prodCategory = data["Product_Category"].toString()
-                                var prodSubcategory = data["Product_Subcategory"].toString()
-                                var actualPrice = data["Product_ActualPrice"].toString()
-                                var discountPrice = data["Product_DiscountPrice"].toString()
-                                var offerStDate = data["Offer_StartDate"].toString()
-                                var offerEdDate = data["Offer_EndDate"].toString()
-                                var location = data["Location"].toString()
-                                var prodWeight = data["Product_Weight"].toString()
-                                var prodDesc = data["Product_Desc"].toString()
+        GlobalScope.launch(Dispatchers.IO) {
+            parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
+                if (parentCollectionSnapshot.isEmpty) {
+                    for (parentDoc in parentCollectionSnapshot.documents) {
+                        val subcollectionRef = parentDoc.reference.collection("OfferProductDetails")
+                        subcollectionRef
+                            .get().addOnSuccessListener { querySnapshot ->
+                                println(querySnapshot.isEmpty)
+                                if (!querySnapshot.isEmpty) {
+                                    var prodCount = 0
+                                    for (doc in querySnapshot) {
+                                        val data = doc.data
+                                        
+                                        var imgName = data["Product_Image"].toString()
+                                        var brandName = data["Product_Brand"].toString()
+                                        var productName = data["Product_Name"].toString()
+                                        var prodCategory = data["Product_Category"].toString()
+                                        var prodSubcategory = data["Product_Subcategory"].toString()
+                                        var actualPrice = data["Product_ActualPrice"].toString()
+                                        var discountPrice = data["Product_DiscountPrice"].toString()
+                                        var offerStDate = data["Offer_StartDate"].toString()
+                                        var offerEdDate = data["Offer_EndDate"].toString()
+                                        var location = data["Location"].toString()
+                                        var prodWeight = data["Product_Weight"].toString()
+                                        var prodDesc = data["Product_Desc"].toString()
 //                        var shopName = data["Shop_Name"].toString()
-                                var discountPercentage = "2%"
-                    
-                                productList.add(
-                                    prodCount, OfferProductDetails(
-                                        imgName,
-                                        productName,
-                                        brandName,
-                                        prodCategory,
-                                        prodSubcategory,
-                                        actualPrice,
-                                        discountPrice,
-                                        offerStDate,
-                                        offerEdDate,
-                                        discountPercentage,
-                                        prodWeight,
-                                        prodDesc,
-                                        location
+                                        var discountPercentage = "2%"
+                                        
+                                        productList.add(
+                                            prodCount, OfferProductDetails(
+                                                imgName,
+                                                productName,
+                                                brandName,
+                                                prodCategory,
+                                                prodSubcategory,
+                                                actualPrice,
+                                                discountPrice,
+                                                offerStDate,
+                                                offerEdDate,
+                                                discountPercentage,
+                                                prodWeight,
+                                                prodDesc,
+                                                location
 //                            shopName
-                                    )
-                                )
-                                prodCount++
+                                            )
+                                        )
+                                        prodCount++
+                                    }
+                                    complete(true)
+                                }
                             }
-                            complete(true)
-                        }
-            
+                            .addOnFailureListener {
+                                Log.d("EXEC", it.localizedMessage)
+                                complete(false)
+                            }
                     }
-                    .addOnFailureListener {
-                        Log.d("DEBUG", it.localizedMessage)
-                        complete(false)
-                    }
+                }
             }
+                .addOnFailureListener {
+                    Log.d("EXEC", it.localizedMessage)
+                    complete(false)
+                }
         }
-            .addOnFailureListener {
-                println(parentCollectionRef.get().isSuccessful)
-            }
-        
+
 //        println(parentDocRef)
-        
+
 //        parentDocRef.collection("OfferProductDetails")
 //            .get().addOnSuccessListener { querySnapshot ->
 //                println(querySnapshot.isEmpty)
@@ -236,6 +214,18 @@ object DatabaseServices {
 //                Log.d("DEBUG", it.localizedMessage)
 //                complete(false)
 //            }
+    }
+    
+    fun getParentDocument() {
+        val parentCollectionRef = fStore.collection("Product_Details")
+        println(parentCollectionRef.id)
+        GlobalScope.launch(Dispatchers.IO) {
+            val parentDocRef = parentCollectionRef.get().await().documents
+            for (parentDoc in parentDocRef) {
+                val parentDocId = parentDoc.id
+                println(parentDocId)
+            }
+        }
     }
     
 }

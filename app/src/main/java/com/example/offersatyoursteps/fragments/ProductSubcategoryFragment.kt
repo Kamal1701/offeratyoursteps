@@ -83,7 +83,11 @@ class ProductSubcategoryFragment : Fragment() {
             productSubcategory ->
             userModel.prodSubcategory = productSubcategory.title
             val fm = OfferNearMeFragment.newInstance(userModel)
-            parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fm).commit()
+//            parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fm).commit()
+            requireActivity().supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace(R.id.mainFragmentContainer, fm)
+            }
         }
         val offerRecycleView = binding.productSubcategoryRecycleView
         offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
