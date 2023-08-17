@@ -105,7 +105,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
     
-    fun userSignIn(email : String, password : String) {
+    private fun userSignIn(email : String, password : String) {
         
         mAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task : Task<AuthResult> ->
@@ -114,17 +114,9 @@ class LoginActivity : AppCompatActivity() {
                     loginBtn.visibility = View.INVISIBLE
                     registerBtn.visibility = View.INVISIBLE
                     
-//                    getDatafromFirestore { dbSuccess ->
-//                        if (dbSuccess) {
-//                            loadHomePage()
-//                        }
-//                    }
-                    
                     val userId = mAuth.currentUser!!.uid
                     DatabaseServices.getCustomerInfoRecord("CustomerInfo", userId, userModel){dbSuccess ->
-//                        Log.d("DEBUG", "LoginActivity")
-//                        Log.d("DEBUG", userModel.cName.toString())
-//                        Log.d("DEBUG", userModel.cEmail.toString())
+
                         if(dbSuccess){
                             loadHomePage()
                         }

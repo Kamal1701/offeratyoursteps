@@ -22,7 +22,7 @@ object DatabaseServices {
         userModel : UserModel,
         complete : (Boolean) -> Unit
     ) {
-//        fStore = FirebaseFirestore.getInstance()
+
         fStore.collection(collectPath).document(userId)
             .get().addOnSuccessListener { custDoc ->
                 if (custDoc != null) {
@@ -33,9 +33,6 @@ object DatabaseServices {
                     userModel.cCity = custDoc.get("City").toString()
                     userModel.cState = custDoc.get("State").toString()
 
-//                    Log.d("DEBUG", "DatabaseServices")
-//                    Log.d("DEBUG", userModel.cName.toString())
-//                    Log.d("DEBUG", userModel.cEmail.toString())
                     complete(true)
                 }
                 
@@ -68,7 +65,6 @@ object DatabaseServices {
         productMap : HashMap<String, String>,
         complete : (Boolean) -> Unit
     ) {
-//        fStore = FirebaseFirestore.getInstance()
         
         fStore.collection(collectPath)
             .document(userId).set(mapOf("_id" to userId))
@@ -103,46 +99,12 @@ object DatabaseServices {
                             .get().addOnSuccessListener { querySnapshot ->
                                 println(querySnapshot.isEmpty)
                                 if (!querySnapshot.isEmpty) {
-                                    var prodCount = 0
-                                    for (doc in querySnapshot) {
-                                        val data = doc.data
-
-//                                        var imgName = data["Product_Image"].toString()
-//                                        var brandName = data["Product_Brand"].toString()
-//                                        var productName = data["Product_Name"].toString()
-//                                        var prodCategory = data["Product_Category"].toString()
-//                                        var prodSubcategory = data["Product_Subcategory"].toString()
-//                                        var actualPrice = data["Product_ActualPrice"].toString()
-//                                        var discountPrice = data["Product_DiscountPrice"].toString()
-//                                        var offerStDate = data["Offer_StartDate"].toString()
-//                                        var offerEdDate = data["Offer_EndDate"].toString()
-//                                        var location = data["Location"].toString()
-//                                        var prodWeight = data["Product_Weight"].toString()
-//                                        var prodDesc = data["Product_Desc"].toString()
-////                        var shopName = data["Shop_Name"].toString()
-//                                        var discountPercentage = "2%"
-                                        
+                                    for ((prodCount, doc) in querySnapshot.withIndex()) {
+                                       
                                         productList.add(
                                             prodCount,
-//                                            OfferProductDetails(
-//                                                imgName,
-//                                                productName,
-//                                                brandName,
-//                                                prodCategory,
-//                                                prodSubcategory,
-//                                                actualPrice,
-//                                                discountPrice,
-//                                                offerStDate,
-//                                                offerEdDate,
-//                                                discountPercentage,
-//                                                prodWeight,
-//                                                prodDesc,
-//                                                location
-////                            shopName
-//                                            )
                                             OfferProductDetails.fromQuerySnapshot(doc)
                                         )
-                                        prodCount++
                                     }
                                     complete(true)
                                 }

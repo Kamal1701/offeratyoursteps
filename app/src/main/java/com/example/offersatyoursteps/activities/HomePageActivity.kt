@@ -81,7 +81,7 @@ class HomePageActivity : AppCompatActivity() {
         
         navView.setNavigationItemSelectedListener { item ->
             val fragment : Fragment
-            when (item!!.itemId) {
+            when (item.itemId) {
                 R.id.nav_offer_near_me -> {
 //                    getProductSubcategoryFragment()
                     val fragment = OfferNearMeFragment.newInstance(userModel)
@@ -178,7 +178,7 @@ class HomePageActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
     
-    fun updateNavHeader() {
+    private fun updateNavHeader() {
         val navView : NavigationView = binding.navView
         val headerView = navView.getHeaderView(0)
         val navUserName = headerView.findViewById<TextView>(R.id.navHeaderUsernameTxt)
@@ -191,10 +191,10 @@ class HomePageActivity : AppCompatActivity() {
         val merchantProfileMenu = navView.menu.findItem(R.id.nav_merchant_profile)
         val merchantProductMenu = navView.menu.findItem(R.id.merchantProductMenu)
         if (userModel.isMerchant == "N") {
-            profileMenu.setVisible(true)
+            profileMenu.isVisible = true
         } else {
-            merchantProfileMenu.setVisible(true)
-            merchantProductMenu.setVisible(true)
+            merchantProfileMenu.isVisible = true
+            merchantProductMenu.isVisible = true
         }
         
         getProductSubcategoryFragment()

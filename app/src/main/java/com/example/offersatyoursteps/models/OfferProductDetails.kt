@@ -1,7 +1,7 @@
 package com.example.offersatyoursteps.models
 
 import com.google.firebase.firestore.QueryDocumentSnapshot
-import com.google.firebase.firestore.QuerySnapshot
+
 
 data class OfferProductDetails(
     var imgName : String,
@@ -23,20 +23,20 @@ data class OfferProductDetails(
         fun fromQuerySnapshot(subDocSnapshot : QueryDocumentSnapshot) : OfferProductDetails {
             
             return OfferProductDetails(
-                subDocSnapshot.data!!["Product_Image"].toString(),
-                subDocSnapshot.data!!["Product_Brand"].toString(),
-                subDocSnapshot.data!!["Product_Name"].toString(),
-                subDocSnapshot.data!!["Product_Category"].toString(),
-                subDocSnapshot.data!!["Product_Subcategory"].toString(),
-                subDocSnapshot.data!!["Product_ActualPrice"].toString(),
-                subDocSnapshot.data!!["Product_DiscountPrice"].toString(),
-                subDocSnapshot.data!!["Offer_StartDate"].toString(),
-                subDocSnapshot.data!!["Offer_EndDate"].toString(),
-                subDocSnapshot.data!!["Location"].toString(),
-                subDocSnapshot.data!!["Product_Weight"].toString(),
-                subDocSnapshot.data!!["Product_Desc"].toString(),
-//it.data["Shop_Name"].toString(),
-                "2%"
+                subDocSnapshot.data["Product_Image"].toString(),
+                subDocSnapshot.data["Product_Name"].toString(),
+                subDocSnapshot.data["Product_Brand"].toString(),
+                subDocSnapshot.data["Product_Category"].toString(),
+                subDocSnapshot.data["Product_Subcategory"].toString(),
+                subDocSnapshot.data["Product_ActualPrice"].toString(),
+                subDocSnapshot.data["Product_DiscountPrice"].toString(),
+                subDocSnapshot.data["Offer_StartDate"].toString(),
+                subDocSnapshot.data["Offer_EndDate"].toString(),
+                "2%",
+                subDocSnapshot.data["Product_Weight"].toString(),
+                subDocSnapshot.data["Product_Desc"].toString(),
+                subDocSnapshot.data["Location"].toString()
+//subDocSnapshot.data["Shop_Name"].toString(),
             )
         }
         

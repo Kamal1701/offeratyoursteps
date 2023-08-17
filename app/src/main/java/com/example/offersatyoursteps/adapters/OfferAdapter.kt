@@ -14,11 +14,11 @@ import com.example.offersatyoursteps.models.OfferProductDetails
 class OfferAdapter(val context:Context, val offerDetails : MutableList<OfferProductDetails>):RecyclerView.Adapter<OfferAdapter.ViewHolder>() {
     
     inner class ViewHolder(val binding : OfferListViewBinding):RecyclerView.ViewHolder(binding.root){
-        val offerImage = binding.offerProductImg
-        val prodName =  binding.offerProductName
-        val actPrice = binding.offerActualPrice
-        val discPrice = binding.offerDiscountPrice
-        val discPercentage = binding.offerSavePercentage
+        private val offerImage = binding.offerProductImg
+        private val prodName =  binding.offerProductName
+        private val actPrice = binding.offerActualPrice
+        private val discPrice = binding.offerDiscountPrice
+        private val discPercentage = binding.offerSavePercentage
         
         fun bindingOffers(context : Context, offerDetails : OfferProductDetails){
             

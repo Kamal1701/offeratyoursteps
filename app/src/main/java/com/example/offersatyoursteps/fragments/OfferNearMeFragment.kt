@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Adapter
+import android.widget.ProgressBar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.offersatyoursteps.R
@@ -30,6 +31,7 @@ class OfferNearMeFragment : Fragment() {
     private lateinit var userModel : UserModel
     private lateinit var binding : FragmentOfferNearMeBinding
     private var productList : MutableList<OfferProductDetails> = mutableListOf()
+    private lateinit var recProgressBar:ProgressBar
 
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +46,9 @@ class OfferNearMeFragment : Fragment() {
     ) : View? {
         // Inflate the layout for this fragment
         binding = FragmentOfferNearMeBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        recProgressBar = binding.recycleProgressBar
+        recProgressBar.visibility = View.VISIBLE
+        return binding.root
     }
     
     companion object {
@@ -64,6 +67,7 @@ class OfferNearMeFragment : Fragment() {
         DatabaseServices.getProductDetailsRecord("Product_Details",productList){
             isGetComplete ->
             if(isGetComplete){
+                recProgressBar.visibility = View.INVISIBLE
                 val itemAdapter = OfferAdapter(this.requireContext(), productList)
                 val offerRecycleView = binding.offerNearMeRecycleView
                 offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
