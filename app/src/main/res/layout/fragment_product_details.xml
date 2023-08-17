@@ -44,7 +44,7 @@
         app:layout_constraintTop_toBottomOf="@+id/productDetailBrandTxt" />
 
     <TextView
-        android:id="@+id/prodDetailsDiscountPrice"
+        android:id="@+id/prodDetailDiscountPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
@@ -85,15 +85,15 @@
         app:layout_constraintTop_toBottomOf="@+id/prodDetailActualPrice" />
 
     <TextView
-        android:id="@+id/prodDetailDiscountPrice"
+        android:id="@+id/prodDetailDiscountPer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
         android:text="00%"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/prodDetailsDiscountPrice"
-        app:layout_constraintStart_toEndOf="@+id/prodDetailsDiscountPrice"
-        app:layout_constraintTop_toTopOf="@+id/prodDetailsDiscountPrice" />
+        app:layout_constraintBottom_toBottomOf="@+id/prodDetailDiscountPrice"
+        app:layout_constraintStart_toEndOf="@+id/prodDetailDiscountPrice"
+        app:layout_constraintTop_toTopOf="@+id/prodDetailDiscountPrice" />
 
     <TextView
         android:id="@+id/prodDetailShopName"
@@ -116,11 +116,11 @@
         android:textSize="16dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/prodDetailLocation"
-        app:layout_constraintTop_toBottomOf="@+id/prodDetailLocation" />
+        app:layout_constraintStart_toStartOf="@+id/prodDetailCity"
+        app:layout_constraintTop_toBottomOf="@+id/prodDetailCity" />
 
     <TextView
-        android:id="@+id/prodDetailLocation"
+        android:id="@+id/prodDetailCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

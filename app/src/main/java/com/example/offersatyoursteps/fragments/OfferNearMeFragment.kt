@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Adapter
 import android.widget.ProgressBar
+import androidx.fragment.app.commit
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.offersatyoursteps.R
@@ -64,11 +65,18 @@ class OfferNearMeFragment : Fragment() {
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        DatabaseServices.getProductDetailsRecord("Product_Details",productList){
+        DatabaseServices.getProductDetailsRecord("Product_Details",productList, userModel.cCity.toString()){
             isGetComplete ->
             if(isGetComplete){
                 recProgressBar.visibility = View.INVISIBLE
-                val itemAdapter = OfferAdapter(this.requireContext(), productList)
+                val itemAdapter = OfferAdapter(this.requireContext(), productList){
+                    productDetail ->
+                    val fragment = ProductDetailsFragment.newInstance(productDetail)
+                    requireActivity().supportFragmentManager.commit {
+                        setReorderingAllowed(true)
+                        replace(R.id.nav_host_fragment_content_home_page, fragment)
+                    }
+                }
                 val offerRecycleView = binding.offerNearMeRecycleView
                 offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
                 offerRecycleView.adapter = itemAdapter

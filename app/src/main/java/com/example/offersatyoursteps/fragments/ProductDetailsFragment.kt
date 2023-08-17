@@ -5,28 +5,33 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.offersatyoursteps.R
+import android.widget.TextView
+import com.example.offersatyoursteps.databinding.FragmentProductDetailsBinding
+import com.example.offersatyoursteps.models.OfferProductDetails
+import com.example.offersatyoursteps.utilities.EXTRA_PRODUCT
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ProductDetailsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ProductDetailsFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1 : String? = null
-    private var param2 : String? = null
+    private lateinit var binding:FragmentProductDetailsBinding
+    private lateinit var offerProductDetails : OfferProductDetails
+    
+    private lateinit var brandName: TextView
+    private lateinit var prodName: TextView
+    private lateinit var actualPrice: TextView
+    private lateinit var discountPrice: TextView
+    private lateinit var discountPercentage: TextView
+    private lateinit var prodWeight: TextView
+    private lateinit var shopName: TextView
+    private lateinit var shopCity: TextView
+    private lateinit var shopState: TextView
     
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            offerProductDetails = it?.getParcelable<OfferProductDetails>(EXTRA_PRODUCT)!!
         }
     }
     
@@ -35,25 +40,43 @@ class ProductDetailsFragment : Fragment() {
         savedInstanceState : Bundle?
     ) : View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_product_details, container, false)
+        binding = FragmentProductDetailsBinding.inflate(inflater, container, false)
+        
+        brandName = binding.productDetailBrandTxt
+        prodName = binding.productDetailNameTxt
+        actualPrice = binding.prodDetailActualPrice
+        discountPrice = binding.prodDetailDiscountPrice
+        discountPercentage = binding.prodDetailDiscountPer
+        prodWeight = binding.prodDetailWeight
+        shopName = binding.prodDetailShopName
+        shopCity = binding.prodDetailCity
+        shopState = binding.prodDetailState
+        
+        return binding.root
+    }
+    
+    override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        
+        brandName.text = offerProductDetails.brandName
+        prodName.text = offerProductDetails.productName
+        actualPrice.text = offerProductDetails.actualPrice
+        discountPrice.text = offerProductDetails.discountPrice
+        discountPercentage.text = offerProductDetails.discountPercentage
+        prodWeight.text = offerProductDetails.prodWeight
+        shopName.text = offerProductDetails.productName
+        shopCity.text = offerProductDetails.location
+        shopState.text = offerProductDetails.location
+        
     }
     
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ProductDetailsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+        
         @JvmStatic
-        fun newInstance(param1 : String, param2 : String) =
+        fun newInstance(offerProductDetails : OfferProductDetails) =
             ProductDetailsFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putParcelable(EXTRA_PRODUCT, offerProductDetails)
                 }
             }
     }

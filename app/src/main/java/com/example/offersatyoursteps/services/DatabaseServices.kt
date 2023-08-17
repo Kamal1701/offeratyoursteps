@@ -22,7 +22,7 @@ object DatabaseServices {
         userModel : UserModel,
         complete : (Boolean) -> Unit
     ) {
-
+        
         fStore.collection(collectPath).document(userId)
             .get().addOnSuccessListener { custDoc ->
                 if (custDoc != null) {
@@ -32,7 +32,7 @@ object DatabaseServices {
                     userModel.isMerchant = custDoc.get("IsMerchant").toString()
                     userModel.cCity = custDoc.get("City").toString()
                     userModel.cState = custDoc.get("State").toString()
-
+                    
                     complete(true)
                 }
                 
@@ -86,6 +86,7 @@ object DatabaseServices {
     fun getProductDetailsRecord(
         collectPath : String,
         productList : MutableList<OfferProductDetails>,
+        location : String,
         complete : (Boolean) -> Unit
     ) {
         
@@ -100,11 +101,14 @@ object DatabaseServices {
                                 println(querySnapshot.isEmpty)
                                 if (!querySnapshot.isEmpty) {
                                     for ((prodCount, doc) in querySnapshot.withIndex()) {
-                                       
-                                        productList.add(
-                                            prodCount,
-                                            OfferProductDetails.fromQuerySnapshot(doc)
-                                        )
+                                        println(doc.data["Location"].toString())
+                                        println(location)
+                                        if (doc.data["Location"].toString() == location) {
+                                            productList.add(
+                                                prodCount,
+                                                OfferProductDetails.fromQuerySnapshot(doc)
+                                            )
+                                        }
                                     }
                                     complete(true)
                                 }
