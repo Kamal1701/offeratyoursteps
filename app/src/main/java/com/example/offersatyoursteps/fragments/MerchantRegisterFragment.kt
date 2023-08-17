@@ -14,13 +14,10 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.example.offersatyoursteps.R
-import com.example.offersatyoursteps.activities.HomePageActivity
 import com.example.offersatyoursteps.activities.LoginActivity
 import com.example.offersatyoursteps.databinding.FragmentMerchantRegisterBinding
-import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.SetTextColorSpan
-import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -39,8 +36,6 @@ class MerchantRegisterFragment : Fragment() {
     private lateinit var registerBtn: Button
     
     private  lateinit var mAuth : FirebaseAuth
-    
-    private var userModel = UserModel("", "", "", "", "", "","")
     
     override fun onCreateView(
         inflater : LayoutInflater, container : ViewGroup?,
@@ -116,14 +111,7 @@ class MerchantRegisterFragment : Fragment() {
                 merchantMap["IsMerchant"] = "Y"
                 merchantMap["City"] = mCity
                 merchantMap["State"] = mState
-    
-                userModel.cName = mName
-                userModel.cEmail = mEmail
-                userModel.cShopName = mShopName
-                userModel.isMerchant = "Y"
-                userModel.cCity = mCity
-                userModel.cState = mState
-    
+                
                 mAuth.createUserWithEmailAndPassword(mEmail, mPassword)
                     .addOnCompleteListener { task : Task<AuthResult> ->
                         if (task.isSuccessful) {
@@ -165,8 +153,8 @@ class MerchantRegisterFragment : Fragment() {
     }
     
     private fun loadHomePage() {
-        val homeActivityIntent = Intent(activity, HomePageActivity::class.java)
-        homeActivityIntent.putExtra(USER_INFO, userModel)
-        startActivity(homeActivityIntent)
+  
+        val loginActivity = Intent(activity, LoginActivity::class.java)
+        startActivity(loginActivity)
     }
 }

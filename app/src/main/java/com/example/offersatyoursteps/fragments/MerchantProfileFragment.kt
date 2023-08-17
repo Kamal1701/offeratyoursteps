@@ -79,8 +79,7 @@ class MerchantProfileFragment : Fragment() {
         mtUserName.setText(userModel.cName)
         mtCity.setText(userModel.cCity)
         mtState.setText(userModel.cState)
-    
-    
+        
     }
     
     companion object{

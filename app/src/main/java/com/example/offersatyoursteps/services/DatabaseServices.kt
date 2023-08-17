@@ -52,8 +52,6 @@ object DatabaseServices {
         userMap : HashMap<String, String>,
         complete : (Boolean) -> Unit
     ) {
-//        fStore = FirebaseFirestore.getInstance()
-        
         fStore.collection(collectPath).document(userId).set(userMap)
             .addOnSuccessListener {
                 complete(true)
@@ -90,16 +88,15 @@ object DatabaseServices {
     }
     
     fun getProductDetailsRecord(
-        collectPath : String, userId : String,
+        collectPath : String,
         productList : MutableList<OfferProductDetails>,
         complete : (Boolean) -> Unit
     ) {
-//        fStore = FirebaseFirestore.getInstance()
         
         val parentCollectionRef = fStore.collection(collectPath)
         GlobalScope.launch(Dispatchers.IO) {
             parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
-                if (parentCollectionSnapshot.isEmpty) {
+                if (!parentCollectionSnapshot.isEmpty) {
                     for (parentDoc in parentCollectionSnapshot.documents) {
                         val subcollectionRef = parentDoc.reference.collection("OfferProductDetails")
                         subcollectionRef
@@ -109,39 +106,41 @@ object DatabaseServices {
                                     var prodCount = 0
                                     for (doc in querySnapshot) {
                                         val data = doc.data
-                                        
-                                        var imgName = data["Product_Image"].toString()
-                                        var brandName = data["Product_Brand"].toString()
-                                        var productName = data["Product_Name"].toString()
-                                        var prodCategory = data["Product_Category"].toString()
-                                        var prodSubcategory = data["Product_Subcategory"].toString()
-                                        var actualPrice = data["Product_ActualPrice"].toString()
-                                        var discountPrice = data["Product_DiscountPrice"].toString()
-                                        var offerStDate = data["Offer_StartDate"].toString()
-                                        var offerEdDate = data["Offer_EndDate"].toString()
-                                        var location = data["Location"].toString()
-                                        var prodWeight = data["Product_Weight"].toString()
-                                        var prodDesc = data["Product_Desc"].toString()
-//                        var shopName = data["Shop_Name"].toString()
-                                        var discountPercentage = "2%"
+
+//                                        var imgName = data["Product_Image"].toString()
+//                                        var brandName = data["Product_Brand"].toString()
+//                                        var productName = data["Product_Name"].toString()
+//                                        var prodCategory = data["Product_Category"].toString()
+//                                        var prodSubcategory = data["Product_Subcategory"].toString()
+//                                        var actualPrice = data["Product_ActualPrice"].toString()
+//                                        var discountPrice = data["Product_DiscountPrice"].toString()
+//                                        var offerStDate = data["Offer_StartDate"].toString()
+//                                        var offerEdDate = data["Offer_EndDate"].toString()
+//                                        var location = data["Location"].toString()
+//                                        var prodWeight = data["Product_Weight"].toString()
+//                                        var prodDesc = data["Product_Desc"].toString()
+////                        var shopName = data["Shop_Name"].toString()
+//                                        var discountPercentage = "2%"
                                         
                                         productList.add(
-                                            prodCount, OfferProductDetails(
-                                                imgName,
-                                                productName,
-                                                brandName,
-                                                prodCategory,
-                                                prodSubcategory,
-                                                actualPrice,
-                                                discountPrice,
-                                                offerStDate,
-                                                offerEdDate,
-                                                discountPercentage,
-                                                prodWeight,
-                                                prodDesc,
-                                                location
-//                            shopName
-                                            )
+                                            prodCount,
+//                                            OfferProductDetails(
+//                                                imgName,
+//                                                productName,
+//                                                brandName,
+//                                                prodCategory,
+//                                                prodSubcategory,
+//                                                actualPrice,
+//                                                discountPrice,
+//                                                offerStDate,
+//                                                offerEdDate,
+//                                                discountPercentage,
+//                                                prodWeight,
+//                                                prodDesc,
+//                                                location
+////                            shopName
+//                                            )
+                                            OfferProductDetails.fromQuerySnapshot(doc)
                                         )
                                         prodCount++
                                     }
@@ -160,60 +159,7 @@ object DatabaseServices {
                     complete(false)
                 }
         }
-
-//        println(parentDocRef)
-
-//        parentDocRef.collection("OfferProductDetails")
-//            .get().addOnSuccessListener { querySnapshot ->
-//                println(querySnapshot.isEmpty)
-//                if (!querySnapshot.isEmpty) {
-//                    var prodCount = 0
-//                    for (doc in querySnapshot) {
-//                        val data = doc.data
-//
-//                        var imgName = data["Product_Image"].toString()
-//                        var brandName = data["Product_Brand"].toString()
-//                        var productName = data["Product_Name"].toString()
-//                        var prodCategory = data["Product_Category"].toString()
-//                        var prodSubcategory = data["Product_Subcategory"].toString()
-//                        var actualPrice = data["Product_ActualPrice"].toString()
-//                        var discountPrice = data["Product_DiscountPrice"].toString()
-//                        var offerStDate = data["Offer_StartDate"].toString()
-//                        var offerEdDate = data["Offer_EndDate"].toString()
-//                        var location = data["Location"].toString()
-//                        var prodWeight = data["Product_Weight"].toString()
-//                        var prodDesc = data["Product_Desc"].toString()
-////                        var shopName = data["Shop_Name"].toString()
-//                        var discountPercentage = "2%"
-//
-//                        productList.add(
-//                            prodCount, OfferProductDetails(
-//                                imgName,
-//                                productName,
-//                                brandName,
-//                                prodCategory,
-//                                prodSubcategory,
-//                                actualPrice,
-//                                discountPrice,
-//                                offerStDate,
-//                                offerEdDate,
-//                                discountPercentage,
-//                                prodWeight,
-//                                prodDesc,
-//                                location
-////                            shopName
-//                            )
-//                        )
-//                        prodCount++
-//                    }
-//                    complete(true)
-//                }
-//
-//            }
-//            .addOnFailureListener {
-//                Log.d("DEBUG", it.localizedMessage)
-//                complete(false)
-//            }
+        
     }
     
     fun getParentDocument() {

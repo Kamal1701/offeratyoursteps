@@ -29,7 +29,6 @@ class OfferNearMeFragment : Fragment() {
     
     private lateinit var userModel : UserModel
     private lateinit var binding : FragmentOfferNearMeBinding
-    private lateinit var mAuth : FirebaseAuth
     private var productList : MutableList<OfferProductDetails> = mutableListOf()
 
     override fun onCreate(savedInstanceState : Bundle?) {
@@ -61,13 +60,8 @@ class OfferNearMeFragment : Fragment() {
     
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-    
-        mAuth = FirebaseAuth.getInstance()
-        val userId = mAuth.currentUser!!.uid
         
-//        DatabaseServices.getParentDocument()
-        
-        DatabaseServices.getProductDetailsRecord("Product_Details",userId,productList){
+        DatabaseServices.getProductDetailsRecord("Product_Details",productList){
             isGetComplete ->
             if(isGetComplete){
                 val itemAdapter = OfferAdapter(this.requireContext(), productList)
@@ -78,9 +72,5 @@ class OfferNearMeFragment : Fragment() {
                 Log.d("DEBUG", "OfferNearMe - no record returned")
             }
         }
-//        val itemAdapter = OfferAdapter(this.requireContext(), Dataservices.getProducts(userModel.prodSubcategory))
-//        val offerRecycleView = binding.offerNearMeRecycleView
-//        offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
-//        offerRecycleView.adapter = itemAdapter
     }
 }

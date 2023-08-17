@@ -88,7 +88,7 @@ class HomePageActivity : AppCompatActivity() {
                     if (fragment != null) {
                         supportFragmentManager.commit {
                             setReorderingAllowed(true)
-                            replace(R.id.mainFragmentContainer, fragment)
+                            replace(R.id.nav_host_fragment_content_home_page, fragment)
                         }
                     }
                     drawerLayout.closeDrawer(GravityCompat.START)
@@ -101,7 +101,7 @@ class HomePageActivity : AppCompatActivity() {
                     if (fragment != null) {
                         supportFragmentManager.commit {
                             setReorderingAllowed(true)
-                            replace(R.id.mainFragmentContainer, fragment)
+                            replace(R.id.nav_host_fragment_content_home_page, fragment)
                         }
                     }
                     drawerLayout.closeDrawer(GravityCompat.START)
@@ -113,7 +113,7 @@ class HomePageActivity : AppCompatActivity() {
                     if (fragment != null) {
                         supportFragmentManager.commit {
                             setReorderingAllowed(true)
-                            replace(R.id.mainFragmentContainer, fragment)
+                            replace(R.id.nav_host_fragment_content_home_page, fragment)
                         }
                         drawerLayout.closeDrawer(GravityCompat.START)
                         supportActionBar?.title = "Profile"
@@ -125,7 +125,7 @@ class HomePageActivity : AppCompatActivity() {
                     if (fragment != null) {
                         supportFragmentManager.commit {
                             setReorderingAllowed(true)
-                            replace(R.id.mainFragmentContainer, fragment)
+                            replace(R.id.nav_host_fragment_content_home_page, fragment)
                         }
                         drawerLayout.closeDrawer(GravityCompat.START)
                         supportActionBar?.title = "Profile"
@@ -138,7 +138,7 @@ class HomePageActivity : AppCompatActivity() {
                     if (fragment != null) {
                         supportFragmentManager.commit {
                             setReorderingAllowed(true)
-                            replace(R.id.mainFragmentContainer, fragment)
+                            replace(R.id.nav_host_fragment_content_home_page, fragment)
                         }
                         drawerLayout.closeDrawer(GravityCompat.START)
                         supportActionBar?.title = "Add Product"
@@ -207,7 +207,7 @@ class HomePageActivity : AppCompatActivity() {
         if (fragment != null) {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
-                replace(R.id.mainFragmentContainer, fragment)
+                replace(R.id.nav_host_fragment_content_home_page, fragment)
             }
         }
     }

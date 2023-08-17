@@ -14,13 +14,10 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.example.offersatyoursteps.R
-import com.example.offersatyoursteps.activities.HomePageActivity
 import com.example.offersatyoursteps.activities.LoginActivity
 import com.example.offersatyoursteps.databinding.FragmentCustomerRegisterBinding
-import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.SetTextColorSpan
-import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -36,13 +33,8 @@ class CustomerRegisterFragment : Fragment() {
     private lateinit var custState : AutoCompleteTextView
     private lateinit var progressBar : ProgressBar
     private lateinit var registerBtn : Button
-//    private lateinit var customerData : UserModel
     
     private lateinit var mAuth : FirebaseAuth
-//    private lateinit var fStore : FirebaseFirestore
-    
-    private var userModel = UserModel("", "", "", "", "", "","")
-    
     
     override fun onCreateView(
         inflater : LayoutInflater, container : ViewGroup?,
@@ -63,13 +55,6 @@ class CustomerRegisterFragment : Fragment() {
         progressBar.visibility = View.INVISIBLE
         
         mAuth = FirebaseAuth.getInstance()
-//        if(mAuth.currentUser==null){
-//            Toast.makeText(activity,"mAuth user is null", Toast.LENGTH_LONG).show()
-//        }else{
-//            Toast.makeText(activity,"mAuth user is not null", Toast.LENGTH_LONG).show()
-//        }
-
-//        fStore = FirebaseFirestore.getInstance()
         
         return view
     }
@@ -93,7 +78,6 @@ class CustomerRegisterFragment : Fragment() {
         val colorSpan = SetTextColorSpan(backToLogin.text.toString())
         backToLogin.text = colorSpan.setTextColorSpan()
 
-//        val backToLogin = binding.regCustLoginBtn
         backToLogin.setOnClickListener {
             val loginActivity = Intent(activity, LoginActivity::class.java)
             startActivity(loginActivity)
@@ -102,7 +86,6 @@ class CustomerRegisterFragment : Fragment() {
         
         registerBtn.setOnClickListener {
 
-//            if(mAuth.currentUser!=null){
             var cName = custName.text.toString()
             val cEmail = custEmail.text.toString()
             val cPassword = custPassword.text.toString()
@@ -124,13 +107,6 @@ class CustomerRegisterFragment : Fragment() {
                 customerMap["IsMerchant"] = "N"
                 customerMap["City"] = cCity
                 customerMap["State"] = cState
-                
-                userModel.cName = cName
-                userModel.cEmail = cEmail
-                userModel.cShopName = "NA"
-                userModel.isMerchant = "N"
-                userModel.cCity = cCity
-                userModel.cState = cState
                 
                 mAuth.createUserWithEmailAndPassword(cEmail, cPassword)
                     .addOnCompleteListener { task : Task<AuthResult> ->
@@ -172,9 +148,8 @@ class CustomerRegisterFragment : Fragment() {
     }
     
     private fun loadHomePage() {
-        val homeActivityIntent = Intent(activity, HomePageActivity::class.java)
-        homeActivityIntent.putExtra(USER_INFO, userModel)
-        startActivity(homeActivityIntent)
+        val loginActivity = Intent(activity, LoginActivity::class.java)
+        startActivity(loginActivity)
     }
     
 }

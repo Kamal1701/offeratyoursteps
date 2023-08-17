@@ -148,6 +148,13 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
     
+    fun onForgotPwdBtnClicked(view : View) {
+//        val registerIntent = Intent(this, RegisterActivity::class.java)
+        val registerIntent = Intent(this, RegistrationActivity::class.java)
+        startActivity(registerIntent)
+        finish()
+    }
+    
     
     private fun loadHomePage() {
         val homeActivityIntent = Intent(this, HomePageActivity::class.java)
@@ -159,31 +166,6 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
     
-//    private fun getDatafromFirestore(complete : (Boolean) -> Unit) {
-//        val userId = mAuth.currentUser!!.uid
-//        fStore.collection("CustomerInfo").document(userId)
-//            .get().addOnSuccessListener { customerDocument ->
-//                if (customerDocument != null) {
-////                    val name = customerDocument.get("User_Name")
-//                    userModel.cName = customerDocument.get("User_Name").toString()
-//                    userModel.cEmail = customerDocument.get("User_EmailId").toString()
-//                    userModel.isMerchant = customerDocument.get("IsMerchant").toString()
-//                    userModel.cCity = customerDocument.get("City").toString()
-//                    userModel.cState = customerDocument.get("State").toString()
-////                    Log.d("DEBUG", name.toString())
-////                    Log.d("DEBUG", customerDocument.get("User_EmailId").toString())
-////                    Log.d("DEBUG", customerDocument.get("IsMerchant").toString())
-//                    complete(true)
-//                } else {
-//                    Log.d("DEBUG", "No such document")
-//                    complete(true)
-//                }
-//            }
-//            .addOnFailureListener {
-//                Log.d("DEBUG", it.localizedMessage)
-//                complete(false)
-//            }
-//    }
 
 //    override fun onStart() {
 //        super.onStart()

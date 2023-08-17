@@ -86,7 +86,7 @@ class ProductSubcategoryFragment : Fragment() {
 //            parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fm).commit()
             requireActivity().supportFragmentManager.commit {
                 setReorderingAllowed(true)
-                replace(R.id.mainFragmentContainer, fm)
+                replace(R.id.nav_host_fragment_content_home_page, fm)
             }
         }
         val offerRecycleView = binding.productSubcategoryRecycleView

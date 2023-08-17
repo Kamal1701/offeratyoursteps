@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.ProductDetailsFragment">
+
+
+    <ImageView
+        android:id="@+id/productDetailImg"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/productDetailBrandTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:text="brand name"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.081"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/productDetailNameTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="product name"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/productDetailBrandTxt"
+        app:layout_constraintTop_toBottomOf="@+id/productDetailBrandTxt" />
+
+    <TextView
+        android:id="@+id/prodDetailsDiscountPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:text="dcp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/prodDetailActualPrice"
+        app:layout_constraintStart_toEndOf="@+id/prodDetailActualPrice"
+        app:layout_constraintTop_toBottomOf="@+id/productDetailNameTxt"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/prodDetailActualPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="acp"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/productDetailNameTxt"
+        app:layout_constraintTop_toBottomOf="@+id/productDetailNameTxt" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="192dp" />
+
+    <TextView
+        android:id="@+id/prodDetailWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="1000kg"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/prodDetailActualPrice"
+        app:layout_constraintTop_toBottomOf="@+id/prodDetailActualPrice" />
+
+    <TextView
+        android:id="@+id/prodDetailDiscountPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:text="00%"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/prodDetailsDiscountPrice"
+        app:layout_constraintStart_toEndOf="@+id/prodDetailsDiscountPrice"
+        app:layout_constraintTop_toTopOf="@+id/prodDetailsDiscountPrice" />
+
+    <TextView
+        android:id="@+id/prodDetailShopName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="KPS Info tech"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintHorizontal_bias="0.197"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productDetailImg" />
+
+    <TextView
+        android:id="@+id/prodDetailState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Tamil Nadu"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/prodDetailLocation"
+        app:layout_constraintTop_toBottomOf="@+id/prodDetailLocation" />
+
+    <TextView
+        android:id="@+id/prodDetailLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Chennai"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/prodDetailShopName"
+        app:layout_constraintTop_toBottomOf="@+id/prodDetailShopName" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

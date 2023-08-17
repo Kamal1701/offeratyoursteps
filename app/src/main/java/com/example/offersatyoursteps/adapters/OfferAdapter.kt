@@ -21,10 +21,6 @@ class OfferAdapter(val context:Context, val offerDetails : MutableList<OfferProd
         val discPercentage = binding.offerSavePercentage
         
         fun bindingOffers(context : Context, offerDetails : OfferProductDetails){
-//            val resourceId = context.resources.getIdentifier(offerDetails.imgName, "drawable", context.packageName)
-//            Log.d("DEBUG", "image name from offer adapter")
-//            Log.d("DEBUG", offerDetails.imgName)
-//            offerImage.setImageResource(resourceId)
             
             Glide.with(context).load(offerDetails.imgName).into(offerImage)
             prodName.text =offerDetails.productName

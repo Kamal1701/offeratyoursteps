@@ -20,21 +20,11 @@ import com.example.offersatyoursteps.utilities.SPAN_COUNT
 import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.firebase.auth.FirebaseAuth
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AllOffersFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AllOffersFragment : Fragment() {
     // TODO: Rename and change types of parameters
     
     private lateinit var binding : FragmentAllOffersBinding
-    private lateinit var mAuth : FirebaseAuth
     private var productList : MutableList<OfferProductDetails> = mutableListOf()
     
     private var userModel = UserModel("", "", "", "", "", "","")
@@ -67,11 +57,8 @@ class AllOffersFragment : Fragment() {
     
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-    
-        mAuth = FirebaseAuth.getInstance()
-        val userId = mAuth.currentUser!!.uid
-    
-        DatabaseServices.getProductDetailsRecord("Product_Details",userId,productList){
+        
+        DatabaseServices.getProductDetailsRecord("Product_Details",productList){
                 isGetComplete ->
             if(isGetComplete){
                 val itemAdapter = OfferAdapter(this.requireContext(), productList)
