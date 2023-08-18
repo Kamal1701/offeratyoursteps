@@ -17,7 +17,7 @@
             android:id="@+id/regMercUserNameTxt"
             android:layout_width="256dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:background="@drawable/register_edittext_sytle"
             android:ems="10"
             android:fontFamily="sans-serif"
@@ -33,7 +33,7 @@
             android:id="@+id/regMercUserEmailTxt"
             android:layout_width="256dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/register_edittext_sytle"
             android:ems="10"
             android:fontFamily="sans-serif"
@@ -48,7 +48,7 @@
             android:id="@+id/regMercPasswordTxt"
             android:layout_width="256dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/register_edittext_sytle"
             android:ems="10"
             android:fontFamily="sans-serif"
@@ -64,7 +64,7 @@
             android:id="@+id/regMercShopNameTxt"
             android:layout_width="256dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/register_edittext_sytle"
             android:ems="10"
             android:fontFamily="sans-serif"
@@ -75,11 +75,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/regMercPasswordTxt" />
 
+        <EditText
+            android:id="@+id/regMercStreetNameTxt"
+            android:layout_width="256dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/register_edittext_sytle"
+            android:ems="10"
+            android:fontFamily="sans-serif"
+            android:hint="street name"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias=".5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/regMercShopNameTxt" />
+
+
         <AutoCompleteTextView
             android:id="@+id/registerMercCity"
             android:layout_width="256dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/register_edittext_sytle"
             android:ems="10"
             android:fontFamily="sans-serif"
@@ -89,13 +105,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias=".5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/regMercShopNameTxt" />
+            app:layout_constraintTop_toBottomOf="@+id/regMercStreetNameTxt" />
 
         <AutoCompleteTextView
             android:id="@+id/registerMercDistrict"
             android:layout_width="256dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/register_edittext_sytle"
             android:ems="10"
             android:fontFamily="sans-serif"
@@ -111,7 +127,7 @@
             android:id="@+id/registerMercState"
             android:layout_width="256dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/register_edittext_sytle"
             android:ems="10"
             android:fontFamily="sans-serif"
@@ -123,12 +139,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/registerMercDistrict" />
 
+        <EditText
+            android:id="@+id/regMercPincodeTxt"
+            android:layout_width="256dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/register_edittext_sytle"
+            android:ems="10"
+            android:fontFamily="sans-serif"
+            android:hint="pincode"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias=".5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registerMercState" />
+
+
 
         <Button
             android:id="@+id/regMercUserRegisterBtn"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="sans-serif"
             android:onClick="onMercUserRegisterBtnClicked"
             android:text="Register"
@@ -136,7 +168,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias=".5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerMercState" />
+            app:layout_constraintTop_toBottomOf="@+id/regMercPincodeTxt" />
 
         <Button
             android:id="@+id/regMercLoginBtn"

@@ -58,6 +58,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/regCustUserEmailTxt" />
 
+        <EditText
+            android:id="@+id/regStreetNameTxt"
+            android:layout_width="256dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/register_edittext_sytle"
+            android:ems="10"
+            android:fontFamily="sans-serif"
+            android:hint="street name"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias=".5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/regCustPasswordTxt" />
+
 
         <AutoCompleteTextView
             android:id="@+id/registerCustCity"
@@ -73,7 +88,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias=".5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/regCustPasswordTxt" />
+            app:layout_constraintTop_toBottomOf="@+id/regStreetNameTxt" />
 
         <AutoCompleteTextView
             android:id="@+id/registerCustDistrict"
@@ -107,6 +122,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/registerCustDistrict" />
 
+        <EditText
+            android:id="@+id/regPincodeTxt"
+            android:layout_width="256dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/register_edittext_sytle"
+            android:ems="10"
+            android:fontFamily="sans-serif"
+            android:hint="pincode"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias=".5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registerCustState" />
+
 
         <Button
             android:id="@+id/regCustUserRegisterBtn"
@@ -119,7 +149,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias=".5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerCustState" />
+            app:layout_constraintTop_toBottomOf="@+id/regPincodeTxt" />
 
         <Button
             android:id="@+id/regCustLoginBtn"

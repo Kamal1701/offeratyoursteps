@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -29,11 +30,14 @@ class CustomerRegisterFragment : Fragment() {
     
     private lateinit var binding : FragmentCustomerRegisterBinding
     
-    private lateinit var custName : TextView
-    private lateinit var custEmail : TextView
-    private lateinit var custPassword : TextView
+    private lateinit var custName : EditText
+    private lateinit var custEmail : EditText
+    private lateinit var custPassword : EditText
+    private lateinit var custStreetName : EditText
+    private lateinit var custDistrict : EditText
     private lateinit var custCity : AutoCompleteTextView
     private lateinit var custState : AutoCompleteTextView
+    private lateinit var custPincode : EditText
     private lateinit var progressBar : ProgressBar
     private lateinit var registerBtn : Button
     
@@ -52,8 +56,11 @@ class CustomerRegisterFragment : Fragment() {
         custName = binding.regCustUserNameTxt
         custEmail = binding.regCustUserEmailTxt
         custPassword = binding.regCustPasswordTxt
+        custStreetName = binding.regStreetNameTxt
         custCity = binding.registerCustCity
+        custDistrict = binding.registerCustDistrict
         custState = binding.registerCustState
+        custPincode = binding.regPincodeTxt
         progressBar = binding.regCustProgressBar
         registerBtn = binding.regCustUserRegisterBtn
         
@@ -94,8 +101,11 @@ class CustomerRegisterFragment : Fragment() {
             var cName = custName.text.toString()
             val cEmail = custEmail.text.toString()
             val cPassword = custPassword.text.toString()
+            val cStreetName = custStreetName.text.toString()
             val cCity = custCity.text.toString()
+            val cDistrict = custDistrict.text.toString()
             val cState = custState.text.toString()
+            val cPincode = custPincode.text.toString()
             
             registerBtn.visibility = View.INVISIBLE
             progressBar.visibility = View.VISIBLE
@@ -110,8 +120,11 @@ class CustomerRegisterFragment : Fragment() {
                 customerMap["User_Password"] = cPassword
                 customerMap["Shop_Name"] = "NA"
                 customerMap["IsMerchant"] = "N"
+                customerMap["Street_Name"] = cStreetName
                 customerMap["City"] = cCity
+                customerMap["District"] = cDistrict
                 customerMap["State"] = cState
+                customerMap["Pincode"] = cPincode
                 
                 mAuth.createUserWithEmailAndPassword(cEmail, cPassword)
                     .addOnCompleteListener { task : Task<AuthResult> ->

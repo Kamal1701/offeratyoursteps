@@ -49,7 +49,7 @@ class AddOfferFragment : Fragment() {
     // TODO: Rename and change types of parameters
     
     private lateinit var binding : FragmentAddOfferBinding
-    private var userModel = UserModel("", "", "", "", "", "", "")
+    private var userModel = UserModel("", "", "", "", "", "","", "","")
     private lateinit var backPressedCallback : OnBackPressedCallback
     
     private lateinit var productImage : ImageView
@@ -296,43 +296,4 @@ class AddOfferFragment : Fragment() {
         backPressedCallback.remove()
     }
     
-    fun showDatePicker(setDateField : EditText) {
-//        val calendar = Calendar.getInstance()
-//        val year = calendar.get(Calendar.YEAR)
-//        val month = calendar.get(Calendar.MONTH)
-//        val day = calendar.get(Calendar.DAY_OF_MONTH)
-//
-//        val datePickerDialog = DatePickerDialog(
-//            requireContext(),
-//            { _, yearSelected, monthOfYear, dayOfMonth ->
-//                val selectedDate = Calendar.getInstance()
-//                selectedDate.set(yearSelected, monthOfYear, dayOfMonth)
-//                setDateInDateField(selectedDate)
-//            },
-//            year,
-//            month,
-//            day
-//        )
-//
-//        datePickerDialog.show()
-        
-        val builder = MaterialDatePicker.Builder.datePicker()
-        val datePicker = builder.build()
-        
-        datePicker.addOnPositiveButtonClickListener {
-            val selectedDate = Calendar.getInstance()
-            selectedDate.timeInMillis = it
-            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            val formattedDate = dateFormat.format(selectedDate.time)
-//            setDateInDateField(selectedDate)
-        }
-        
-        datePicker.show(requireActivity().supportFragmentManager, "datepicker")
-    }
-    
-    private fun setDateInDateField(calendar : Calendar) {
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val formattedDate = dateFormat.format(calendar.time)
-        offerStartDate.setText(formattedDate)
-    }
 }

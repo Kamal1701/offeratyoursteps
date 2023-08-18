@@ -31,7 +31,7 @@ class AllOffersFragment : Fragment() {
     private lateinit var recProgressBar : ProgressBar
     private var productList : MutableList<OfferProductDetails> = mutableListOf()
     
-    private var userModel = UserModel("", "", "", "", "", "", "")
+    private var userModel = UserModel("", "", "", "", "", "","", "","")
     private lateinit var backPressedCallback : OnBackPressedCallback
     
     override fun onCreate(savedInstanceState : Bundle?) {

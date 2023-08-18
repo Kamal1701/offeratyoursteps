@@ -3,10 +3,18 @@ package com.example.offersatyoursteps.models
 import android.os.Parcel
 import android.os.Parcelable
 
-class UserModel constructor(var cName:String?,var cEmail:String?,
-                            var cShopName:String?, var isMerchant:String?,
-                            var cCity:String?, var cState:String?, var prodSubcategory:String?):Parcelable{
+class UserModel constructor(var cName:String?,
+                            var cEmail:String?,
+                            var cShopName:String?,
+                            var isMerchant:String?,
+                            var cStreetName:String?,
+                            var cCity:String?,
+                            var cDistrict:String?,
+                            var cState:String?,
+                            var cPincode:String?):Parcelable{
     constructor(parcel : Parcel) : this(
+        parcel.readString(),
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -22,9 +30,11 @@ class UserModel constructor(var cName:String?,var cEmail:String?,
         parcel.writeString(cEmail)
         parcel.writeString(cShopName)
         parcel.writeString(isMerchant)
+        parcel.writeString(cStreetName)
         parcel.writeString(cCity)
+        parcel.writeString(cDistrict)
         parcel.writeString(cState)
-        parcel.writeString(prodSubcategory)
+        parcel.writeString(cPincode)
     }
     
     override fun describeContents() : Int {
@@ -40,5 +50,4 @@ class UserModel constructor(var cName:String?,var cEmail:String?,
             return arrayOfNulls(size)
         }
     }
-    
 }

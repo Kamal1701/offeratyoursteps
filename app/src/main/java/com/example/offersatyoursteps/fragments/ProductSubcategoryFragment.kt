@@ -24,20 +24,8 @@ import com.example.offersatyoursteps.utilities.SPAN_COUNT
 import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.firebase.firestore.auth.User
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ProductSubcategoryFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ProductSubcategoryFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1 : String? = null
-    private var param2 : String? = null
     
     private lateinit var binding: FragmentProductSubcategoryBinding
     
@@ -62,14 +50,6 @@ class ProductSubcategoryFragment : Fragment() {
     }
     
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ProductSubcategoryFragment.
-         */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(userModel : UserModel) =
@@ -86,7 +66,7 @@ class ProductSubcategoryFragment : Fragment() {
 //        val offerList = OfferConstants.getOfferData()
         val itemAdapter = ProductSubcategoryAdapter(this.requireContext(), Dataservices.subcategories){
             productSubcategory ->
-            userModel.prodSubcategory = productSubcategory.title
+//            userModel.prodSubcategory = productSubcategory.title
             val fm = OfferNearMeFragment.newInstance(userModel)
 //            parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fm).commit()
             requireActivity().supportFragmentManager.commit {

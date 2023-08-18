@@ -29,6 +29,7 @@ class CustomerProfileFragment : Fragment() {
     private lateinit var backPressedCallback : OnBackPressedCallback
     
     private lateinit var custUserName : EditText
+    private lateinit var custStreetName : EditText
     private lateinit var custCity : AutoCompleteTextView
     private lateinit var custDistrict : AutoCompleteTextView
     private lateinit var custState : AutoCompleteTextView
@@ -36,7 +37,7 @@ class CustomerProfileFragment : Fragment() {
     
     private lateinit var profileProgress : ProgressBar
     
-    private lateinit var userModel : UserModel
+    private var userModel = UserModel("", "", "", "", "", "","","","")
     
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +56,7 @@ class CustomerProfileFragment : Fragment() {
         val view = binding.root
         
         custUserName = binding.profileCustName
+        custStreetName = binding.profileCustStreetName
         custCity = binding.profileCity
         custDistrict = binding.profileDistrict
         custState = binding.profileState
@@ -95,8 +97,11 @@ class CustomerProfileFragment : Fragment() {
         binding!!.profileState.setAdapter(stateAdapter)
 
         custUserName.setText(userModel.cName)
+        custStreetName.setText(userModel.cStreetName)
         custCity.setText(userModel.cCity, false)
+        custDistrict.setText(userModel.cDistrict, false)
         custState.setText(userModel.cState, false)
+        custPincode.setText(userModel.cPincode)
     
         backPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {

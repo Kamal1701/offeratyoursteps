@@ -30,9 +30,15 @@ object DatabaseServices {
                     userModel.cName = custDoc.get("User_Name").toString()
                     userModel.cEmail = custDoc.get("User_EmailId").toString()
                     userModel.cShopName = custDoc.get("Shop_Name").toString()
+                    userModel.cStreetName = custDoc.get("Street_Name").toString()
                     userModel.isMerchant = custDoc.get("IsMerchant").toString()
                     userModel.cCity = custDoc.get("City").toString()
+                    userModel.cDistrict = custDoc.get("District").toString()
+                    println("getCustomerInfo")
+                    println(custDoc.get("District").toString())
+                    println(custDoc.get("State").toString())
                     userModel.cState = custDoc.get("State").toString()
+                    userModel.cPincode = custDoc.get("Pincode").toString()
                     
                     complete(true)
                 }
@@ -96,19 +102,19 @@ object DatabaseServices {
             parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
                 if (!parentCollectionSnapshot.isEmpty) {
                     for (parentDoc in parentCollectionSnapshot.documents) {
-                        val subcollectionRef: Query = parentDoc.reference.collection("OfferProductDetails").whereEqualTo("Location", location)
+                        val subcollectionRef : Query =
+                            parentDoc.reference.collection("OfferProductDetails")
+                                .whereEqualTo("Location", location)
                         subcollectionRef
                             .get().addOnSuccessListener { querySnapshot ->
                                 println(querySnapshot.isEmpty)
                                 if (!querySnapshot.isEmpty) {
                                     for ((prodCount, doc) in querySnapshot.withIndex()) {
-                                        println(doc.data["Location"].toString())
-                                        println(location)
 //                                        if (doc.data["Location"].toString() == location) {
-                                            productList.add(
-                                                prodCount,
-                                                OfferProductDetails.fromQuerySnapshot(doc)
-                                            )
+                                        productList.add(
+                                            prodCount,
+                                            OfferProductDetails.fromQuerySnapshot(doc)
+                                        )
 //                                        }
                                     }
                                     complete(true)

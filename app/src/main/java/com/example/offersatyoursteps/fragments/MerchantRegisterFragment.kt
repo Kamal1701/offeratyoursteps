@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -26,13 +27,15 @@ import com.google.firebase.auth.FirebaseAuth
 class MerchantRegisterFragment : Fragment() {
     
     private lateinit var binding : FragmentMerchantRegisterBinding
-    private lateinit var merchantName : TextView
-    private lateinit var merchantEmail : TextView
-    private lateinit var merchantPassword : TextView
-    private lateinit var merchantShopName : TextView
+    private lateinit var merchantName : EditText
+    private lateinit var merchantEmail : EditText
+    private lateinit var merchantPassword : EditText
+    private lateinit var merchantShopName : EditText
+    private lateinit var merchantStreeName : EditText
     private lateinit var merchantCity : AutoCompleteTextView
     private lateinit var merchantDistrict : AutoCompleteTextView
     private lateinit var merchantState : AutoCompleteTextView
+    private lateinit var merchantPincode : EditText
     private lateinit var progressBar : ProgressBar
     private lateinit var registerBtn : Button
     
@@ -52,9 +55,11 @@ class MerchantRegisterFragment : Fragment() {
         merchantEmail = binding.regMercUserEmailTxt
         merchantPassword = binding.regMercPasswordTxt
         merchantShopName = binding.regMercShopNameTxt
+        merchantStreeName = binding.regMercStreetNameTxt
         merchantCity = binding.registerMercCity
         merchantDistrict = binding.registerMercDistrict
         merchantState = binding.registerMercState
+        merchantPincode = binding.regMercPincodeTxt
         progressBar = binding.regMercProgressBar
         registerBtn = binding.regMercUserRegisterBtn
         
@@ -95,10 +100,12 @@ class MerchantRegisterFragment : Fragment() {
             val mName = merchantName.text.toString()
             val mEmail = merchantEmail.text.toString()
             val mPassword = merchantPassword.text.toString()
-            var mShopName = merchantShopName.text.toString()
+            val mShopName = merchantShopName.text.toString()
+            val mStreetName = merchantStreeName.text.toString()
             val mCity = merchantCity.text.toString()
-            var mDistrict = merchantDistrict.text.toString()
+            val mDistrict = merchantDistrict.text.toString()
             val mState = merchantState.text.toString()
+            val mPincode = merchantPincode.text.toString()
             
             registerBtn.visibility = View.INVISIBLE
             progressBar.visibility = View.VISIBLE
@@ -113,8 +120,11 @@ class MerchantRegisterFragment : Fragment() {
                 merchantMap["User_Password"] = mPassword
                 merchantMap["Shop_Name"] = mShopName
                 merchantMap["IsMerchant"] = "Y"
+                merchantMap["Street_Name"] = mStreetName
                 merchantMap["City"] = mCity
+                merchantMap["District"] = mDistrict
                 merchantMap["State"] = mState
+                merchantMap["Pincode"] = mPincode
                 
                 mAuth.createUserWithEmailAndPassword(mEmail, mPassword)
                     .addOnCompleteListener { task : Task<AuthResult> ->

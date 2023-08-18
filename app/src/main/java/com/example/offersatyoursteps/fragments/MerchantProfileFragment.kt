@@ -28,6 +28,7 @@ class MerchantProfileFragment : Fragment() {
     
     private lateinit var mtShopName: EditText
     private lateinit var mtUserName: EditText
+    private lateinit var mtStreetName : EditText
     private lateinit var mtCity: AutoCompleteTextView
     private lateinit var mtDistrict: AutoCompleteTextView
     private lateinit var mtState: AutoCompleteTextView
@@ -35,7 +36,7 @@ class MerchantProfileFragment : Fragment() {
     private lateinit var profileProgress : ProgressBar
     
     private lateinit var mAuth : FirebaseAuth
-    private var userModel = UserModel("", "", "", "", "", "","")
+    private var userModel = UserModel("", "", "", "", "", "","","","")
     
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +55,7 @@ class MerchantProfileFragment : Fragment() {
         
         mtShopName = binding.mShopName
         mtUserName = binding.mCustName
+        mtStreetName = binding.mStreetName
         mtCity = binding.mprofileCity
         mtDistrict = binding.mprofileDistrict
         mtState = binding.mprofileState
@@ -83,11 +85,16 @@ class MerchantProfileFragment : Fragment() {
         val stateList = resources.getStringArray(R.array.StateList)
         val stateAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_list, stateList)
         binding!!.mprofileState.setAdapter(stateAdapter)
-        
-        mtShopName.setText(userModel.cShopName)
+    
         mtUserName.setText(userModel.cName)
+        mtShopName.setText(userModel.cShopName)
+        mtStreetName.setText(userModel.cStreetName)
         mtCity.setText(userModel.cCity)
+        mtDistrict.setText(userModel.cDistrict)
+        println(userModel.cDistrict)
+        println(userModel.cState)
         mtState.setText(userModel.cState)
+        mtPincode.setText(userModel.cPincode)
     
         backPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
