@@ -1,6 +1,7 @@
 package com.example.offersatyoursteps.fragments
 
 import android.app.Activity.RESULT_OK
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -17,22 +18,31 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.FragmentManager
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.databinding.FragmentAddOfferBinding
 import com.example.offersatyoursteps.models.ProductSubcategory
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
+import com.example.offersatyoursteps.utilities.ADD_PRODUCT_TITLE
 import com.example.offersatyoursteps.utilities.GALLERY_REQUEST_CODE
+import com.example.offersatyoursteps.utilities.PROFILE_TITLE
 import com.example.offersatyoursteps.utilities.USER_INFO
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 
 class AddOfferFragment : Fragment() {
@@ -40,6 +50,7 @@ class AddOfferFragment : Fragment() {
     
     private lateinit var binding : FragmentAddOfferBinding
     private var userModel = UserModel("", "", "", "", "", "", "")
+    private lateinit var backPressedCallback : OnBackPressedCallback
     
     private lateinit var productImage : ImageView
     private lateinit var productName : EditText
@@ -74,6 +85,10 @@ class AddOfferFragment : Fragment() {
     ) : View? {
         // Inflate the layout for this fragment
         binding = FragmentAddOfferBinding.inflate(inflater, container, false)
+        
+        val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
+        toolbar?.title = ADD_PRODUCT_TITLE
+        
         return binding.root
     }
     
@@ -107,7 +122,7 @@ class AddOfferFragment : Fragment() {
                 uri = data?.data!!
                 productImage.setImageURI(uri)
                 productImage.tag = "image_added"
-            } else{
+            } else {
                 productImage.tag = ""
             }
         }
@@ -118,6 +133,35 @@ class AddOfferFragment : Fragment() {
             }
             imagePickerLauncher.launch(intent)
         }
+        
+        offerStartDate.setOnClickListener {
+            val builder = MaterialDatePicker.Builder.datePicker()
+            val datePicker = builder.build()
+            
+            datePicker.addOnPositiveButtonClickListener {
+                val selectedDate = Calendar.getInstance()
+                selectedDate.timeInMillis = it
+                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                val formattedDate = dateFormat.format(selectedDate.time)
+                offerStartDate.setText(formattedDate)
+            }
+            datePicker.show(requireActivity().supportFragmentManager, "datepicker")
+        }
+        
+        offerEndDate.setOnClickListener {
+            val builder = MaterialDatePicker.Builder.datePicker()
+            val datePicker = builder.build()
+            
+            datePicker.addOnPositiveButtonClickListener {
+                val selectedDate = Calendar.getInstance()
+                selectedDate.timeInMillis = it
+                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                val formattedDate = dateFormat.format(selectedDate.time)
+                offerEndDate.setText(formattedDate)
+            }
+            datePicker.show(requireActivity().supportFragmentManager, "datepicker")
+        }
+        
         
         addProductBtn.setOnClickListener {
             progressBar.visibility = View.VISIBLE
@@ -144,7 +188,7 @@ class AddOfferFragment : Fragment() {
                 && ofrStartDate.isNotEmpty() && ofrEndDate.isNotEmpty() && prodWeight.isNotEmpty()
                 && prodDesc.isNotEmpty()
             ) {
-    
+                
                 val prodMap = HashMap<String, String>()
                 
                 prodMap["Product_Name"] = prodName
@@ -169,17 +213,28 @@ class AddOfferFragment : Fragment() {
                                 Log.d("DEBUG", "Image upload")
                                 prodMap["Product_Image"] = it.toString()
                                 val userId = FirebaseAuth.getInstance().currentUser!!.uid
-                                DatabaseServices.createProductDetailsRecord("Product_Details",userId,prodMap){
-                                    isProdCreateComplete ->
-                                    if(isProdCreateComplete){
-                                        Toast.makeText(activity, "Offer Product added successfully", Toast.LENGTH_LONG).show()
+                                DatabaseServices.createProductDetailsRecord(
+                                    "Product_Details",
+                                    userId,
+                                    prodMap
+                                ) { isProdCreateComplete ->
+                                    if (isProdCreateComplete) {
+                                        Toast.makeText(
+                                            activity,
+                                            "Offer Product added successfully",
+                                            Toast.LENGTH_LONG
+                                        ).show()
                                         progressBar.visibility = View.INVISIBLE
                                         addProductBtn.visibility = View.VISIBLE
                                         cancelProductBtn.visibility = View.VISIBLE
                                         clearProducts()
-                                    
+                                        
                                     } else {
-                                        Toast.makeText(activity, "Unable to add product now, please try again", Toast.LENGTH_LONG).show()
+                                        Toast.makeText(
+                                            activity,
+                                            "Unable to add product now, please try again",
+                                            Toast.LENGTH_LONG
+                                        ).show()
                                     }
                                 }
                             }
@@ -199,9 +254,19 @@ class AddOfferFragment : Fragment() {
             clearProducts()
         }
         
+        backPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().supportFragmentManager.popBackStack("NearMe", 0)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            backPressedCallback
+        )
+        
     }
     
-    private fun clearProducts(){
+    private fun clearProducts() {
         productImage.tag = ""
         productImage.setImageResource(R.drawable.baseline_image_search_24)
         productName.text.clear()
@@ -224,5 +289,50 @@ class AddOfferFragment : Fragment() {
                     putParcelable(USER_INFO, userModel)
                 }
             }
+    }
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+        backPressedCallback.remove()
+    }
+    
+    fun showDatePicker(setDateField : EditText) {
+//        val calendar = Calendar.getInstance()
+//        val year = calendar.get(Calendar.YEAR)
+//        val month = calendar.get(Calendar.MONTH)
+//        val day = calendar.get(Calendar.DAY_OF_MONTH)
+//
+//        val datePickerDialog = DatePickerDialog(
+//            requireContext(),
+//            { _, yearSelected, monthOfYear, dayOfMonth ->
+//                val selectedDate = Calendar.getInstance()
+//                selectedDate.set(yearSelected, monthOfYear, dayOfMonth)
+//                setDateInDateField(selectedDate)
+//            },
+//            year,
+//            month,
+//            day
+//        )
+//
+//        datePickerDialog.show()
+        
+        val builder = MaterialDatePicker.Builder.datePicker()
+        val datePicker = builder.build()
+        
+        datePicker.addOnPositiveButtonClickListener {
+            val selectedDate = Calendar.getInstance()
+            selectedDate.timeInMillis = it
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val formattedDate = dateFormat.format(selectedDate.time)
+//            setDateInDateField(selectedDate)
+        }
+        
+        datePicker.show(requireActivity().supportFragmentManager, "datepicker")
+    }
+    
+    private fun setDateInDateField(calendar : Calendar) {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val formattedDate = dateFormat.format(calendar.time)
+        offerStartDate.setText(formattedDate)
     }
 }

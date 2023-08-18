@@ -14,6 +14,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.commit
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,11 +26,9 @@ import com.example.offersatyoursteps.databinding.FragmentOfferNearMeBinding
 import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
-import com.example.offersatyoursteps.services.Dataservices
+import com.example.offersatyoursteps.utilities.OFFER_NEAR_ME_TITLE
 import com.example.offersatyoursteps.utilities.SPAN_COUNT
 import com.example.offersatyoursteps.utilities.USER_INFO
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 
 
 class OfferNearMeFragment : Fragment() {
@@ -58,6 +57,10 @@ class OfferNearMeFragment : Fragment() {
         binding = FragmentOfferNearMeBinding.inflate(inflater, container, false)
         recProgressBar = binding.recycleProgressBar
         recProgressBar.visibility = View.VISIBLE
+    
+        val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
+        toolbar?.title = OFFER_NEAR_ME_TITLE
+        
         return binding.root
     }
     

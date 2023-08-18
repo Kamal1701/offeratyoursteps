@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.commit
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.offersatyoursteps.R
@@ -18,6 +19,7 @@ import com.example.offersatyoursteps.databinding.FragmentAllOffersBinding
 import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
+import com.example.offersatyoursteps.utilities.All_OFFERS_TITLE
 import com.example.offersatyoursteps.utilities.SPAN_COUNT
 import com.example.offersatyoursteps.utilities.USER_INFO
 
@@ -28,8 +30,6 @@ class AllOffersFragment : Fragment() {
     private lateinit var binding : FragmentAllOffersBinding
     private lateinit var recProgressBar : ProgressBar
     private var productList : MutableList<OfferProductDetails> = mutableListOf()
-    
-    private var ALL_OFFER = "ALL"
     
     private var userModel = UserModel("", "", "", "", "", "", "")
     private lateinit var backPressedCallback : OnBackPressedCallback
@@ -49,6 +49,10 @@ class AllOffersFragment : Fragment() {
         binding = FragmentAllOffersBinding.inflate(inflater, container, false)
         recProgressBar = binding.recProgressBar
         recProgressBar.visibility = View.VISIBLE
+        
+        val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
+        toolbar?.title = All_OFFERS_TITLE
+        
         return binding.root
     }
     
@@ -64,6 +68,8 @@ class AllOffersFragment : Fragment() {
     
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
+        
         
         DatabaseServices.getAllProductDetails("Product_Details", productList) { isGetComplete ->
             if (isGetComplete) {

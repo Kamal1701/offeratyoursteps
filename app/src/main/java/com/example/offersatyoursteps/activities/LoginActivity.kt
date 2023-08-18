@@ -1,5 +1,7 @@
 package com.example.offersatyoursteps.activities
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +17,8 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
 import com.example.offersatyoursteps.utilities.SetTextColorSpan
 import com.example.offersatyoursteps.databinding.ActivityLoginBinding
 import com.example.offersatyoursteps.fragments.OfferNearMeFragment
@@ -75,6 +79,22 @@ class LoginActivity : AppCompatActivity() {
         val registerBtn = loginBinding.loginRegisterBtn
         val colorSpan = SetTextColorSpan(registerBtn.text.toString())
         registerBtn.text = colorSpan.setTextColorSpan()
+        
+//        val callback = object : OnBackPressedCallback(true){
+//            override fun handleOnBackPressed() {
+//                val alertDialog = AlertDialog.Builder(this@LoginActivity)
+//                    .setTitle("Offers At Your Step")
+//                    .setMessage("Do you want to exit?")
+//                    .setPositiveButton("Yes", DialogInterface.OnClickListener { _, _ ->
+//                        finish()
+//                    })
+//                    .setNegativeButton("No", DialogInterface.OnClickListener { _, _ -> })
+//                    .create()
+//                alertDialog.show()
+//            }
+//        }
+//
+//        onBackPressedDispatcher.addCallback(this, callback)
         
     }
     
@@ -165,5 +185,10 @@ class LoginActivity : AppCompatActivity() {
 //        if(user != null){
 //            updateUI()
 //        }
+//    }
+    
+//    override fun onBackPressed() {
+//        super.onBackPressed()
+//        finish()
 //    }
 }

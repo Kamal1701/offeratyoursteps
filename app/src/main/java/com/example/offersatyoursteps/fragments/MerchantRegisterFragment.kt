@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.activities.LoginActivity
 import com.example.offersatyoursteps.databinding.FragmentMerchantRegisterBinding
@@ -24,7 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 class MerchantRegisterFragment : Fragment() {
     
-    private lateinit var binding: FragmentMerchantRegisterBinding
+    private lateinit var binding : FragmentMerchantRegisterBinding
     private lateinit var merchantName : TextView
     private lateinit var merchantEmail : TextView
     private lateinit var merchantPassword : TextView
@@ -32,10 +33,12 @@ class MerchantRegisterFragment : Fragment() {
     private lateinit var merchantCity : AutoCompleteTextView
     private lateinit var merchantDistrict : AutoCompleteTextView
     private lateinit var merchantState : AutoCompleteTextView
-    private lateinit var progressBar: ProgressBar
-    private lateinit var registerBtn: Button
+    private lateinit var progressBar : ProgressBar
+    private lateinit var registerBtn : Button
     
-    private  lateinit var mAuth : FirebaseAuth
+//    private lateinit var backPressedCallback : OnBackPressedCallback
+    
+    private lateinit var mAuth : FirebaseAuth
     
     override fun onCreateView(
         inflater : LayoutInflater, container : ViewGroup?,
@@ -68,7 +71,7 @@ class MerchantRegisterFragment : Fragment() {
         val cityList = resources.getStringArray(R.array.CityList)
         val cityAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_list, cityList)
         binding!!.registerMercCity.setAdapter(cityAdapter)
-    
+        
         val districtList = resources.getStringArray(R.array.DistrictList)
         val districtAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_list, districtList)
         binding!!.registerMercDistrict.setAdapter(districtAdapter)
@@ -76,7 +79,7 @@ class MerchantRegisterFragment : Fragment() {
         val stateList = resources.getStringArray(R.array.StateList)
         val stateAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_list, stateList)
         binding!!.registerMercState.setAdapter(stateAdapter)
-    
+        
         val backToLogin = binding.regMercLoginBtn
         val colorSpan = SetTextColorSpan(backToLogin.text.toString())
         backToLogin.text = colorSpan.setTextColorSpan()
@@ -100,9 +103,10 @@ class MerchantRegisterFragment : Fragment() {
             registerBtn.visibility = View.INVISIBLE
             progressBar.visibility = View.VISIBLE
             
-            if(mName.isNotEmpty()||mEmail.isNotEmpty()||mPassword.isNotEmpty()
-                ||mShopName.isNotEmpty()||mCity.isNotEmpty()||mState.isNotEmpty()){
-    
+            if (mName.isNotEmpty() || mEmail.isNotEmpty() || mPassword.isNotEmpty()
+                || mShopName.isNotEmpty() || mCity.isNotEmpty() || mState.isNotEmpty()
+            ) {
+                
                 val merchantMap = HashMap<String, String>()
                 merchantMap["User_Name"] = mName
                 merchantMap["User_EmailId"] = mEmail
@@ -136,7 +140,7 @@ class MerchantRegisterFragment : Fragment() {
                                         "Unable to register, please try again",
                                         Toast.LENGTH_LONG
                                     ).show()
-                        
+                                    
                                 }
                             }
                         }
@@ -144,17 +148,31 @@ class MerchantRegisterFragment : Fragment() {
             } else {
                 Toast.makeText(activity, "Please fill all the fields", Toast.LENGTH_SHORT)
                     .show()
-    
+                
                 registerBtn.visibility = View.VISIBLE
                 progressBar.visibility = View.INVISIBLE
             }
             
         }
+        
+//        backPressedCallback = object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                requireActivity().supportFragmentManager.popBackStack()
+//            }
+//        }
+//        requireActivity().onBackPressedDispatcher.addCallback(
+//            viewLifecycleOwner,
+//            backPressedCallback
+//        )
     }
-    
     private fun loadHomePage() {
-  
+        
         val loginActivity = Intent(activity, LoginActivity::class.java)
         startActivity(loginActivity)
+    }
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+//        backPressedCallback.remove()
     }
 }

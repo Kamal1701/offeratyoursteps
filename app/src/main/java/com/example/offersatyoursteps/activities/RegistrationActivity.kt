@@ -17,6 +17,7 @@ class RegistrationActivity : AppCompatActivity() {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewerPage: ViewPager2
     private lateinit var adapter: ViewPageAdapter
+    
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegistrationBinding.inflate(layoutInflater)
@@ -25,7 +26,7 @@ class RegistrationActivity : AppCompatActivity() {
     
         tabLayout = binding.tablayoutid
         viewerPage = binding.viewerpage
-    
+        
         adapter = ViewPageAdapter(this)
         adapter.addFragment(CustomerRegisterFragment(), "Customer")
         adapter.addFragment(MerchantRegisterFragment(), "Merchant")

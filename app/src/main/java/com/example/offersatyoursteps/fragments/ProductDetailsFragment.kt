@@ -10,11 +10,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.databinding.FragmentProductDetailsBinding
 import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.utilities.EXTRA_PRODUCT
+import com.example.offersatyoursteps.utilities.OFFER_NEAR_ME_TITLE
+import com.example.offersatyoursteps.utilities.PRODUCT_DETAIL_TITLE
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -63,6 +67,9 @@ class ProductDetailsFragment : Fragment() {
         shopName = binding.prodDetailShopName
         shopCity = binding.prodDetailCity
         shopState = binding.prodDetailState
+    
+        val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
+        toolbar?.title = PRODUCT_DETAIL_TITLE
         
         return binding.root
     }

@@ -1,5 +1,6 @@
 package com.example.offersatyoursteps.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,9 +10,13 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.ProgressBar
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.widget.Toolbar
 import com.example.offersatyoursteps.R
+import com.example.offersatyoursteps.activities.LoginActivity
 import com.example.offersatyoursteps.databinding.FragmentMerchantProfileBinding
 import com.example.offersatyoursteps.models.UserModel
+import com.example.offersatyoursteps.utilities.PROFILE_TITLE
 import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.firebase.auth.FirebaseAuth
 
@@ -19,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth
 class MerchantProfileFragment : Fragment() {
     
     private lateinit var binding : FragmentMerchantProfileBinding
+    private lateinit var backPressedCallback : OnBackPressedCallback
     
     private lateinit var mtShopName: EditText
     private lateinit var mtUserName: EditText
@@ -57,6 +63,9 @@ class MerchantProfileFragment : Fragment() {
         
         profileProgress = binding.mprofileProgressBar
         profileProgress.visibility = View.INVISIBLE
+    
+        val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
+        toolbar?.title = PROFILE_TITLE
         
         return view
     }
@@ -79,6 +88,16 @@ class MerchantProfileFragment : Fragment() {
         mtUserName.setText(userModel.cName)
         mtCity.setText(userModel.cCity)
         mtState.setText(userModel.cState)
+    
+        backPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().supportFragmentManager.popBackStack("NearMe",0)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            backPressedCallback
+        )
         
     }
     
@@ -90,6 +109,11 @@ class MerchantProfileFragment : Fragment() {
                     putParcelable(USER_INFO, userModel)
                 }
             }
+    }
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+        backPressedCallback.remove()
     }
     
 }

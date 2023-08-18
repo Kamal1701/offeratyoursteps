@@ -9,9 +9,13 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.ProgressBar
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.widget.Toolbar
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.databinding.FragmentCustomerProfileBinding
 import com.example.offersatyoursteps.models.UserModel
+import com.example.offersatyoursteps.utilities.PRODUCT_DETAIL_TITLE
+import com.example.offersatyoursteps.utilities.PROFILE_TITLE
 import com.example.offersatyoursteps.utilities.USER_INFO
 
 /**
@@ -22,6 +26,7 @@ import com.example.offersatyoursteps.utilities.USER_INFO
 class CustomerProfileFragment : Fragment() {
 
     private lateinit var binding : FragmentCustomerProfileBinding
+    private lateinit var backPressedCallback : OnBackPressedCallback
     
     private lateinit var custUserName : EditText
     private lateinit var custCity : AutoCompleteTextView
@@ -57,6 +62,9 @@ class CustomerProfileFragment : Fragment() {
         
         profileProgress = binding.profileProgressBar
         profileProgress.visibility = View.INVISIBLE
+    
+        val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
+        toolbar?.title = PROFILE_TITLE
         
         return view
     }
@@ -89,7 +97,22 @@ class CustomerProfileFragment : Fragment() {
         custUserName.setText(userModel.cName)
         custCity.setText(userModel.cCity, false)
         custState.setText(userModel.cState, false)
+    
+        backPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().supportFragmentManager.popBackStack("NearMe",0)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            backPressedCallback
+        )
         
+    }
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+        backPressedCallback.remove()
     }
     
 }

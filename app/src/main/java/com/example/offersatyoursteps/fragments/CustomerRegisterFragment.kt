@@ -13,6 +13,8 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.FragmentManager
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.activities.LoginActivity
 import com.example.offersatyoursteps.databinding.FragmentCustomerRegisterBinding
@@ -26,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth
 class CustomerRegisterFragment : Fragment() {
     
     private lateinit var binding : FragmentCustomerRegisterBinding
+    
     private lateinit var custName : TextView
     private lateinit var custEmail : TextView
     private lateinit var custPassword : TextView
@@ -33,6 +36,8 @@ class CustomerRegisterFragment : Fragment() {
     private lateinit var custState : AutoCompleteTextView
     private lateinit var progressBar : ProgressBar
     private lateinit var registerBtn : Button
+    
+//    private lateinit var backPressedCallback : OnBackPressedCallback
     
     private lateinit var mAuth : FirebaseAuth
     
@@ -145,11 +150,26 @@ class CustomerRegisterFragment : Fragment() {
                 progressBar.visibility = View.INVISIBLE
             }
         }
+    
+//        backPressedCallback = object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                requireActivity().supportFragmentManager.popBackStack()
+//            }
+//        }
+//        requireActivity().onBackPressedDispatcher.addCallback(
+//            viewLifecycleOwner,
+//            backPressedCallback
+//        )
     }
     
     private fun loadHomePage() {
         val loginActivity = Intent(activity, LoginActivity::class.java)
         startActivity(loginActivity)
+    }
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+//        backPressedCallback.remove()
     }
     
 }

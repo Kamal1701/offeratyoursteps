@@ -93,7 +93,7 @@ class HomePageActivity : AppCompatActivity() {
                         }
                     }
                     drawerLayout.closeDrawer(GravityCompat.START)
-                    supportActionBar?.title = "Offers Near Me"
+//                    supportActionBar?.title = "Offers Near Me"
                 }
                 
                 R.id.nav_all_offers -> {
@@ -107,7 +107,7 @@ class HomePageActivity : AppCompatActivity() {
                         }
                     }
                     drawerLayout.closeDrawer(GravityCompat.START)
-                    supportActionBar?.title = "All Offers"
+//                    supportActionBar?.title = "All Offers"
                 }
                 
                 R.id.nav_profile -> {
@@ -119,7 +119,7 @@ class HomePageActivity : AppCompatActivity() {
                             addToBackStack(null)
                         }
                         drawerLayout.closeDrawer(GravityCompat.START)
-                        supportActionBar?.title = "Profile"
+//                        supportActionBar?.title = "Profile"
                     }
                 }
                 
@@ -132,7 +132,7 @@ class HomePageActivity : AppCompatActivity() {
                             addToBackStack(null)
                         }
                         drawerLayout.closeDrawer(GravityCompat.START)
-                        supportActionBar?.title = "Profile"
+//                        supportActionBar?.title = "Profile"
                     }
                 }
                 
@@ -146,7 +146,7 @@ class HomePageActivity : AppCompatActivity() {
                             addToBackStack(null)
                         }
                         drawerLayout.closeDrawer(GravityCompat.START)
-                        supportActionBar?.title = "Add Product"
+//                        supportActionBar?.title = "Add Product"
                     }
                     
                 }
@@ -202,8 +202,18 @@ class HomePageActivity : AppCompatActivity() {
             merchantProductMenu.isVisible = true
         }
         
-        getProductSubcategoryFragment()
-        supportActionBar?.title = "Offers Near Me"
+//        getProductSubcategoryFragment()
+//        supportActionBar?.title = "Offers Near Me"
+    
+        val fragment = OfferNearMeFragment.newInstance(userModel)
+        if (fragment != null) {
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace(R.id.nav_host_fragment_content_home_page, fragment,"NearMe")
+                addToBackStack("NearMe")
+            }
+        }
+        
     }
     
     
