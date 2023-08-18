@@ -88,7 +88,8 @@ class HomePageActivity : AppCompatActivity() {
                     if (fragment != null) {
                         supportFragmentManager.commit {
                             setReorderingAllowed(true)
-                            replace(R.id.nav_host_fragment_content_home_page, fragment)
+                            replace(R.id.nav_host_fragment_content_home_page, fragment,"NearMe")
+                            addToBackStack("NearMe")
                         }
                     }
                     drawerLayout.closeDrawer(GravityCompat.START)
@@ -102,6 +103,7 @@ class HomePageActivity : AppCompatActivity() {
                         supportFragmentManager.commit {
                             setReorderingAllowed(true)
                             replace(R.id.nav_host_fragment_content_home_page, fragment)
+                            addToBackStack(null)
                         }
                     }
                     drawerLayout.closeDrawer(GravityCompat.START)
@@ -114,6 +116,7 @@ class HomePageActivity : AppCompatActivity() {
                         supportFragmentManager.commit {
                             setReorderingAllowed(true)
                             replace(R.id.nav_host_fragment_content_home_page, fragment)
+                            addToBackStack(null)
                         }
                         drawerLayout.closeDrawer(GravityCompat.START)
                         supportActionBar?.title = "Profile"
@@ -126,6 +129,7 @@ class HomePageActivity : AppCompatActivity() {
                         supportFragmentManager.commit {
                             setReorderingAllowed(true)
                             replace(R.id.nav_host_fragment_content_home_page, fragment)
+                            addToBackStack(null)
                         }
                         drawerLayout.closeDrawer(GravityCompat.START)
                         supportActionBar?.title = "Profile"
@@ -139,6 +143,7 @@ class HomePageActivity : AppCompatActivity() {
                         supportFragmentManager.commit {
                             setReorderingAllowed(true)
                             replace(R.id.nav_host_fragment_content_home_page, fragment)
+                            addToBackStack(null)
                         }
                         drawerLayout.closeDrawer(GravityCompat.START)
                         supportActionBar?.title = "Add Product"
@@ -208,6 +213,7 @@ class HomePageActivity : AppCompatActivity() {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
                 replace(R.id.nav_host_fragment_content_home_page, fragment)
+                addToBackStack(null)
             }
         }
     }

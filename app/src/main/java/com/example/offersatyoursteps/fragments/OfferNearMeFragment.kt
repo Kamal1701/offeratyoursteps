@@ -1,5 +1,7 @@
 package com.example.offersatyoursteps.fragments
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.provider.ContactsContract.Data
 import android.util.Log
@@ -9,6 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Adapter
 import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
 import androidx.fragment.app.commit
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,13 +37,17 @@ class OfferNearMeFragment : Fragment() {
     private lateinit var userModel : UserModel
     private lateinit var binding : FragmentOfferNearMeBinding
     private var productList : MutableList<OfferProductDetails> = mutableListOf()
-    private lateinit var recProgressBar:ProgressBar
-
+    private lateinit var itemAdapter : OfferAdapter
+    private lateinit var recProgressBar : ProgressBar
+    
+    private lateinit var backPressedCallback : OnBackPressedCallback
+    
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             userModel = it?.getParcelable<UserModel>(USER_INFO)!!
         }
+        
     }
     
     override fun onCreateView(
@@ -65,24 +74,65 @@ class OfferNearMeFragment : Fragment() {
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        DatabaseServices.getProductDetailsRecord("Product_Details",productList, userModel.cCity.toString()){
-            isGetComplete ->
-            if(isGetComplete){
+        DatabaseServices.getLocationProductDetails(
+            "Product_Details",
+            productList,
+            userModel.cCity.toString()
+        ) { isGetComplete ->
+            if (isGetComplete) {
                 recProgressBar.visibility = View.INVISIBLE
-                val itemAdapter = OfferAdapter(this.requireContext(), productList){
-                    productDetail ->
-                    val fragment = ProductDetailsFragment.newInstance(productDetail)
-                    requireActivity().supportFragmentManager.commit {
-                        setReorderingAllowed(true)
-                        replace(R.id.nav_host_fragment_content_home_page, fragment)
+                itemAdapter =
+                    OfferAdapter(this.requireContext(), productList) { productDetail ->
+                        val fragment = ProductDetailsFragment.newInstance(productDetail)
+                        requireActivity().supportFragmentManager.commit {
+                            setReorderingAllowed(true)
+                            replace(R.id.nav_host_fragment_content_home_page, fragment)
+                            addToBackStack(null)
+                        }
                     }
-                }
                 val offerRecycleView = binding.offerNearMeRecycleView
                 offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
                 offerRecycleView.adapter = itemAdapter
-            } else{
+                offerRecycleView.setHasFixedSize(true)
+            } else {
                 Log.d("DEBUG", "OfferNearMe - no record returned")
             }
         }
+        
+        backPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                
+                val alertDialog = AlertDialog.Builder(activity)
+                    .setTitle("Offers At Your Step")
+                    .setMessage("Do you want to exit?")
+                    .setPositiveButton("Yes", DialogInterface.OnClickListener { _, _ ->
+                        requireActivity().finish()
+                    })
+                    .setNegativeButton("No", DialogInterface.OnClickListener { _, _ -> })
+                    .create()
+                alertDialog.show()
+                
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            backPressedCallback
+        )
     }
+    
+    
+    override fun onResume() {
+        super.onResume()
+        println("near me on resume outside if")
+        if (productList.isNotEmpty()) {
+            productList.clear()
+            println("near me on resume inside if")
+        }
+    }
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+        backPressedCallback.remove()
+    }
+    
 }

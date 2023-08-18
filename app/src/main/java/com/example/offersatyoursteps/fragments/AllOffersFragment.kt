@@ -1,5 +1,7 @@
 package com.example.offersatyoursteps.fragments
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -7,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.commit
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.offersatyoursteps.R
@@ -29,6 +32,7 @@ class AllOffersFragment : Fragment() {
     private var ALL_OFFER = "ALL"
     
     private var userModel = UserModel("", "", "", "", "", "", "")
+    private lateinit var backPressedCallback : OnBackPressedCallback
     
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +65,7 @@ class AllOffersFragment : Fragment() {
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        DatabaseServices.getProductDetailsRecord("Product_Details", productList, ALL_OFFER) { isGetComplete ->
+        DatabaseServices.getAllProductDetails("Product_Details", productList) { isGetComplete ->
             if (isGetComplete) {
                 recProgressBar.visibility = View.INVISIBLE
                 val itemAdapter =
@@ -70,6 +74,7 @@ class AllOffersFragment : Fragment() {
                         requireActivity().supportFragmentManager.commit {
                             setReorderingAllowed(true)
                             replace(R.id.nav_host_fragment_content_home_page, fragment)
+                            addToBackStack(null)
                         }
                     }
                 val offerRecycleView = binding.offerAllRecycleView
@@ -79,5 +84,27 @@ class AllOffersFragment : Fragment() {
                 Log.d("DEBUG", "OfferNearMe - no record returned")
             }
         }
+    
+        backPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().supportFragmentManager.popBackStack("NearMe",0)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            backPressedCallback
+        )
+    }
+    
+    override fun onResume() {
+        super.onResume()
+        if(productList.isNotEmpty()){
+            productList.clear()
+        }
+    }
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+        backPressedCallback.remove()
     }
 }

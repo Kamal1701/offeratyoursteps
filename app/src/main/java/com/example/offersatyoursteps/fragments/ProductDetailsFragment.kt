@@ -1,11 +1,17 @@
 package com.example.offersatyoursteps.fragments
 
+import android.graphics.Paint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.offersatyoursteps.databinding.FragmentProductDetailsBinding
 import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.utilities.EXTRA_PRODUCT
@@ -18,6 +24,8 @@ class ProductDetailsFragment : Fragment() {
     private lateinit var binding:FragmentProductDetailsBinding
     private lateinit var offerProductDetails : OfferProductDetails
     
+    
+    private lateinit var prodImage : ImageView
     private lateinit var brandName: TextView
     private lateinit var prodName: TextView
     private lateinit var actualPrice: TextView
@@ -27,6 +35,8 @@ class ProductDetailsFragment : Fragment() {
     private lateinit var shopName: TextView
     private lateinit var shopCity: TextView
     private lateinit var shopState: TextView
+    
+    private lateinit var backPressedCallback : OnBackPressedCallback
     
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +51,8 @@ class ProductDetailsFragment : Fragment() {
     ) : View? {
         // Inflate the layout for this fragment
         binding = FragmentProductDetailsBinding.inflate(inflater, container, false)
+    
+        prodImage = binding.productDetailImg
         
         brandName = binding.productDetailBrandTxt
         prodName = binding.productDetailNameTxt
@@ -58,16 +70,33 @@ class ProductDetailsFragment : Fragment() {
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
+        Glide.with(this)
+            .load(offerProductDetails.imgName)
+            .into(prodImage)
+        
         brandName.text = offerProductDetails.brandName
         prodName.text = offerProductDetails.productName
         actualPrice.text = offerProductDetails.actualPrice
+        actualPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
         discountPrice.text = offerProductDetails.discountPrice
         discountPercentage.text = offerProductDetails.discountPercentage
         prodWeight.text = offerProductDetails.prodWeight
         shopName.text = offerProductDetails.productName
         shopCity.text = offerProductDetails.location
         shopState.text = offerProductDetails.location
-        
+    
+        backPressedCallback = object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                requireActivity().supportFragmentManager.popBackStack()
+            }
+        }
+    
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressedCallback)
+    }
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+        backPressedCallback.remove()
     }
     
     companion object {

@@ -5,6 +5,7 @@ import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -83,10 +84,54 @@ object DatabaseServices {
             }
     }
     
-    fun getProductDetailsRecord(
+    fun getLocationProductDetails(
         collectPath : String,
         productList : MutableList<OfferProductDetails>,
         location : String,
+        complete : (Boolean) -> Unit
+    ) {
+        
+        val parentCollectionRef = fStore.collection(collectPath)
+        GlobalScope.launch(Dispatchers.IO) {
+            parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
+                if (!parentCollectionSnapshot.isEmpty) {
+                    for (parentDoc in parentCollectionSnapshot.documents) {
+                        val subcollectionRef: Query = parentDoc.reference.collection("OfferProductDetails").whereEqualTo("Location", location)
+                        subcollectionRef
+                            .get().addOnSuccessListener { querySnapshot ->
+                                println(querySnapshot.isEmpty)
+                                if (!querySnapshot.isEmpty) {
+                                    for ((prodCount, doc) in querySnapshot.withIndex()) {
+                                        println(doc.data["Location"].toString())
+                                        println(location)
+//                                        if (doc.data["Location"].toString() == location) {
+                                            productList.add(
+                                                prodCount,
+                                                OfferProductDetails.fromQuerySnapshot(doc)
+                                            )
+//                                        }
+                                    }
+                                    complete(true)
+                                }
+                            }
+                            .addOnFailureListener {
+                                Log.d("EXEC", it.localizedMessage)
+                                complete(false)
+                            }
+                    }
+                }
+            }
+                .addOnFailureListener {
+                    Log.d("EXEC", it.localizedMessage)
+                    complete(false)
+                }
+        }
+        
+    }
+    
+    fun getAllProductDetails(
+        collectPath : String,
+        productList : MutableList<OfferProductDetails>,
         complete : (Boolean) -> Unit
     ) {
         
@@ -101,14 +146,10 @@ object DatabaseServices {
                                 println(querySnapshot.isEmpty)
                                 if (!querySnapshot.isEmpty) {
                                     for ((prodCount, doc) in querySnapshot.withIndex()) {
-                                        println(doc.data["Location"].toString())
-                                        println(location)
-                                        if (doc.data["Location"].toString() == location) {
-                                            productList.add(
-                                                prodCount,
-                                                OfferProductDetails.fromQuerySnapshot(doc)
-                                            )
-                                        }
+                                        productList.add(
+                                            prodCount,
+                                            OfferProductDetails.fromQuerySnapshot(doc)
+                                        )
                                     }
                                     complete(true)
                                 }
