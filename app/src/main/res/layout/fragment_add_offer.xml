@@ -142,6 +142,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addDiscountStartDateTxt" />
 
+        <TextView
+            android:id="@+id/addDiscountPercTxt"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/register_edittext_sytle"
+            android:ems="10"
+            android:hint="discount %"
+            android:inputType="text"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/addDiscountEndDateTxt" />
+
+
+
         <EditText
             android:id="@+id/addProductDescriptionTxt"
             android:layout_width="365dp"

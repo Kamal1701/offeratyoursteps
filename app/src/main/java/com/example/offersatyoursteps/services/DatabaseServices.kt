@@ -34,9 +34,6 @@ object DatabaseServices {
                     userModel.isMerchant = custDoc.get("IsMerchant").toString()
                     userModel.cCity = custDoc.get("City").toString()
                     userModel.cDistrict = custDoc.get("District").toString()
-                    println("getCustomerInfo")
-                    println(custDoc.get("District").toString())
-                    println(custDoc.get("State").toString())
                     userModel.cState = custDoc.get("State").toString()
                     userModel.cPincode = custDoc.get("Pincode").toString()
                     
@@ -107,6 +104,7 @@ object DatabaseServices {
                                 .whereEqualTo("Location", location)
                         subcollectionRef
                             .get().addOnSuccessListener { querySnapshot ->
+                                println("querysnapshot empty")
                                 println(querySnapshot.isEmpty)
                                 if (!querySnapshot.isEmpty) {
                                     for ((prodCount, doc) in querySnapshot.withIndex()) {
@@ -118,6 +116,8 @@ object DatabaseServices {
 //                                        }
                                     }
                                     complete(true)
+                                }else{
+                                    complete(false)
                                 }
                             }
                             .addOnFailureListener {
@@ -125,9 +125,10 @@ object DatabaseServices {
                                 complete(false)
                             }
                     }
+                } else{
+                    complete(false)
                 }
-            }
-                .addOnFailureListener {
+            }.addOnFailureListener {
                     Log.d("EXEC", it.localizedMessage)
                     complete(false)
                 }
@@ -158,6 +159,8 @@ object DatabaseServices {
                                         )
                                     }
                                     complete(true)
+                                } else{
+                                    complete(false)
                                 }
                             }
                             .addOnFailureListener {
@@ -165,6 +168,8 @@ object DatabaseServices {
                                 complete(false)
                             }
                     }
+                } else{
+                    complete(false)
                 }
             }
                 .addOnFailureListener {

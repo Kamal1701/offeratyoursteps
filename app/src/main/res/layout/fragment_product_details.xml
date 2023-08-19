@@ -26,6 +26,7 @@
         android:layout_marginTop="16dp"
         android:text="brand name"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.081"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
@@ -38,10 +39,23 @@
         android:layout_marginTop="16dp"
         android:text="product name"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/productDetailBrandTxt"
         app:layout_constraintTop_toBottomOf="@+id/productDetailBrandTxt" />
+
+
+    <TextView
+        android:id="@+id/prodDetailActualPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="acp"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/productDetailNameTxt"
+        app:layout_constraintTop_toBottomOf="@+id/productDetailNameTxt" />
 
     <TextView
         android:id="@+id/prodDetailDiscountPrice"
@@ -50,27 +64,26 @@
         android:layout_marginStart="6dp"
         android:text="dcp"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/prodDetailActualPrice"
         app:layout_constraintStart_toEndOf="@+id/prodDetailActualPrice"
         app:layout_constraintTop_toBottomOf="@+id/productDetailNameTxt"
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView
-        android:id="@+id/prodDetailActualPrice"
+        android:id="@+id/prodDetailDiscountPer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="acp"
+        android:layout_marginStart="6dp"
+        android:background="#9C27B0"
+        android:text="00%"
+        android:textStyle="bold"
+        android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/productDetailNameTxt"
-        app:layout_constraintTop_toBottomOf="@+id/productDetailNameTxt" />
+        app:layout_constraintBottom_toBottomOf="@+id/prodDetailDiscountPrice"
+        app:layout_constraintStart_toEndOf="@+id/prodDetailDiscountPrice"
+        app:layout_constraintTop_toTopOf="@+id/prodDetailDiscountPrice" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="192dp" />
 
     <TextView
         android:id="@+id/prodDetailWeight"
@@ -79,21 +92,45 @@
         android:layout_marginTop="16dp"
         android:text="1000kg"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/prodDetailActualPrice"
         app:layout_constraintTop_toBottomOf="@+id/prodDetailActualPrice" />
 
     <TextView
-        android:id="@+id/prodDetailDiscountPer"
+        android:id="@+id/prodDetailEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:text="00%"
+        android:layout_marginTop="16dp"
+        android:text="Offer End On:"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/prodDetailDiscountPrice"
-        app:layout_constraintStart_toEndOf="@+id/prodDetailDiscountPrice"
-        app:layout_constraintTop_toTopOf="@+id/prodDetailDiscountPrice" />
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/prodDetailOfferEnd"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/prodDetailWeight"
+        app:layout_constraintTop_toBottomOf="@+id/prodDetailWeight" />
+
+    <TextView
+        android:id="@+id/prodDetailOfferEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="21/08/2023"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/prodDetailEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/prodDetailEnd"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="192dp" />
+
 
     <TextView
         android:id="@+id/prodDetailShopName"
@@ -102,33 +139,50 @@
         android:layout_marginTop="24dp"
         android:text="KPS Info tech"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.197"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productDetailImg" />
 
     <TextView
-        android:id="@+id/prodDetailState"
+        android:id="@+id/prodStreetName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Tamil Nadu"
+        android:layout_marginTop="8dp"
+        android:text="Chennai"
         android:textSize="16dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/prodDetailCity"
-        app:layout_constraintTop_toBottomOf="@+id/prodDetailCity" />
+        app:layout_constraintStart_toStartOf="@+id/prodDetailShopName"
+        app:layout_constraintTop_toBottomOf="@+id/prodDetailShopName" />
 
     <TextView
         android:id="@+id/prodDetailCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="Chennai"
         android:textSize="16dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/prodDetailShopName"
-        app:layout_constraintTop_toBottomOf="@+id/prodDetailShopName" />
+        app:layout_constraintStart_toStartOf="@+id/prodStreetName"
+        app:layout_constraintTop_toBottomOf="@+id/prodStreetName" />
+
+    <TextView
+        android:id="@+id/prodDetailState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Tamil Nadu"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/prodDetailCity"
+        app:layout_constraintTop_toBottomOf="@+id/prodDetailCity" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

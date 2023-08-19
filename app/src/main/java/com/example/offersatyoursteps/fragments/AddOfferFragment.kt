@@ -197,8 +197,9 @@ class AddOfferFragment : Fragment() {
                 prodMap["Product_Subcategory"] = prodSubcategory
                 prodMap["Product_ActualPrice"] = prodActualPrice
                 prodMap["Product_DiscountPrice"] = prodDiscoutPrice
+                prodMap["Discount_Percentage"] = calculatePercentate(prodActualPrice, prodDiscoutPrice)
                 prodMap["Offer_StartDate"] = ofrStartDate
-                prodMap["offer_EndDate"] = ofrEndDate
+                prodMap["Offer_EndDate"] = ofrEndDate
                 prodMap["Product_Weight"] = prodWeight
                 prodMap["Product_Desc"] = prodDesc
                 prodMap["Location"] = userModel.cCity.toString()
@@ -294,6 +295,16 @@ class AddOfferFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         backPressedCallback.remove()
+    }
+    
+    fun calculatePercentate(actPrice : String, discPric: String) : String{
+        val actualPrice : Float = actPrice.toFloat()
+        val discountPrice : Float = discPric.toFloat()
+        val discPercentage : Float = ((actualPrice - discountPrice) / actualPrice) * 100
+        println("calculatePercentage")
+        println(discPercentage)
+        return discPercentage.toString()
+        
     }
     
 }

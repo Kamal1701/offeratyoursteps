@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Adapter
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
@@ -38,6 +39,7 @@ class OfferNearMeFragment : Fragment() {
     private var productList : MutableList<OfferProductDetails> = mutableListOf()
     private lateinit var itemAdapter : OfferAdapter
     private lateinit var recProgressBar : ProgressBar
+    private lateinit var noOffersToday : TextView
     
     private lateinit var backPressedCallback : OnBackPressedCallback
     
@@ -57,6 +59,8 @@ class OfferNearMeFragment : Fragment() {
         binding = FragmentOfferNearMeBinding.inflate(inflater, container, false)
         recProgressBar = binding.recycleProgressBar
         recProgressBar.visibility = View.VISIBLE
+        noOffersToday = binding.noOfferProduct
+        noOffersToday.visibility = View.VISIBLE
     
         val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
         toolbar?.title = OFFER_NEAR_ME_TITLE
@@ -84,9 +88,10 @@ class OfferNearMeFragment : Fragment() {
         ) { isGetComplete ->
             if (isGetComplete) {
                 recProgressBar.visibility = View.INVISIBLE
+                noOffersToday.visibility = View.GONE
                 itemAdapter =
                     OfferAdapter(this.requireContext(), productList) { productDetail ->
-                        val fragment = ProductDetailsFragment.newInstance(productDetail)
+                        val fragment = ProductDetailsFragment.newInstance(userModel, productDetail)
                         requireActivity().supportFragmentManager.commit {
                             setReorderingAllowed(true)
                             replace(R.id.nav_host_fragment_content_home_page, fragment)
@@ -98,6 +103,8 @@ class OfferNearMeFragment : Fragment() {
                 offerRecycleView.adapter = itemAdapter
                 offerRecycleView.setHasFixedSize(true)
             } else {
+                recProgressBar.visibility = View.INVISIBLE
+                noOffersToday.visibility = View.VISIBLE
                 Log.d("DEBUG", "OfferNearMe - no record returned")
             }
         }
@@ -126,10 +133,8 @@ class OfferNearMeFragment : Fragment() {
     
     override fun onResume() {
         super.onResume()
-        println("near me on resume outside if")
         if (productList.isNotEmpty()) {
             productList.clear()
-            println("near me on resume inside if")
         }
     }
     

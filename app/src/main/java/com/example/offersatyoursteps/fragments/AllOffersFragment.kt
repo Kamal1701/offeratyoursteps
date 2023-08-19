@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.commit
@@ -29,6 +30,7 @@ class AllOffersFragment : Fragment() {
     
     private lateinit var binding : FragmentAllOffersBinding
     private lateinit var recProgressBar : ProgressBar
+    private lateinit var noOfferToday:TextView
     private var productList : MutableList<OfferProductDetails> = mutableListOf()
     
     private var userModel = UserModel("", "", "", "", "", "","", "","")
@@ -48,7 +50,9 @@ class AllOffersFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentAllOffersBinding.inflate(inflater, container, false)
         recProgressBar = binding.recProgressBar
+        noOfferToday = binding.noAllOfferProduct
         recProgressBar.visibility = View.VISIBLE
+        noOfferToday.visibility = View.GONE
         
         val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
         toolbar?.title = All_OFFERS_TITLE
@@ -76,7 +80,7 @@ class AllOffersFragment : Fragment() {
                 recProgressBar.visibility = View.INVISIBLE
                 val itemAdapter =
                     OfferAdapter(this.requireContext(), productList) { productDetail ->
-                        val fragment = ProductDetailsFragment.newInstance(productDetail)
+                        val fragment = ProductDetailsFragment.newInstance(userModel, productDetail)
                         requireActivity().supportFragmentManager.commit {
                             setReorderingAllowed(true)
                             replace(R.id.nav_host_fragment_content_home_page, fragment)
@@ -87,6 +91,8 @@ class AllOffersFragment : Fragment() {
                 offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
                 offerRecycleView.adapter = itemAdapter
             } else {
+                recProgressBar.visibility = View.INVISIBLE
+                noOfferToday.visibility = View.VISIBLE
                 Log.d("DEBUG", "OfferNearMe - no record returned")
             }
         }

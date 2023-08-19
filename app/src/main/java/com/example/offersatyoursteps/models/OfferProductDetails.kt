@@ -102,7 +102,7 @@ data class OfferProductDetails(
                 subDocSnapshot.data["Product_DiscountPrice"].toString(),
                 subDocSnapshot.data["Offer_StartDate"].toString(),
                 subDocSnapshot.data["Offer_EndDate"].toString(),
-                "2%",
+                subDocSnapshot.data["Discount_Percentage"].toString(),
                 subDocSnapshot.data["Product_Weight"].toString(),
                 subDocSnapshot.data["Product_Desc"].toString(),
                 subDocSnapshot.data["Location"].toString()

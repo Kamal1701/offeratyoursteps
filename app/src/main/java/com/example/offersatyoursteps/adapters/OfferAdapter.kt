@@ -4,7 +4,9 @@ import android.content.Context
 import android.graphics.Paint
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.offersatyoursteps.models.OfferDetails
@@ -34,7 +36,8 @@ class OfferAdapter(
             actPrice.text = offerDetails.actualPrice
             actPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             discPrice.text = offerDetails.discountPrice
-            discPercentage.text = offerDetails.discountPercentage
+            discPercentage.text = "${offerDetails.discountPercentage}%"
+            
             
             offerImage.setOnClickListener { prodItemClick(offerDetails) }
             
