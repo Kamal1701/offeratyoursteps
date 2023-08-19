@@ -182,7 +182,7 @@ class LoginActivity : AppCompatActivity() {
 
 //    override fun onStart() {
 //        super.onStart()
-//        val user = mAuth.currentUser
+//        val user = mAuth.currentUserā
 //        if(user != null){
 //            updateUI()
 //        }

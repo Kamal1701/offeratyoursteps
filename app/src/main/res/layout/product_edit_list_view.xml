@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:id="@+id/editProductImage"
+        android:layout_width="132dp"
+        android:layout_height="125dp"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/editGuideline"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/editGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="146dp" />
+
+    <TextView
+        android:id="@+id/editProductName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="Product Name"
+        app:layout_constraintStart_toStartOf="@+id/editGuideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/editBrandName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Product Brand"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.172"
+        app:layout_constraintStart_toEndOf="@+id/editProductName"
+        app:layout_constraintTop_toTopOf="@+id/editProductName" />
+
+
+
+    <TextView
+        android:id="@+id/editActualPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        android:text="Actual Price"
+        app:layout_constraintStart_toStartOf="@+id/editGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/editProductName"
+        tools:layout_editor_absoluteY="45dp" />
+
+    <TextView
+        android:id="@+id/editDiscountPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="discount price"
+        app:layout_constraintBottom_toBottomOf="@+id/editActualPrice"
+        app:layout_constraintStart_toEndOf="@+id/editActualPrice"
+        app:layout_constraintTop_toTopOf="@+id/editActualPrice"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/editStartDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        android:text="Offer Start Dt"
+        tools:layout_editor_absoluteX="156dp"
+        tools:layout_editor_absoluteY="75dp"
+        app:layout_constraintStart_toStartOf="@+id/editGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/editActualPrice"/>
+
+    <TextView
+        android:id="@+id/editOfferStartDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="68dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/editStartDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.338"
+        app:layout_constraintStart_toEndOf="@+id/editStartDate"
+        app:layout_constraintTop_toBottomOf="@+id/editDiscountPrice"
+        app:layout_constraintVertical_bias="1.0" />
+
+
+    <TextView
+        android:id="@+id/editEndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        android:text="Offer End Dt"
+        app:layout_constraintBottom_toBottomOf="@+id/editProductImage"
+        app:layout_constraintStart_toStartOf="@+id/editGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/editStartDate"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/editOfferEndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/editEndDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.172"
+        app:layout_constraintStart_toEndOf="@+id/editEndDate"
+        app:layout_constraintTop_toBottomOf="@+id/editOfferStartDate"
+        app:layout_constraintVertical_bias="1.0" />
+</androidx.constraintlayout.widget.ConstraintLayout>
