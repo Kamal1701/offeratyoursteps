@@ -95,6 +95,8 @@ object DatabaseServices {
     ) {
         
         val parentCollectionRef = fStore.collection(collectPath)
+        println("getLocationProductDetails")
+        println(collectPath)
         GlobalScope.launch(Dispatchers.IO) {
             parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
                 if (!parentCollectionSnapshot.isEmpty) {
@@ -104,8 +106,6 @@ object DatabaseServices {
                                 .whereEqualTo("Location", location)
                         subcollectionRef
                             .get().addOnSuccessListener { querySnapshot ->
-                                println("querysnapshot empty")
-                                println(querySnapshot.isEmpty)
                                 if (!querySnapshot.isEmpty) {
                                     for ((prodCount, doc) in querySnapshot.withIndex()) {
 //                                        if (doc.data["Location"].toString() == location) {
@@ -150,7 +150,6 @@ object DatabaseServices {
                         val subcollectionRef = parentDoc.reference.collection("OfferProductDetails")
                         subcollectionRef
                             .get().addOnSuccessListener { querySnapshot ->
-                                println(querySnapshot.isEmpty)
                                 if (!querySnapshot.isEmpty) {
                                     for ((prodCount, doc) in querySnapshot.withIndex()) {
                                         productList.add(

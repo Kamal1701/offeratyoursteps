@@ -28,6 +28,8 @@ import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.OFFER_NEAR_ME_TITLE
+import com.example.offersatyoursteps.utilities.PRODUCT_DETAIL_TITLE
+import com.example.offersatyoursteps.utilities.PRODUCT_INFO_TABLE
 import com.example.offersatyoursteps.utilities.SPAN_COUNT
 import com.example.offersatyoursteps.utilities.USER_INFO
 
@@ -60,7 +62,7 @@ class OfferNearMeFragment : Fragment() {
         recProgressBar = binding.recycleProgressBar
         recProgressBar.visibility = View.VISIBLE
         noOffersToday = binding.noOfferProduct
-        noOffersToday.visibility = View.VISIBLE
+        noOffersToday.visibility = View.INVISIBLE
     
         val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
         toolbar?.title = OFFER_NEAR_ME_TITLE
@@ -80,15 +82,17 @@ class OfferNearMeFragment : Fragment() {
     
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    
+//        noOffersToday.visibility = View.INVISIBLE
         
         DatabaseServices.getLocationProductDetails(
-            "Product_Details",
+            PRODUCT_INFO_TABLE,
             productList,
             userModel.cCity.toString()
         ) { isGetComplete ->
             if (isGetComplete) {
-                recProgressBar.visibility = View.INVISIBLE
-                noOffersToday.visibility = View.GONE
+//                recProgressBar.visibility = View.INVISIBLE
+//                noOffersToday.visibility = View.GONE
                 itemAdapter =
                     OfferAdapter(this.requireContext(), productList) { productDetail ->
                         val fragment = ProductDetailsFragment.newInstance(userModel, productDetail)
@@ -102,9 +106,16 @@ class OfferNearMeFragment : Fragment() {
                 offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
                 offerRecycleView.adapter = itemAdapter
                 offerRecycleView.setHasFixedSize(true)
+                offerRecycleView.adapter.let {
+                    if(itemAdapter.itemCount == 0){
+                        noOffersToday.visibility = View.VISIBLE
+                    } else {
+                        noOffersToday.visibility = View.INVISIBLE
+                    }
+                }
             } else {
                 recProgressBar.visibility = View.INVISIBLE
-                noOffersToday.visibility = View.VISIBLE
+//                noOffersToday.visibility = View.VISIBLE
                 Log.d("DEBUG", "OfferNearMe - no record returned")
             }
         }

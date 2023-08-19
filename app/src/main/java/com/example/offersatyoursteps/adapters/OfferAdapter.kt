@@ -2,6 +2,7 @@ package com.example.offersatyoursteps.adapters
 
 import android.content.Context
 import android.graphics.Paint
+import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.offersatyoursteps.models.OfferDetails
 import com.example.offersatyoursteps.databinding.OfferListViewBinding
 import com.example.offersatyoursteps.models.OfferProductDetails
+import com.example.offersatyoursteps.utilities.RUPEE_SYMBOL
 
 class OfferAdapter(
     val context : Context,
@@ -33,10 +35,11 @@ class OfferAdapter(
             
             Glide.with(context).load(offerDetails.imgName).into(offerImage)
             prodName.text = offerDetails.productName
-            actPrice.text = offerDetails.actualPrice
-            actPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-            discPrice.text = offerDetails.discountPrice
-            discPercentage.text = "${offerDetails.discountPercentage}%"
+//            actPrice.text = RUPEE_SYMBOL + "${offerDetails.actualPrice}"
+            "$RUPEE_SYMBOL ${offerDetails.actualPrice}".also { actPrice.text =  it }
+            actPrice.paintFlags = STRIKE_THRU_TEXT_FLAG
+            "$RUPEE_SYMBOL ${offerDetails.discountPrice}".also { discPrice.text =  it }
+            "${offerDetails.discountPercentage}%".also { discPercentage.text = it }
             
             
             offerImage.setOnClickListener { prodItemClick(offerDetails) }

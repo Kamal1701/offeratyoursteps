@@ -19,6 +19,7 @@ import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.activities.LoginActivity
 import com.example.offersatyoursteps.databinding.FragmentMerchantRegisterBinding
 import com.example.offersatyoursteps.services.DatabaseServices
+import com.example.offersatyoursteps.utilities.CUSTOMER_INFO_TABLE
 import com.example.offersatyoursteps.utilities.SetTextColorSpan
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -133,7 +134,7 @@ class MerchantRegisterFragment : Fragment() {
                             val userId = mAuth.currentUser!!.uid
                             Log.d("DEBUG", userId)
                             DatabaseServices.createCustomerInfoRecord(
-                                "CustomerInfo",
+                                CUSTOMER_INFO_TABLE,
                                 userId,
                                 merchantMap
                             ) { isSetComplete ->

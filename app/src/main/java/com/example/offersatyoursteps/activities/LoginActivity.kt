@@ -24,6 +24,7 @@ import com.example.offersatyoursteps.databinding.ActivityLoginBinding
 import com.example.offersatyoursteps.fragments.OfferNearMeFragment
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
+import com.example.offersatyoursteps.utilities.CUSTOMER_INFO_TABLE
 import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -135,7 +136,7 @@ class LoginActivity : AppCompatActivity() {
                     registerBtn.visibility = View.INVISIBLE
                     
                     val userId = mAuth.currentUser!!.uid
-                    DatabaseServices.getCustomerInfoRecord("CustomerInfo", userId, userModel){dbSuccess ->
+                    DatabaseServices.getCustomerInfoRecord(CUSTOMER_INFO_TABLE, userId, userModel){ dbSuccess ->
 
                         if(dbSuccess){
                             loadHomePage()

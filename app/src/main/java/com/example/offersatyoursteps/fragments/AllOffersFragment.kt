@@ -21,6 +21,8 @@ import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.All_OFFERS_TITLE
+import com.example.offersatyoursteps.utilities.PRODUCT_DETAIL_TITLE
+import com.example.offersatyoursteps.utilities.PRODUCT_INFO_TABLE
 import com.example.offersatyoursteps.utilities.SPAN_COUNT
 import com.example.offersatyoursteps.utilities.USER_INFO
 
@@ -73,9 +75,7 @@ class AllOffersFragment : Fragment() {
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        
-        
-        DatabaseServices.getAllProductDetails("Product_Details", productList) { isGetComplete ->
+        DatabaseServices.getAllProductDetails(PRODUCT_INFO_TABLE, productList) { isGetComplete ->
             if (isGetComplete) {
                 recProgressBar.visibility = View.INVISIBLE
                 val itemAdapter =
@@ -90,9 +90,15 @@ class AllOffersFragment : Fragment() {
                 val offerRecycleView = binding.offerAllRecycleView
                 offerRecycleView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
                 offerRecycleView.adapter = itemAdapter
+                offerRecycleView.adapter.let {
+                    if(itemAdapter.itemCount == 0){
+                        noOfferToday.visibility = View.VISIBLE
+                    } else {
+                        noOfferToday.visibility = View.INVISIBLE
+                    }
+                }
             } else {
                 recProgressBar.visibility = View.INVISIBLE
-                noOfferToday.visibility = View.VISIBLE
                 Log.d("DEBUG", "OfferNearMe - no record returned")
             }
         }

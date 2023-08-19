@@ -12,4 +12,9 @@ const val PROFILE_TITLE = "Profile"
 const val ADD_PRODUCT_TITLE = "Add Product"
 const val PRODUCT_DETAIL_TITLE = "Product Description"
 
+const val CUSTOMER_INFO_TABLE = "CustomerInfo"
+const val PRODUCT_INFO_TABLE = "Product_Details"
+
+const val RUPEE_SYMBOL = "\u20B9"
+
 const val SPAN_COUNT = 2

@@ -1,12 +1,10 @@
 package com.example.offersatyoursteps.fragments
 
 import android.app.Activity.RESULT_OK
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import android.provider.MediaStore.Video.Media
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,35 +12,32 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.FragmentManager
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.databinding.FragmentAddOfferBinding
-import com.example.offersatyoursteps.models.ProductSubcategory
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.ADD_PRODUCT_TITLE
-import com.example.offersatyoursteps.utilities.GALLERY_REQUEST_CODE
-import com.example.offersatyoursteps.utilities.PROFILE_TITLE
+import com.example.offersatyoursteps.utilities.OfferTextWatcher
+import com.example.offersatyoursteps.utilities.PRODUCT_DETAIL_TITLE
 import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.lang.Math.round
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import kotlin.math.roundToInt
 
 
 class AddOfferFragment : Fragment() {
@@ -58,7 +53,8 @@ class AddOfferFragment : Fragment() {
     private lateinit var productCategory : EditText
     private lateinit var productSubcategory : EditText
     private lateinit var productActualPrice : EditText
-    private lateinit var productDiscoutPrice : EditText
+    private lateinit var productDiscountPrice : EditText
+    private lateinit var productDiscountPercentage : TextView
     private lateinit var offerStartDate : EditText
     private lateinit var offerEndDate : EditText
     private lateinit var productWeight : EditText
@@ -101,10 +97,11 @@ class AddOfferFragment : Fragment() {
         productCategory = binding.addProductCategoryTxt
         productSubcategory = binding.addProductSubCategoryTxt
         productActualPrice = binding.addProductActualPriceTxt
-        productDiscoutPrice = binding.addProductDiscountPriceTxt
+        productDiscountPrice = binding.addProductDiscountPriceTxt
         offerStartDate = binding.addDiscountStartDateTxt
         offerEndDate = binding.addDiscountEndDateTxt
         productWeight = binding.addProductWeighTxt
+        productDiscountPercentage = binding.addDiscountPercTxt
         productDesc = binding.addProductDescriptionTxt
         addProductBtn = binding.addProductBtn
         cancelProductBtn = binding.cancelProductBtn
@@ -145,7 +142,11 @@ class AddOfferFragment : Fragment() {
                 val formattedDate = dateFormat.format(selectedDate.time)
                 offerStartDate.setText(formattedDate)
             }
-            datePicker.show(requireActivity().supportFragmentManager, "datepicker")
+            datePicker.show(requireActivity().supportFragmentManager, "date-picker")
+            
+            if(productActualPrice.text.toString().isNotEmpty() && productActualPrice.text.toString().isNotEmpty()){
+                productDiscountPercentage.text = calculatePercentate(productActualPrice.text.toString(), productDiscountPrice.text.toString())
+            }
         }
         
         offerEndDate.setOnClickListener {
@@ -159,7 +160,7 @@ class AddOfferFragment : Fragment() {
                 val formattedDate = dateFormat.format(selectedDate.time)
                 offerEndDate.setText(formattedDate)
             }
-            datePicker.show(requireActivity().supportFragmentManager, "datepicker")
+            datePicker.show(requireActivity().supportFragmentManager, "date-picker")
         }
         
         
@@ -174,7 +175,8 @@ class AddOfferFragment : Fragment() {
             val prodCategory = productCategory.text.toString()
             val prodSubcategory = productSubcategory.text.toString()
             val prodActualPrice = productActualPrice.text.toString()
-            val prodDiscoutPrice = productDiscoutPrice.text.toString()
+            val prodDiscountPrice = productDiscountPrice.text.toString()
+            val prodDiscountPerc = productDiscountPercentage.text.toString()
             val ofrStartDate = offerStartDate.text.toString()
             val ofrEndDate = offerEndDate.text.toString()
             val prodWeight = productWeight.text.toString()
@@ -184,7 +186,7 @@ class AddOfferFragment : Fragment() {
             Log.d("DEBUG", productImage.tag.toString())
             
             if (prodImage == "image_added" && prodName.isNotEmpty() && prodBrand.isNotEmpty() && prodCategory.isNotEmpty()
-                && prodSubcategory.isNotEmpty() && prodActualPrice.isNotEmpty() && prodDiscoutPrice.isNotEmpty()
+                && prodSubcategory.isNotEmpty() && prodActualPrice.isNotEmpty() && prodDiscountPrice.isNotEmpty()
                 && ofrStartDate.isNotEmpty() && ofrEndDate.isNotEmpty() && prodWeight.isNotEmpty()
                 && prodDesc.isNotEmpty()
             ) {
@@ -196,8 +198,8 @@ class AddOfferFragment : Fragment() {
                 prodMap["Product_Category"] = prodCategory
                 prodMap["Product_Subcategory"] = prodSubcategory
                 prodMap["Product_ActualPrice"] = prodActualPrice
-                prodMap["Product_DiscountPrice"] = prodDiscoutPrice
-                prodMap["Discount_Percentage"] = calculatePercentate(prodActualPrice, prodDiscoutPrice)
+                prodMap["Product_DiscountPrice"] = prodDiscountPrice
+                prodMap["Discount_Percentage"] = prodDiscountPerc
                 prodMap["Offer_StartDate"] = ofrStartDate
                 prodMap["Offer_EndDate"] = ofrEndDate
                 prodMap["Product_Weight"] = prodWeight
@@ -215,7 +217,7 @@ class AddOfferFragment : Fragment() {
                                 prodMap["Product_Image"] = it.toString()
                                 val userId = FirebaseAuth.getInstance().currentUser!!.uid
                                 DatabaseServices.createProductDetailsRecord(
-                                    "Product_Details",
+                                    PRODUCT_DETAIL_TITLE,
                                     userId,
                                     prodMap
                                 ) { isProdCreateComplete ->
@@ -275,7 +277,8 @@ class AddOfferFragment : Fragment() {
         productCategory.text.clear()
         productSubcategory.text.clear()
         productActualPrice.text.clear()
-        productDiscoutPrice.text.clear()
+        productDiscountPrice.text.clear()
+        productDiscountPercentage.text = ""
         offerStartDate.text.clear()
         offerEndDate.text.clear()
         productWeight.text.clear()
@@ -300,10 +303,9 @@ class AddOfferFragment : Fragment() {
     fun calculatePercentate(actPrice : String, discPric: String) : String{
         val actualPrice : Float = actPrice.toFloat()
         val discountPrice : Float = discPric.toFloat()
-        val discPercentage : Float = ((actualPrice - discountPrice) / actualPrice) * 100
-        println("calculatePercentage")
-        println(discPercentage)
-        return discPercentage.toString()
+        val discPercentage : Int =
+            (((actualPrice - discountPrice) / actualPrice) * 100).roundToInt()
+        return "${discPercentage}%"
         
     }
     

@@ -20,6 +20,7 @@ import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.utilities.EXTRA_PRODUCT
 import com.example.offersatyoursteps.utilities.OFFER_NEAR_ME_TITLE
 import com.example.offersatyoursteps.utilities.PRODUCT_DETAIL_TITLE
+import com.example.offersatyoursteps.utilities.RUPEE_SYMBOL
 import com.example.offersatyoursteps.utilities.USER_INFO
 
 // TODO: Rename parameter arguments, choose names that match
@@ -92,12 +93,22 @@ class ProductDetailsFragment : Fragment() {
         
         brandName.text = offerProductDetails.brandName
         prodName.text = offerProductDetails.productName
-        actualPrice.text = offerProductDetails.actualPrice
+        "$RUPEE_SYMBOL ${offerProductDetails.actualPrice}".also { actualPrice.text = it }
         actualPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-        discountPrice.text = offerProductDetails.discountPrice
-        discountPercentage.text = "${offerProductDetails.discountPercentage}%"
+        "$RUPEE_SYMBOL ${offerProductDetails.discountPrice}".also { discountPrice.text = it }
+        if (offerProductDetails.discountPercentage !="null"){
+            "${offerProductDetails.discountPercentage}%".also { discountPercentage.text = it }
+        } else{
+            discountPercentage.text = "0%"
+        }
+        
         prodWeight.text = offerProductDetails.prodWeight
-        offerEndDate.text = offerProductDetails.offerEdDate
+        if(offerProductDetails.offerEdDate != "null"){
+            offerEndDate.text = offerProductDetails.offerEdDate
+        } else{
+            offerEndDate.text = ""
+        }
+        
         shopName.text = userModel.cShopName
         shopStName.text = userModel.cStreetName
         shopCity.text = userModel.cCity
