@@ -24,6 +24,7 @@ import com.example.offersatyoursteps.fragments.AllOffersFragment
 import com.example.offersatyoursteps.fragments.MerchantProfileFragment
 import com.example.offersatyoursteps.fragments.OfferNearMeFragment
 import com.example.offersatyoursteps.fragments.CustomerProfileFragment
+import com.example.offersatyoursteps.fragments.EditOfferFragment
 import com.example.offersatyoursteps.fragments.ProductSubcategoryFragment
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.utilities.USER_INFO
@@ -149,6 +150,21 @@ class HomePageActivity : AppCompatActivity() {
 //                        supportActionBar?.title = "Add Product"
                     }
                     
+                }
+    
+                R.id.editOfferProduct -> {
+        
+                    fragment =EditOfferFragment.newInstance(userModel)
+                    if (fragment != null) {
+                        supportFragmentManager.commit {
+                            setReorderingAllowed(true)
+                            replace(R.id.nav_host_fragment_content_home_page, fragment)
+                            addToBackStack(null)
+                        }
+                        drawerLayout.closeDrawer(GravityCompat.START)
+//                        supportActionBar?.title = "Add Product"
+                    }
+        
                 }
             }
             

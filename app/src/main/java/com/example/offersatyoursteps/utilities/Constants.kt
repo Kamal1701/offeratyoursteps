@@ -11,6 +11,7 @@ const val All_OFFERS_TITLE = "All Offers"
 const val PROFILE_TITLE = "Profile"
 const val ADD_PRODUCT_TITLE = "Add Product"
 const val PRODUCT_DETAIL_TITLE = "Product Description"
+const val EDIT_OFFER_PRODUCT = "Edit Product"
 
 const val CUSTOMER_INFO_TABLE = "CustomerInfo"
 const val PRODUCT_INFO_TABLE = "Product_Details"

@@ -1,32 +1,52 @@
 package com.example.offersatyoursteps.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.commit
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.offersatyoursteps.R
+import com.example.offersatyoursteps.adapters.EditOfferAdapter
+import com.example.offersatyoursteps.adapters.OfferAdapter
+import com.example.offersatyoursteps.databinding.FragmentEditOfferBinding
+import com.example.offersatyoursteps.databinding.ProductEditListViewBinding
+import com.example.offersatyoursteps.models.OfferProductDetails
+import com.example.offersatyoursteps.models.UserModel
+import com.example.offersatyoursteps.services.DatabaseServices
+import com.example.offersatyoursteps.utilities.EDIT_OFFER_PRODUCT
+import com.example.offersatyoursteps.utilities.OFFER_NEAR_ME_TITLE
+import com.example.offersatyoursteps.utilities.PRODUCT_INFO_TABLE
+import com.example.offersatyoursteps.utilities.SPAN_COUNT
+import com.example.offersatyoursteps.utilities.USER_INFO
+import com.google.firebase.auth.FirebaseAuth
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [EditOfferFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class EditOfferFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1 : String? = null
-    private var param2 : String? = null
+    private lateinit var userModel : UserModel
+    private lateinit var binding : FragmentEditOfferBinding
+    private var productList : MutableList<OfferProductDetails> = mutableListOf()
+    private lateinit var editOfferAdapter : EditOfferAdapter
+    private lateinit var editPrgBar : ProgressBar
+    private lateinit var editNoProduct : TextView
+    private lateinit var mAuth : FirebaseAuth
+    
+    private lateinit var backPressedCallback : OnBackPressedCallback
+    
     
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            userModel = it.getParcelable<UserModel>(USER_INFO)!!
         }
     }
     
@@ -35,26 +55,83 @@ class EditOfferFragment : Fragment() {
         savedInstanceState : Bundle?
     ) : View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_offer, container, false)
+        binding = FragmentEditOfferBinding.inflate(inflater, container, false)
+        editPrgBar = binding.editProgressBar
+        editNoProduct = binding.editNoProduct
+        editPrgBar.visibility = View.INVISIBLE
+        editNoProduct.visibility = View.INVISIBLE
+        mAuth = FirebaseAuth.getInstance()
+        
+        val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
+        toolbar?.title = EDIT_OFFER_PRODUCT
+    
+        return binding.root
     }
     
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment EditOfferFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+      
         @JvmStatic
-        fun newInstance(param1 : String, param2 : String) =
+        fun newInstance(userModel : UserModel) =
             EditOfferFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putParcelable(USER_INFO, userModel)
                 }
             }
+    }
+    
+    override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        
+        val userId = mAuth.currentUser?.uid!!
+    
+        DatabaseServices.getProductDetailByUserId(
+            PRODUCT_INFO_TABLE,
+            productList,
+            userId
+        ) { isGetComplete ->
+            if (isGetComplete) {
+//                recProgressBar.visibility = View.INVISIBLE
+//                noOffersToday.visibility = View.GONE
+                editOfferAdapter =
+                    EditOfferAdapter(this.requireContext(), productList)
+                val editRecycleView = binding.editOfferRecycleView
+                editRecycleView.layoutManager = LinearLayoutManager(context)
+                editRecycleView.adapter = editOfferAdapter
+                editRecycleView.setHasFixedSize(true)
+                editRecycleView.adapter.let {
+                    if(editOfferAdapter.itemCount == 0){
+                        editNoProduct.visibility = View.VISIBLE
+                    } else {
+                        editNoProduct.visibility = View.INVISIBLE
+                    }
+                }
+            } else {
+                editPrgBar.visibility = View.INVISIBLE
+//                noOffersToday.visibility = View.VISIBLE
+                Log.d("DEBUG", "Edit Offer Fragment - no record returned")
+            }
+        }
+    
+        backPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().supportFragmentManager.popBackStack("NearMe",0)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            backPressedCallback
+        )
+    }
+    
+    override fun onResume() {
+        super.onResume()
+        if(productList.isNotEmpty()){
+            productList.clear()
+        }
+    }
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+        backPressedCallback.remove()
     }
 }

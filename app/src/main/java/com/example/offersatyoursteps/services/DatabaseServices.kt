@@ -116,7 +116,7 @@ object DatabaseServices {
 //                                        }
                                     }
                                     complete(true)
-                                }else{
+                                } else {
                                     complete(false)
                                 }
                             }
@@ -125,13 +125,13 @@ object DatabaseServices {
                                 complete(false)
                             }
                     }
-                } else{
+                } else {
                     complete(false)
                 }
             }.addOnFailureListener {
-                    Log.d("EXEC", it.localizedMessage)
-                    complete(false)
-                }
+                Log.d("EXEC", it.localizedMessage)
+                complete(false)
+            }
         }
         
     }
@@ -158,7 +158,7 @@ object DatabaseServices {
                                         )
                                     }
                                     complete(true)
-                                } else{
+                                } else {
                                     complete(false)
                                 }
                             }
@@ -167,7 +167,7 @@ object DatabaseServices {
                                 complete(false)
                             }
                     }
-                } else{
+                } else {
                     complete(false)
                 }
             }
@@ -179,16 +179,39 @@ object DatabaseServices {
         
     }
     
-    fun getParentDocument() {
-        val parentCollectionRef = fStore.collection("Product_Details")
-        println(parentCollectionRef.id)
+    fun getProductDetailByUserId(
+        collectPath : String,
+        productList : MutableList<OfferProductDetails>,
+        userId : String,
+        complete : (Boolean) -> Unit
+    ) {
+        
+        val parentCollectionRef = fStore.collection(collectPath).document(userId)
+        println("getProductDetailByUserId")
+        println(collectPath)
         GlobalScope.launch(Dispatchers.IO) {
-            val parentDocRef = parentCollectionRef.get().await().documents
-            for (parentDoc in parentDocRef) {
-                val parentDocId = parentDoc.id
-                println(parentDocId)
+            parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
+                val subcollectionRef : Query =
+                    parentCollectionSnapshot.reference.collection("OfferProductDetails")
+                subcollectionRef
+                    .get().addOnSuccessListener { querySnapshot ->
+                        if (!querySnapshot.isEmpty) {
+                            for ((prodCount, doc) in querySnapshot.withIndex()) {
+                                productList.add(
+                                    prodCount,
+                                    OfferProductDetails.fromQuerySnapshot(doc)
+                                )
+                            }
+                            complete(true)
+                        } else {
+                            complete(false)
+                        }
+                    }
+                    .addOnFailureListener {
+                        Log.d("EXEC", it.localizedMessage)
+                        complete(false)
+                    }
             }
         }
     }
-    
 }
