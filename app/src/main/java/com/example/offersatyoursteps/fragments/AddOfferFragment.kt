@@ -26,8 +26,10 @@ import com.example.offersatyoursteps.databinding.FragmentAddOfferBinding
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.ADD_PRODUCT_TITLE
+import com.example.offersatyoursteps.utilities.FIREBASE_IMAGE_LOCATION
 import com.example.offersatyoursteps.utilities.OfferTextWatcher
 import com.example.offersatyoursteps.utilities.PRODUCT_DETAIL_TITLE
+import com.example.offersatyoursteps.utilities.PRODUCT_INFO_TABLE
 import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.auth.FirebaseAuth
@@ -207,7 +209,7 @@ class AddOfferFragment : Fragment() {
                 prodMap["Location"] = userModel.cCity.toString()
                 prodMap["Shop_Name"] = userModel.cShopName.toString()
                 
-                storageRef.getReference("productImages")
+                storageRef.getReference(FIREBASE_IMAGE_LOCATION)
                     .child(System.currentTimeMillis().toString())
                     .putFile(uri)
                     .addOnSuccessListener { task ->
@@ -217,7 +219,7 @@ class AddOfferFragment : Fragment() {
                                 prodMap["Product_Image"] = it.toString()
                                 val userId = FirebaseAuth.getInstance().currentUser!!.uid
                                 DatabaseServices.createProductDetailsRecord(
-                                    PRODUCT_DETAIL_TITLE,
+                                    PRODUCT_INFO_TABLE,
                                     userId,
                                     prodMap
                                 ) { isProdCreateComplete ->

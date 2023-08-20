@@ -73,11 +73,43 @@ object DatabaseServices {
         fStore.collection(collectPath)
             .document(userId).set(mapOf("_id" to userId))
         
+//        fStore.collection(collectPath)
+//            .document(userId)
+//            .collection("OfferProductDetails")
+//            .document()
+//            .set(productMap)
+//            .addOnSuccessListener {
+//                complete(true)
+//            }
+//            .addOnFailureListener {
+//                Log.d("DEBUG", it.localizedMessage)
+//                complete(false)
+//            }
+    
+    
+        val subcollectionDocId = fStore.collection(collectPath)
+            .document(userId)
+            .collection("OfferProductDetails")
+            .document().id
+    
         fStore.collection(collectPath)
             .document(userId)
             .collection("OfferProductDetails")
-            .document()
+            .document(subcollectionDocId)
             .set(productMap)
+            .addOnSuccessListener {
+                complete(true)
+            }
+            .addOnFailureListener {
+                Log.d("DEBUG", it.localizedMessage)
+                complete(false)
+            }
+    
+        fStore.collection(collectPath)
+            .document(userId)
+            .collection("OfferProductDetails")
+            .document(subcollectionDocId)
+            .update(mapOf("_id" to subcollectionDocId))
             .addOnSuccessListener {
                 complete(true)
             }
