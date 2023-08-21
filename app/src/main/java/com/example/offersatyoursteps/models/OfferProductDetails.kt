@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.google.firebase.firestore.QueryDocumentSnapshot
 
 
-data class OfferProductDetails(
+data class OfferProductDetails(var docId:String,
     var imgName : String,
     var productName : String,
     var brandName : String,
@@ -22,6 +22,7 @@ data class OfferProductDetails(
 //    var shopName : String
 ):Parcelable {
     constructor(parcel : Parcel) : this(
+        parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readString().toString(),
@@ -62,6 +63,7 @@ data class OfferProductDetails(
 //    }
     
     override fun writeToParcel(parcel : Parcel, flags : Int) {
+        parcel.writeString(docId)
         parcel.writeString(imgName)
         parcel.writeString(productName)
         parcel.writeString(brandName)
@@ -93,6 +95,7 @@ data class OfferProductDetails(
         fun fromQuerySnapshot(subDocSnapshot : QueryDocumentSnapshot) : OfferProductDetails {
         
             return OfferProductDetails(
+                subDocSnapshot.data["_id"].toString(),
                 subDocSnapshot.data["Product_Image"].toString(),
                 subDocSnapshot.data["Product_Name"].toString(),
                 subDocSnapshot.data["Product_Brand"].toString(),

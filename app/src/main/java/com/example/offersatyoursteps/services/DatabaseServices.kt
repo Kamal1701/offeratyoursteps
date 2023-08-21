@@ -3,6 +3,7 @@ package com.example.offersatyoursteps.services
 import android.util.Log
 import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
+import com.example.offersatyoursteps.utilities.PRODUCT_INFO_SUB_COLLECTION_TABLE
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -75,7 +76,7 @@ object DatabaseServices {
         
 //        fStore.collection(collectPath)
 //            .document(userId)
-//            .collection("OfferProductDetails")
+//            .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
 //            .document()
 //            .set(productMap)
 //            .addOnSuccessListener {
@@ -89,12 +90,12 @@ object DatabaseServices {
     
         val subcollectionDocId = fStore.collection(collectPath)
             .document(userId)
-            .collection("OfferProductDetails")
+            .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
             .document().id
     
         fStore.collection(collectPath)
             .document(userId)
-            .collection("OfferProductDetails")
+            .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
             .document(subcollectionDocId)
             .set(productMap)
             .addOnSuccessListener {
@@ -107,7 +108,7 @@ object DatabaseServices {
     
         fStore.collection(collectPath)
             .document(userId)
-            .collection("OfferProductDetails")
+            .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
             .document(subcollectionDocId)
             .update(mapOf("_id" to subcollectionDocId))
             .addOnSuccessListener {
@@ -134,7 +135,7 @@ object DatabaseServices {
                 if (!parentCollectionSnapshot.isEmpty) {
                     for (parentDoc in parentCollectionSnapshot.documents) {
                         val subcollectionRef : Query =
-                            parentDoc.reference.collection("OfferProductDetails")
+                            parentDoc.reference.collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
                                 .whereEqualTo("Location", location)
                         subcollectionRef
                             .get().addOnSuccessListener { querySnapshot ->
@@ -179,7 +180,7 @@ object DatabaseServices {
             parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
                 if (!parentCollectionSnapshot.isEmpty) {
                     for (parentDoc in parentCollectionSnapshot.documents) {
-                        val subcollectionRef = parentDoc.reference.collection("OfferProductDetails")
+                        val subcollectionRef = parentDoc.reference.collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
                         subcollectionRef
                             .get().addOnSuccessListener { querySnapshot ->
                                 if (!querySnapshot.isEmpty) {
@@ -224,7 +225,7 @@ object DatabaseServices {
         GlobalScope.launch(Dispatchers.IO) {
             parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
                 val subcollectionRef : Query =
-                    parentCollectionSnapshot.reference.collection("OfferProductDetails")
+                    parentCollectionSnapshot.reference.collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
                 subcollectionRef
                     .get().addOnSuccessListener { querySnapshot ->
                         if (!querySnapshot.isEmpty) {

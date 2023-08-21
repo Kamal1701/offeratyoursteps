@@ -17,6 +17,7 @@ const val EDIT_OFFER_PRODUCT = "Edit Product"
 
 const val CUSTOMER_INFO_TABLE = "CustomerInfo"
 const val PRODUCT_INFO_TABLE = "Product_Details"
+const val PRODUCT_INFO_SUB_COLLECTION_TABLE = "OfferProductDetails"
 
 const val RUPEE_SYMBOL = "\u20B9"
 
