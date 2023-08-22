@@ -158,8 +158,8 @@ class HomePageActivity : AppCompatActivity() {
                     if (fragment != null) {
                         supportFragmentManager.commit {
                             setReorderingAllowed(true)
-                            replace(R.id.nav_host_fragment_content_home_page, fragment)
-                            addToBackStack(null)
+                            replace(R.id.nav_host_fragment_content_home_page, fragment, "EditOffer")
+                            addToBackStack("EditOffer")
                         }
                         drawerLayout.closeDrawer(GravityCompat.START)
 //                        supportActionBar?.title = "Add Product"

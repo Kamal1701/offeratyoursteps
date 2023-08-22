@@ -8,14 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.activities.LoginActivity
 import com.example.offersatyoursteps.databinding.FragmentMerchantProfileBinding
 import com.example.offersatyoursteps.models.UserModel
+import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.PROFILE_TITLE
 import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.firebase.auth.FirebaseAuth
@@ -33,6 +36,7 @@ class MerchantProfileFragment : Fragment() {
     private lateinit var mtDistrict: AutoCompleteTextView
     private lateinit var mtState: AutoCompleteTextView
     private lateinit var mtPincode: EditText
+    private lateinit var updateBtn : Button
     private lateinit var profileProgress : ProgressBar
     
     private lateinit var mAuth : FirebaseAuth
@@ -60,6 +64,7 @@ class MerchantProfileFragment : Fragment() {
         mtDistrict = binding.mprofileDistrict
         mtState = binding.mprofileState
         mtPincode = binding.mprofilePincode
+        updateBtn = binding.updatemProfileBtn
         
         mAuth = FirebaseAuth.getInstance()
         
@@ -85,16 +90,35 @@ class MerchantProfileFragment : Fragment() {
         val stateList = resources.getStringArray(R.array.StateList)
         val stateAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_list, stateList)
         binding!!.mprofileState.setAdapter(stateAdapter)
+        
+        updateCustomerInfoUI()
     
-        mtUserName.setText(userModel.cName)
-        mtShopName.setText(userModel.cShopName)
-        mtStreetName.setText(userModel.cStreetName)
-        mtCity.setText(userModel.cCity)
-        mtDistrict.setText(userModel.cDistrict)
-        println(userModel.cDistrict)
-        println(userModel.cState)
-        mtState.setText(userModel.cState)
-        mtPincode.setText(userModel.cPincode)
+        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+    
+        updateBtn.setOnClickListener {
+            userModel.cName = mtUserName.text.toString()
+            userModel.cShopName = mtShopName.text.toString()
+            userModel.cStreetName = mtStreetName.text.toString()
+            userModel.cCity = mtCity.text.toString()
+            userModel.cDistrict = mtDistrict.text.toString()
+            userModel.cState = mtState.text.toString()
+            userModel.cPincode = mtPincode.text.toString()
+    
+            DatabaseServices.updateCustomerInfoRecord(userId, userModel){ isUpdateSuccess ->
+                if (isUpdateSuccess){
+                    profileProgress.visibility = View.VISIBLE
+                    updateBtn.visibility = View.INVISIBLE
+                    Toast.makeText(activity, "User profile updated successfully", Toast.LENGTH_LONG)
+                        .show()
+                } else{
+                    profileProgress.visibility = View.INVISIBLE
+                    updateBtn.visibility = View.VISIBLE
+                    Toast.makeText(activity, "Unable to update now, please try later", Toast.LENGTH_LONG)
+                        .show()
+                }
+        
+            }
+        }
     
         backPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -123,4 +147,13 @@ class MerchantProfileFragment : Fragment() {
         backPressedCallback.remove()
     }
     
+    fun updateCustomerInfoUI(){
+        mtUserName.setText(userModel.cName)
+        mtShopName.setText(userModel.cShopName)
+        mtStreetName.setText(userModel.cStreetName)
+        mtCity.setText(userModel.cCity)
+        mtDistrict.setText(userModel.cDistrict)
+        mtState.setText(userModel.cState)
+        mtPincode.setText(userModel.cPincode)
+    }
 }

@@ -97,7 +97,7 @@ class ProductDetailsFragment : Fragment() {
         actualPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
         "$RUPEE_SYMBOL ${offerProductDetails.discountPrice}".also { discountPrice.text = it }
         if (offerProductDetails.discountPercentage !="null"){
-            "${offerProductDetails.discountPercentage}%".also { discountPercentage.text = it }
+            "${offerProductDetails.discountPercentage}".also { discountPercentage.text = it }
         } else{
             discountPercentage.text = "0%"
         }

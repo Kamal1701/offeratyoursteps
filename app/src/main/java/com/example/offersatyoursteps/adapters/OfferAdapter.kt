@@ -39,7 +39,7 @@ class OfferAdapter(
             "$RUPEE_SYMBOL ${offerDetails.actualPrice}".also { actPrice.text =  it }
             actPrice.paintFlags = STRIKE_THRU_TEXT_FLAG
             "$RUPEE_SYMBOL ${offerDetails.discountPrice}".also { discPrice.text =  it }
-            "${offerDetails.discountPercentage}%".also { discPercentage.text = it }
+            "${offerDetails.discountPercentage}".also { discPercentage.text = it }
             
             
             offerImage.setOnClickListener { prodItemClick(offerDetails) }

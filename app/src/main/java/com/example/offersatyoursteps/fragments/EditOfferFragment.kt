@@ -11,21 +11,15 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.commit
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.adapters.EditOfferAdapter
-import com.example.offersatyoursteps.adapters.OfferAdapter
 import com.example.offersatyoursteps.databinding.FragmentEditOfferBinding
-import com.example.offersatyoursteps.databinding.ProductEditListViewBinding
 import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.EDIT_OFFER_PRODUCT
-import com.example.offersatyoursteps.utilities.OFFER_NEAR_ME_TITLE
 import com.example.offersatyoursteps.utilities.PRODUCT_INFO_TABLE
-import com.example.offersatyoursteps.utilities.SPAN_COUNT
 import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.firebase.auth.FirebaseAuth
 
@@ -90,10 +84,15 @@ class EditOfferFragment : Fragment() {
             userId
         ) { isGetComplete ->
             if (isGetComplete) {
-//                recProgressBar.visibility = View.INVISIBLE
-//                noOffersToday.visibility = View.GONE
                 editOfferAdapter =
-                    EditOfferAdapter(this.requireContext(), productList)
+                    EditOfferAdapter(this.requireContext(), productList){ productDetail ->
+                        val fragment = EditOfferPageFragment.newInstance(userModel, productDetail)
+                        requireActivity().supportFragmentManager.commit {
+                            setReorderingAllowed(true)
+                            replace(R.id.nav_host_fragment_content_home_page, fragment)
+                            addToBackStack(null)
+                        }
+                    }
                 val editRecycleView = binding.editOfferRecycleView
                 editRecycleView.layoutManager = LinearLayoutManager(context)
                 editRecycleView.adapter = editOfferAdapter

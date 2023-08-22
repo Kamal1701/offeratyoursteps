@@ -3,8 +3,11 @@ package com.example.offersatyoursteps.services
 import android.util.Log
 import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
+import com.example.offersatyoursteps.utilities.CUSTOMER_INFO_TABLE
 import com.example.offersatyoursteps.utilities.PRODUCT_INFO_SUB_COLLECTION_TABLE
+import com.example.offersatyoursteps.utilities.PRODUCT_INFO_TABLE
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.Dispatchers
@@ -64,6 +67,32 @@ object DatabaseServices {
             }
     }
     
+    
+    fun updateCustomerInfoRecord(
+        userId : String,
+        userModel : UserModel,
+        complete : (Boolean) -> Unit
+    ) {
+    
+        val custMap = HashMap<String, String>()
+        custMap["User_Name"] = userModel.cName.toString()
+        custMap["Shop_Name"] = userModel.cShopName.toString()
+        custMap["Street_Name"] = userModel.cStreetName.toString()
+        custMap["City"] = userModel.cCity.toString()
+        custMap["District"] = userModel.cDistrict.toString()
+        custMap["State"] = userModel.cState.toString()
+        custMap["Pincode"] = userModel.cPincode.toString()
+        
+        fStore.collection(CUSTOMER_INFO_TABLE).document(userId).update(custMap as Map<String, Any>)
+            .addOnSuccessListener {
+                complete(true)
+            }
+            .addOnFailureListener {
+                Log.d("DEBUG", it.localizedMessage)
+                complete(false)
+            }
+    }
+    
     fun createProductDetailsRecord(
         collectPath : String,
         userId : String,
@@ -74,19 +103,6 @@ object DatabaseServices {
         fStore.collection(collectPath)
             .document(userId).set(mapOf("_id" to userId))
         
-//        fStore.collection(collectPath)
-//            .document(userId)
-//            .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
-//            .document()
-//            .set(productMap)
-//            .addOnSuccessListener {
-//                complete(true)
-//            }
-//            .addOnFailureListener {
-//                Log.d("DEBUG", it.localizedMessage)
-//                complete(false)
-//            }
-    
     
         val subcollectionDocId = fStore.collection(collectPath)
             .document(userId)
@@ -111,6 +127,43 @@ object DatabaseServices {
             .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
             .document(subcollectionDocId)
             .update(mapOf("_id" to subcollectionDocId))
+            .addOnSuccessListener {
+                complete(true)
+            }
+            .addOnFailureListener {
+                Log.d("DEBUG", it.localizedMessage)
+                complete(false)
+            }
+    }
+    
+    fun updateProductDetailsRecord(
+        collectPath : String,
+        userId : String,
+        productMap : HashMap<String, String>,
+        complete : (Boolean) -> Unit
+    ) {
+        
+      
+        fStore.collection(collectPath)
+            .document(userId)
+            .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
+            .document(productMap["_id"].toString())
+            .update(productMap as Map<String, Any>)
+            .addOnSuccessListener {
+                complete(true)
+            }
+            .addOnFailureListener {
+                Log.d("DEBUG", it.localizedMessage)
+                complete(false)
+            }
+    }
+    
+    fun deleteProductDetails(userId : String, documentId : String, complete : (Boolean) -> Unit){
+        fStore.collection(PRODUCT_INFO_TABLE)
+            .document(userId)
+            .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
+            .document(documentId)
+            .delete()
             .addOnSuccessListener {
                 complete(true)
             }

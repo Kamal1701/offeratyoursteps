@@ -11,10 +11,11 @@ import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.utilities.RUPEE_SYMBOL
 
 class EditOfferAdapter(val context : Context,
-                       val offerDetails : MutableList<OfferProductDetails>):
+                       val offerDetails : MutableList<OfferProductDetails>,
+                       val prodItemClick : (OfferProductDetails) -> Unit):
     RecyclerView.Adapter<EditOfferAdapter.ViewHolder>() {
     
-    inner class ViewHolder(val binding : ProductEditListViewBinding):RecyclerView.ViewHolder(binding.root){
+    inner class ViewHolder(val binding : ProductEditListViewBinding, val prodItemClick : (OfferProductDetails) -> Unit):RecyclerView.ViewHolder(binding.root){
         var editImage = binding.editProductImage
         var editProdName = binding.editProductName
         var editBrandName = binding.editBrandName
@@ -33,6 +34,13 @@ class EditOfferAdapter(val context : Context,
 //            editDiscPrice.text = offerDetails.discountPrice
             editOfferStartDt.text = offerDetails.offerStDate
             editOfferEndDt.text = offerDetails.offerEdDate
+    
+            editImage.setOnClickListener { prodItemClick(offerDetails) }
+            editBrandName.setOnClickListener { prodItemClick(offerDetails) }
+            editActualPrice.setOnClickListener { prodItemClick(offerDetails) }
+            editDiscPrice.setOnClickListener { prodItemClick(offerDetails) }
+            editOfferStartDt.setOnClickListener { prodItemClick(offerDetails) }
+            editOfferEndDt.setOnClickListener { prodItemClick(offerDetails) }
         }
         
     }
@@ -41,7 +49,7 @@ class EditOfferAdapter(val context : Context,
         viewType : Int
     ) : EditOfferAdapter.ViewHolder {
         val binding = ProductEditListViewBinding.inflate(LayoutInflater.from(parent.context),parent, false)
-        return ViewHolder(binding)
+        return ViewHolder(binding, prodItemClick)
     }
     
     override fun onBindViewHolder(holder : EditOfferAdapter.ViewHolder, position : Int) {
