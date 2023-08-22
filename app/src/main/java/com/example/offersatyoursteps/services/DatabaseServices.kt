@@ -16,6 +16,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.async
 import kotlinx.coroutines.tasks.await
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 object DatabaseServices {
     
@@ -190,6 +192,7 @@ object DatabaseServices {
                         val subcollectionRef : Query =
                             parentDoc.reference.collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
                                 .whereEqualTo("Location", location)
+                                .whereEqualTo("Offer_EndDate", LocalDateTime.now())
                         subcollectionRef
                             .get().addOnSuccessListener { querySnapshot ->
                                 if (!querySnapshot.isEmpty) {

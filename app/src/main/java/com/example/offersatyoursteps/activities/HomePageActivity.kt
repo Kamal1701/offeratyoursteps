@@ -17,6 +17,8 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.databinding.ActivityHomePageBinding
 import com.example.offersatyoursteps.fragments.AddOfferFragment
@@ -26,6 +28,7 @@ import com.example.offersatyoursteps.fragments.OfferNearMeFragment
 import com.example.offersatyoursteps.fragments.CustomerProfileFragment
 import com.example.offersatyoursteps.fragments.EditOfferFragment
 import com.example.offersatyoursteps.fragments.ProductSubcategoryFragment
+import com.example.offersatyoursteps.models.NavigationHeaderViewModel
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.firebase.auth.FirebaseAuth
@@ -35,6 +38,7 @@ class HomePageActivity : AppCompatActivity() {
     
     private lateinit var appBarConfiguration : AppBarConfiguration
     private lateinit var binding : ActivityHomePageBinding
+    private lateinit var navHeaderChangeNotify : NavigationHeaderViewModel
     
     private lateinit var mAuth : FirebaseAuth
     private lateinit var currentUser : FirebaseUser
@@ -171,6 +175,8 @@ class HomePageActivity : AppCompatActivity() {
             true
         }
         navView.setCheckedItem(R.id.nav_offer_near_me)
+        
+        
     }
     
     override fun onCreateOptionsMenu(menu : Menu) : Boolean {
@@ -202,10 +208,18 @@ class HomePageActivity : AppCompatActivity() {
     private fun updateNavHeader() {
         val navView : NavigationView = binding.navView
         val headerView = navView.getHeaderView(0)
-        val navUserName = headerView.findViewById<TextView>(R.id.navHeaderUsernameTxt)
+//        val navUserName = headerView.findViewById<TextView>(R.id.navHeaderUsernameTxt)
         val navUserEmail = headerView.findViewById<TextView>(R.id.navHeaderEmailTxt)
+    
+    
+        navHeaderChangeNotify = ViewModelProvider(this)[NavigationHeaderViewModel::class.java]
+        navHeaderChangeNotify.setUserName(userModel.cName!!)
+        navHeaderChangeNotify.userName.observe(this){
+            val navUserName = headerView.findViewById<TextView>(R.id.navHeaderUsernameTxt)
+            navUserName.text = userModel.cName
         
-        navUserName.text = userModel.cName
+        }
+//        navUserName.text = userModel.cName
         navUserEmail.text = userModel.cEmail
         
         val profileMenu = navView.menu.findItem(R.id.nav_profile)
@@ -244,3 +258,5 @@ class HomePageActivity : AppCompatActivity() {
         }
     }
 }
+
+

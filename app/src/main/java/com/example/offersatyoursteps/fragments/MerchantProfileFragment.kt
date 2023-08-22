@@ -14,9 +14,11 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.activityViewModels
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.activities.LoginActivity
 import com.example.offersatyoursteps.databinding.FragmentMerchantProfileBinding
+import com.example.offersatyoursteps.models.NavigationHeaderViewModel
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.PROFILE_TITLE
@@ -28,6 +30,7 @@ class MerchantProfileFragment : Fragment() {
     
     private lateinit var binding : FragmentMerchantProfileBinding
     private lateinit var backPressedCallback : OnBackPressedCallback
+    private val navHeaderChangeNotify : NavigationHeaderViewModel by activityViewModels<NavigationHeaderViewModel>()
     
     private lateinit var mtShopName: EditText
     private lateinit var mtUserName: EditText
@@ -103,11 +106,13 @@ class MerchantProfileFragment : Fragment() {
             userModel.cDistrict = mtDistrict.text.toString()
             userModel.cState = mtState.text.toString()
             userModel.cPincode = mtPincode.text.toString()
-    
+            profileProgress.visibility = View.VISIBLE
+            updateBtn.visibility = View.INVISIBLE
             DatabaseServices.updateCustomerInfoRecord(userId, userModel){ isUpdateSuccess ->
                 if (isUpdateSuccess){
-                    profileProgress.visibility = View.VISIBLE
-                    updateBtn.visibility = View.INVISIBLE
+                    profileProgress.visibility = View.INVISIBLE
+                    updateBtn.visibility = View.VISIBLE
+                    navHeaderChangeNotify.setUserName(userModel.cName!!)
                     Toast.makeText(activity, "User profile updated successfully", Toast.LENGTH_LONG)
                         .show()
                 } else{

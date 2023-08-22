@@ -13,8 +13,11 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.databinding.FragmentCustomerProfileBinding
+import com.example.offersatyoursteps.models.NavigationHeaderViewModel
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.PRODUCT_DETAIL_TITLE
@@ -31,6 +34,7 @@ class CustomerProfileFragment : Fragment() {
 
     private lateinit var binding : FragmentCustomerProfileBinding
     private lateinit var backPressedCallback : OnBackPressedCallback
+    private val navHeaderChangeNotify : NavigationHeaderViewModel by activityViewModels<NavigationHeaderViewModel>()
     
     private lateinit var custUserName : EditText
     private lateinit var custStreetName : EditText
@@ -113,11 +117,16 @@ class CustomerProfileFragment : Fragment() {
             userModel.cDistrict = custDistrict.text.toString()
             userModel.cState = custState.text.toString()
             userModel.cPincode = custPincode.text.toString()
+            profileProgress.visibility = View.VISIBLE
+            updateBtn.visibility = View.INVISIBLE
+    
+            
             
             DatabaseServices.updateCustomerInfoRecord(userId, userModel){isUpdateSuccess ->
                 if (isUpdateSuccess){
-                    profileProgress.visibility = View.VISIBLE
-                    updateBtn.visibility = View.INVISIBLE
+                    profileProgress.visibility = View.INVISIBLE
+                    updateBtn.visibility = View.VISIBLE
+                    navHeaderChangeNotify.setUserName(userModel.cName!!)
                     Toast.makeText(activity, "User profile updated successfully", Toast.LENGTH_LONG)
                         .show()
                 } else{
