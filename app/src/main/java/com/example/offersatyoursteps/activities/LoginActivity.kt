@@ -15,11 +15,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
+import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.utilities.SetTextColorSpan
 import com.example.offersatyoursteps.databinding.ActivityLoginBinding
 import com.example.offersatyoursteps.fragments.OfferNearMeFragment
@@ -56,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var mAuth : FirebaseAuth
 //    private lateinit var fStore : FirebaseFirestore
     
-    private var userModel = UserModel("", "", "", "", "", "","", "","")
+    private var userModel = UserModel("", "", "", "", "", "", "", "", "")
     
     override fun onSaveInstanceState(outState : Bundle) {
         super.onSaveInstanceState(outState)
@@ -85,6 +87,36 @@ class LoginActivity : AppCompatActivity() {
         val colorSpan = SetTextColorSpan(registerBtn.text.toString())
         registerBtn.text = colorSpan.setTextColorSpan()
         
+//        forgotPassword.setOnClickListener {
+//            val builder = AlertDialog.Builder(this)
+//            val dialogView = layoutInflater.inflate(R.layout.activity_forgot_password, null)
+//            builder.setView(dialogView)
+//                .setPositiveButton("Reset") { _, _ ->
+//                    val resetEmailAddressField = dialogView.findViewById<EditText>(R.id.forgotEmail)
+//                    val resetEmailAddress = resetEmailAddressField.text.toString()
+//                    if (resetEmailAddress.isNotEmpty() && isValidEmail(resetEmailAddress)) {
+//                        mAuth.sendPasswordResetEmail(resetEmailAddress).addOnCompleteListener { task ->
+//                            if (task.isSuccessful) {
+//                                Toast.makeText(
+//                                    this,
+//                                    "Password Reset email sent to your email address, please check your inbox",
+//                                    Toast.LENGTH_LONG
+//                                ).show()
+////                                finish()
+//                            }
+//                        }.addOnFailureListener {
+//                            Toast.makeText(this, it.localizedMessage.toString(), Toast.LENGTH_LONG).show()
+//                        }
+//                    } else {
+//                        Toast.makeText(this, "Please enter your valid email address", Toast.LENGTH_LONG).show()
+//                    }
+//                }
+//                .setNegativeButton("Cancel"){_,_ ->
+//
+//                }
+//                .show()
+//        }
+
 //        val callback = object : OnBackPressedCallback(true){
 //            override fun handleOnBackPressed() {
 //                val alertDialog = AlertDialog.Builder(this@LoginActivity)
@@ -115,7 +147,6 @@ class LoginActivity : AppCompatActivity() {
         loginBtn.visibility = View.INVISIBLE
         registerBtn.visibility = View.INVISIBLE
         
-        
         val email = userEmail.text.toString()
         val password = userPassword.text.toString()
         
@@ -141,9 +172,9 @@ class LoginActivity : AppCompatActivity() {
                     
                     val userId = mAuth.currentUser!!.uid
                     println("Login success")
-                    DatabaseServices.getCustomerInfoRecord(userId, userModel){ dbSuccess ->
-
-                        if(dbSuccess){
+                    DatabaseServices.getCustomerInfoRecord(userId, userModel) { dbSuccess ->
+                        
+                        if (dbSuccess) {
                             loadHomePage()
                         }
                     }
@@ -159,7 +190,7 @@ class LoginActivity : AppCompatActivity() {
     }
     
     fun onRegisterBtnClicked(view : View) {
-
+        
         val registerIntent = Intent(this, RegistrationActivity::class.java)
         startActivity(registerIntent)
         finish()
@@ -172,11 +203,15 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
     
-    fun onForgotPwdBtnClicked(view : View){
+    fun onForgotPwdBtnClicked(view : View) {
         val forgotIntent = Intent(this, ForgotPasswordActivity::class.java)
         startActivity(forgotIntent)
     }
     
+    fun isValidEmail(email : String) : Boolean {
+        val regex = Regex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z]{2,6}$")
+        return regex.matches(email)
+    }
 
 //    override fun onStart() {
 //        super.onStart()
@@ -185,7 +220,7 @@ class LoginActivity : AppCompatActivity() {
 //            updateUI()
 //        }
 //    }
-    
+
 //    override fun onBackPressed() {
 //        super.onBackPressed()
 //        finish()

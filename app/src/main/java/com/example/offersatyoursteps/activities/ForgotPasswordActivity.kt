@@ -28,7 +28,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
         emailTxt = binding.forgotEmail
         cancelBtn = binding.forgotCancel
         resetBtn = binding.resetBtn
-        
+
         mAuth = FirebaseAuth.getInstance()
         
         setContentView(binding.root)
@@ -63,7 +63,5 @@ class ForgotPasswordActivity : AppCompatActivity() {
     fun isValidEmail(email : String) : Boolean {
         val regex = Regex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z]{2,6}$")
         return regex.matches(email)
-        
     }
-    
 }
