@@ -12,6 +12,7 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
@@ -50,6 +51,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loginProBar : ProgressBar
     private lateinit var loginBtn : Button
     private lateinit var registerBtn : Button
+    private lateinit var forgotPassword : Button
     
     private lateinit var mAuth : FirebaseAuth
 //    private lateinit var fStore : FirebaseFirestore
@@ -72,6 +74,8 @@ class LoginActivity : AppCompatActivity() {
         loginProBar = loginBinding.loginProgressBar
         loginBtn = loginBinding.loginUserLoginBtn
         registerBtn = loginBinding.loginRegisterBtn
+        forgotPassword = loginBinding.loginForgotPwdBtn
+        
         mAuth = FirebaseAuth.getInstance()
 //        fStore = FirebaseFirestore.getInstance()
         
@@ -161,19 +165,16 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
     
-    fun onForgotPwdBtnClicked(view : View) {
-
-        val registerIntent = Intent(this, RegistrationActivity::class.java)
-        startActivity(registerIntent)
-        finish()
-    }
-    
-    
     private fun loadHomePage() {
         val homeActivityIntent = Intent(this, HomePageActivity::class.java)
         homeActivityIntent.putExtra(USER_INFO, userModel)
         startActivity(homeActivityIntent)
         finish()
+    }
+    
+    fun onForgotPwdBtnClicked(view : View){
+        val forgotIntent = Intent(this, ForgotPasswordActivity::class.java)
+        startActivity(forgotIntent)
     }
     
 
