@@ -75,7 +75,7 @@ class AllOffersFragment : Fragment() {
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        DatabaseServices.getAllProductDetails(PRODUCT_INFO_TABLE, productList) { isGetComplete ->
+        DatabaseServices.getAllProductDetails(productList) { isGetComplete ->
             if (isGetComplete) {
                 recProgressBar.visibility = View.INVISIBLE
                 val itemAdapter =

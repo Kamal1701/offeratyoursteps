@@ -75,17 +75,12 @@ class OfferNearMeFragment : Fragment() {
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     
-//        noOffersToday.visibility = View.INVISIBLE
-        println("OfferNearMe - Location ")
-        println(userModel.customerCity.toString())
         DatabaseServices.getLocationProductDetails(
-            PRODUCT_INFO_TABLE,
             productList,
             userModel.customerCity.toString()
         ) { isGetComplete ->
             if (isGetComplete) {
-//                recProgressBar.visibility = View.INVISIBLE
-//                noOffersToday.visibility = View.GONE
+
                 itemAdapter =
                     OfferAdapter(this.requireContext(), productList) { productDetail ->
                         val fragment = ProductDetailsFragment.newInstance(userModel, productDetail)
@@ -108,7 +103,6 @@ class OfferNearMeFragment : Fragment() {
                 }
             } else {
                 recProgressBar.visibility = View.INVISIBLE
-//                noOffersToday.visibility = View.VISIBLE
                 Log.d("DEBUG", "OfferNearMe - no record returned")
             }
         }

@@ -92,8 +92,6 @@ class RegisterActivity : AppCompatActivity() {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{task:Task<AuthResult> ->
             if(task.isSuccessful){
                 Toast.makeText(this, "User registration success", Toast.LENGTH_SHORT).show()
-
-//                updateUserInfo(name, mAuth.currentUser)
                 updateUI()
 
             } else{
@@ -104,10 +102,6 @@ class RegisterActivity : AppCompatActivity() {
 
         }
     }
-
-//    fun updateUserInfo(name: String, currentUser: FirebaseUser?){
-//
-//    }
 
     private fun updateUI(){
         val homeActivityIntent = Intent(this, HomePageActivity::class.java)

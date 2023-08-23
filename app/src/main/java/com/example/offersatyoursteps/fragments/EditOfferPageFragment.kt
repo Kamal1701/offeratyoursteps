@@ -63,6 +63,8 @@ class EditOfferPageFragment : Fragment() {
     private lateinit var deleteProductBtn : Button
     private lateinit var progressBar : ProgressBar
     
+    private lateinit var mAuth : FirebaseAuth
+    
     private lateinit var uri : Uri
     private var storageRef = Firebase.storage
     
@@ -84,6 +86,9 @@ class EditOfferPageFragment : Fragment() {
         binding = FragmentEditOfferPageBinding.inflate(inflater, container, false)
         val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
         toolbar?.title = EDIT_PRODUCT_TITLE
+        
+        mAuth = FirebaseAuth.getInstance()
+        
         return binding.root
     }
     
@@ -122,11 +127,7 @@ class EditOfferPageFragment : Fragment() {
                 uri = data?.data!!
                 productImage.setImageURI(uri)
                 productImage.tag = "image_changed"
-                println(uri)
-                println(productImage.tag)
-                
-                
-                
+
             } else {
                 productImage.tag = ""
             }
@@ -235,7 +236,7 @@ class EditOfferPageFragment : Fragment() {
                 prodMap["productWeight"] = prodWeight
                 prodMap["productDesc"] = prodDesc
     
-                val userId = FirebaseAuth.getInstance().currentUser!!.uid
+                val userId = mAuth.currentUser!!.uid
                 
                 if (prodImage == "image_changed") {
                     storageRef.getReference(FIREBASE_IMAGE_LOCATION)
@@ -249,7 +250,6 @@ class EditOfferPageFragment : Fragment() {
                                     prodMap["productImgName"] = it.toString()
     
                                     DatabaseServices.updateProductDetailsRecord(
-                                        PRODUCT_INFO_TABLE,
                                         userId,
                                         prodMap
                                     ) { isProdUpdateComplete ->
@@ -277,9 +277,7 @@ class EditOfferPageFragment : Fragment() {
                         }
                 }
                 else {
-//                    prodMap["Product_Image"] = offerProductDetails.imgName
                     DatabaseServices.updateProductDetailsRecord(
-                        PRODUCT_INFO_TABLE,
                         userId,
                         prodMap
                     ) { isProdUpdateComplete ->

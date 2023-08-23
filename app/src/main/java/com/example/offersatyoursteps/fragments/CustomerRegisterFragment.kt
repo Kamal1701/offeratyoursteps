@@ -117,18 +117,6 @@ class CustomerRegisterFragment : Fragment() {
                 cCity.isNotEmpty() && cState.isNotEmpty()
             ) {
                 
-//                val customerMap = HashMap<String, String>()
-//                customerMap["User_Name"] = cName
-//                customerMap["User_EmailId"] = cEmail
-//                customerMap["User_Password"] = cPassword
-//                customerMap["Shop_Name"] = "NA"
-//                customerMap["IsMerchant"] = "N"
-//                customerMap["Street_Name"] = cStreetName
-//                customerMap["City"] = cCity
-//                customerMap["District"] = cDistrict
-//                customerMap["State"] = cState
-//                customerMap["Pincode"] = cPincode
-                
                 val customer = UserModel(cName,
                     cEmail,
                     SHOPNAME_NA,
@@ -142,12 +130,8 @@ class CustomerRegisterFragment : Fragment() {
                 mAuth.createUserWithEmailAndPassword(cEmail, cPassword)
                     .addOnCompleteListener { task : Task<AuthResult> ->
                         if (task.isSuccessful) {
-//                            Log.d("ERROR", mAuth.currentUser!!.uid)
-                            println("Customer Register Fragment - ")
                             val userId = mAuth.currentUser!!.uid
-                            Log.d("DEBUG", userId)
                             DatabaseServices.createCustomerInfoRecord(
-                                CUSTOMER_INFO_TABLE,
                                 userId,
                                 customer
                             ) { isSetComplete ->
@@ -208,5 +192,4 @@ class CustomerRegisterFragment : Fragment() {
         super.onDestroyView()
 //        backPressedCallback.remove()
     }
-    
 }

@@ -94,7 +94,7 @@ class MerchantProfileFragment : Fragment() {
         
         updateCustomerInfoUI()
     
-        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+        val userId = mAuth.currentUser!!.uid
     
         updateBtn.setOnClickListener {
             userModel.customerName = mtUserName.text.toString()

@@ -137,7 +137,7 @@ class LoginActivity : AppCompatActivity() {
                     
                     val userId = mAuth.currentUser!!.uid
                     println("Login success")
-                    DatabaseServices.getCustomerInfoRecord(CUSTOMER_INFO_TABLE, userId, userModel){ dbSuccess ->
+                    DatabaseServices.getCustomerInfoRecord(userId, userModel){ dbSuccess ->
 
                         if(dbSuccess){
                             loadHomePage()
@@ -146,7 +146,6 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(this, "Login failed, invalid credential", Toast.LENGTH_LONG)
                         .show()
-//                Toast.makeText(this, task.exception.toString(), Toast.LENGTH_LONG).show()
                     loginProBar.visibility = View.INVISIBLE
                     loginBtn.visibility = View.VISIBLE
                     registerBtn.visibility = View.VISIBLE
@@ -156,14 +155,14 @@ class LoginActivity : AppCompatActivity() {
     }
     
     fun onRegisterBtnClicked(view : View) {
-//        val registerIntent = Intent(this, RegisterActivity::class.java)
+
         val registerIntent = Intent(this, RegistrationActivity::class.java)
         startActivity(registerIntent)
         finish()
     }
     
     fun onForgotPwdBtnClicked(view : View) {
-//        val registerIntent = Intent(this, RegisterActivity::class.java)
+
         val registerIntent = Intent(this, RegistrationActivity::class.java)
         startActivity(registerIntent)
         finish()
@@ -173,9 +172,6 @@ class LoginActivity : AppCompatActivity() {
     private fun loadHomePage() {
         val homeActivityIntent = Intent(this, HomePageActivity::class.java)
         homeActivityIntent.putExtra(USER_INFO, userModel)
-//        Log.d("DEBUG", "LoginActivity")
-//        Log.d("DEBUG", userModel.cName.toString())
-//        Log.d("DEBUG", userModel.cEmail.toString())
         startActivity(homeActivityIntent)
         finish()
     }

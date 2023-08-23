@@ -20,23 +20,41 @@ import java.time.format.DateTimeFormatter
 
 object DatabaseServices {
     
-    private var fStore = FirebaseFirestore.getInstance()
+    private var fStore : FirebaseFirestore
+        get() = FirebaseFirestore.getInstance()
+        set(value) = TODO()
     
-    fun getCustomerInfoRecord(
-        collectPath : String,
+    
+    fun createCustomerInfoRecord(
         userId : String,
         userModel : UserModel,
         complete : (Boolean) -> Unit
     ) {
         
-        fStore.collection(collectPath).document(userId)
+        val gson = Gson()
+        val custJson = gson.toJson(userModel)
+        val userMap = gson.fromJson(custJson, Map::class.java) as Map<String, Any>
+        
+        fStore.collection(CUSTOMER_INFO_TABLE).document(userId).set(userMap)
+            .addOnSuccessListener {
+                complete(true)
+            }
+            .addOnFailureListener {
+                Log.d("DEBUG", it.localizedMessage)
+                complete(false)
+            }
+    }
+    
+    
+    fun getCustomerInfoRecord(
+        userId : String,
+        userModel : UserModel,
+        complete : (Boolean) -> Unit
+    ) {
+        
+        fStore.collection(CUSTOMER_INFO_TABLE).document(userId)
             .get().addOnSuccessListener { custDoc ->
                 if (custDoc != null) {
-                    println("get customer info record success")
-//                    val userModel = custDoc.toObject(UserModel::class.java)!!
-//                    val parcel = Parcel.obtain()
-//                    userModel.writeToParcel(parcel,0)
-//                    parcel.setDataPosition(0)
                     userModel.customerName = custDoc.get("customerName").toString()
                     userModel.customerEmail = custDoc.get("customerEmail").toString()
                     userModel.customerShopName = custDoc.get("customerShopName").toString()
@@ -56,28 +74,6 @@ object DatabaseServices {
                 complete(false)
             }
     }
-    
-    fun createCustomerInfoRecord(
-        collectPath : String,
-        userId : String,
-        userModel : UserModel,
-        complete : (Boolean) -> Unit
-    ) {
-        
-        val gson = Gson()
-        val custJson = gson.toJson(userModel)
-        val userMap = gson.fromJson(custJson, Map::class.java) as Map<String, Any>
-        
-        fStore.collection(collectPath).document(userId).set(userMap)
-            .addOnSuccessListener {
-                complete(true)
-            }
-            .addOnFailureListener {
-                Log.d("DEBUG", it.localizedMessage)
-                complete(false)
-            }
-    }
-    
     
     fun updateCustomerInfoRecord(
         userId : String,
@@ -100,7 +96,6 @@ object DatabaseServices {
     }
     
     fun createProductDetailsRecord(
-        collectPath : String,
         userId : String,
         offerProduct : OfferProductDetails,
         complete : (Boolean) -> Unit
@@ -110,15 +105,15 @@ object DatabaseServices {
         val offerJson = gson.toJson(offerProduct)
         val productMap = gson.fromJson(offerJson, Map::class.java) as Map<String, Any>
         
-        fStore.collection(collectPath)
+        fStore.collection(PRODUCT_INFO_TABLE)
             .document(userId).set(mapOf("_id" to userId))
         
-        val subcollectionDocId = fStore.collection(collectPath)
+        val subcollectionDocId = fStore.collection(PRODUCT_INFO_TABLE)
             .document(userId)
             .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
             .document().id
         
-        fStore.collection(collectPath)
+        fStore.collection(PRODUCT_INFO_TABLE)
             .document(userId)
             .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
             .document(subcollectionDocId)
@@ -131,7 +126,7 @@ object DatabaseServices {
                 complete(false)
             }
         
-        fStore.collection(collectPath)
+        fStore.collection(PRODUCT_INFO_TABLE)
             .document(userId)
             .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
             .document(subcollectionDocId)
@@ -146,13 +141,12 @@ object DatabaseServices {
     }
     
     fun updateProductDetailsRecord(
-        collectPath : String,
         userId : String,
         productMap : HashMap<String, String>,
         complete : (Boolean) -> Unit
     ) {
         
-        fStore.collection(collectPath)
+        fStore.collection(PRODUCT_INFO_TABLE)
             .document(userId)
             .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
             .document(productMap["docId"].toString())
@@ -183,7 +177,6 @@ object DatabaseServices {
     
     @RequiresApi(Build.VERSION_CODES.O)
     fun getLocationProductDetails(
-        collectPath : String,
         productList : MutableList<OfferProductDetails>,
         location : String,
         complete : (Boolean) -> Unit
@@ -192,9 +185,7 @@ object DatabaseServices {
         val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
         val formattedDate = currentDate.format(formatter)
         println(formattedDate)
-        val parentCollectionRef = fStore.collection(collectPath)
-        println("getLocationProductDetails")
-        println(collectPath)
+        val parentCollectionRef = fStore.collection(PRODUCT_INFO_TABLE)
         GlobalScope.launch(Dispatchers.IO) {
             parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
                 println("parentcollect is empty")
@@ -203,7 +194,7 @@ object DatabaseServices {
                     for (parentDoc in parentCollectionSnapshot.documents) {
                         val subcollectionRef : Query =
                             parentDoc.reference.collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
-                                .whereEqualTo("Location", location)
+                                .whereEqualTo("shopCity", location)
                         subcollectionRef
                             .get().addOnSuccessListener { querySnapshot ->
                                 if (!querySnapshot.isEmpty) {
@@ -237,12 +228,11 @@ object DatabaseServices {
     }
     
     fun getAllProductDetails(
-        collectPath : String,
         productList : MutableList<OfferProductDetails>,
         complete : (Boolean) -> Unit
     ) {
         
-        val parentCollectionRef = fStore.collection(collectPath)
+        val parentCollectionRef = fStore.collection(PRODUCT_INFO_TABLE)
         GlobalScope.launch(Dispatchers.IO) {
             parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
                 if (!parentCollectionSnapshot.isEmpty) {
@@ -281,15 +271,12 @@ object DatabaseServices {
     }
     
     fun getProductDetailByUserId(
-        collectPath : String,
         productList : MutableList<OfferProductDetails>,
         userId : String,
         complete : (Boolean) -> Unit
     ) {
         
-        val parentCollectionRef = fStore.collection(collectPath).document(userId)
-        println("getProductDetailByUserId")
-        println(collectPath)
+        val parentCollectionRef = fStore.collection(PRODUCT_INFO_TABLE).document(userId)
         GlobalScope.launch(Dispatchers.IO) {
             parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
                 val subcollectionRef : Query =
@@ -309,7 +296,7 @@ object DatabaseServices {
                         }
                     }
                     .addOnFailureListener {
-                        Log.d("EXEC", it.localizedMessage)
+                        Log.d("EXEC", it.localizedMessage.toString())
                         complete(false)
                     }
             }

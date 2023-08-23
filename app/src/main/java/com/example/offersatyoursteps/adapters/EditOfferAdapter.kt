@@ -16,6 +16,7 @@ class EditOfferAdapter(val context : Context,
     RecyclerView.Adapter<EditOfferAdapter.ViewHolder>() {
     
     inner class ViewHolder(val binding : ProductEditListViewBinding, val prodItemClick : (OfferProductDetails) -> Unit):RecyclerView.ViewHolder(binding.root){
+       
         var editImage = binding.editProductImage
         var editProdName = binding.editProductName
         var editBrandName = binding.editBrandName
@@ -24,14 +25,14 @@ class EditOfferAdapter(val context : Context,
         var editOfferStartDt = binding.editOfferStartDate
         var editOfferEndDt = binding.editOfferEndDate
         fun bindingOffers(context : Context, offerDetails : OfferProductDetails) {
+           
             Glide.with(context).load(offerDetails.productImgName).into(editImage)
             editProdName.text = offerDetails.productName
             editBrandName.text = offerDetails.productBrandName
             "$RUPEE_SYMBOL ${offerDetails.productActualPrice}".also { editActualPrice.text =  it }
             editActualPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             "$RUPEE_SYMBOL ${offerDetails.productDiscountPrice}".also { editDiscPrice.text =  it }
-//            editActualPrice.text = offerDetails.actualPrice
-//            editDiscPrice.text = offerDetails.discountPrice
+
             editOfferStartDt.text = offerDetails.productOfferStDate
             editOfferEndDt.text = offerDetails.productOfferEdDate
     

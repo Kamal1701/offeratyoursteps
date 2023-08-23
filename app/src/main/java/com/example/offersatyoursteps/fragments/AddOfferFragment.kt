@@ -64,6 +64,8 @@ class AddOfferFragment : Fragment() {
     private lateinit var cancelProductBtn : Button
     private lateinit var progressBar : ProgressBar
     
+    private lateinit var mAuth : FirebaseAuth
+    
     private var storageRef = Firebase.storage
     private lateinit var uri : Uri
     
@@ -85,7 +87,7 @@ class AddOfferFragment : Fragment() {
         
         val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
         toolbar?.title = ADD_PRODUCT_TITLE
-        
+        mAuth = FirebaseAuth.getInstance()
         return binding.root
     }
     
@@ -192,25 +194,6 @@ class AddOfferFragment : Fragment() {
                 && prodDesc.isNotEmpty()
             ) {
                 
-//                val prodMap = HashMap<String, String>()
-//
-//                prodMap["Product_Name"] = prodName
-//                prodMap["Product_Brand"] = prodBrand
-//                prodMap["Product_Category"] = prodCategory
-//                prodMap["Product_Subcategory"] = prodSubcategory
-//                prodMap["Product_ActualPrice"] = prodActualPrice
-//                prodMap["Product_DiscountPrice"] = prodDiscountPrice
-//                prodMap["Discount_Percentage"] = prodDiscountPerc
-//                prodMap["Offer_StartDate"] = ofrStartDate
-//                prodMap["Offer_EndDate"] = ofrEndDate
-//                prodMap["Product_Weight"] = prodWeight
-//                prodMap["Product_Desc"] = prodDesc
-//                prodMap["Location"] = userModel.customerCity.toString()
-//                prodMap["customerDistrict"] = userModel.customerDistrict.toString()
-//                prodMap["customerState"] = userModel.customerState.toString()
-//                prodMap["customerPincode"] = userModel.customerPincode.toString()
-//                prodMap["Shop_Name"] = userModel.customerShopName.toString()
-                
                 storageRef.getReference(FIREBASE_IMAGE_LOCATION)
                     .child(System.currentTimeMillis().toString())
                     .putFile(uri)
@@ -218,7 +201,7 @@ class AddOfferFragment : Fragment() {
                         task.metadata!!.reference!!.downloadUrl
                             .addOnSuccessListener {
                                 Log.d("DEBUG", "Image upload")
-//                                prodMap["Product_Image"] = it.toString()
+
                                 offerProduct = OfferProductDetails("",
                                     it.toString(),
                                     prodName,
@@ -239,9 +222,8 @@ class AddOfferFragment : Fragment() {
                                     userModel.customerState.toString(),
                                     userModel.customerPincode.toString()
                                     )
-                                val userId = FirebaseAuth.getInstance().currentUser!!.uid
+                                val userId = mAuth.currentUser!!.uid
                                 DatabaseServices.createProductDetailsRecord(
-                                    PRODUCT_INFO_TABLE,
                                     userId,
                                     offerProduct
                                 ) { isProdCreateComplete ->
@@ -324,7 +306,7 @@ class AddOfferFragment : Fragment() {
         backPressedCallback.remove()
     }
     
-    fun calculatePercentate(actPrice : String, discPric: String) : String{
+    private fun calculatePercentate(actPrice : String, discPric: String) : String{
         val actualPrice : Float = actPrice.toFloat()
         val discountPrice : Float = discPric.toFloat()
         val discPercentage : Int =

@@ -131,11 +131,9 @@ class MerchantRegisterFragment : Fragment() {
                 mAuth.createUserWithEmailAndPassword(mEmail, mPassword)
                     .addOnCompleteListener { task : Task<AuthResult> ->
                         if (task.isSuccessful) {
-//                            Log.d("ERROR", mAuth.currentUser!!.uid)
                             val userId = mAuth.currentUser!!.uid
                             Log.d("DEBUG", userId)
                             DatabaseServices.createCustomerInfoRecord(
-                                CUSTOMER_INFO_TABLE,
                                 userId,
                                 merchant
                             ) { isSetComplete ->

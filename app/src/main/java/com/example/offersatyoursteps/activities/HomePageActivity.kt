@@ -63,13 +63,10 @@ class HomePageActivity : AppCompatActivity() {
         
         setSupportActionBar(binding.appBarHomePage.toolbar)
         
-//        val drawerLayout : DrawerLayout = binding.drawerLayout
         drawerLayout = binding.drawerLayout
         val navView : NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_home_page)
-//        val fragmentContainerView  = findViewById<FragmentContainerView>(R.id.mainFragmentContainer)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home_page,
@@ -84,12 +81,10 @@ class HomePageActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
         updateNavHeader()
         
-        
         navView.setNavigationItemSelectedListener { item ->
             val fragment : Fragment
             when (item.itemId) {
                 R.id.nav_offer_near_me -> {
-//                    getProductSubcategoryFragment()
                     val fragment = OfferNearMeFragment.newInstance(userModel)
                     if (fragment != null) {
                         supportFragmentManager.commit {
@@ -99,11 +94,9 @@ class HomePageActivity : AppCompatActivity() {
                         }
                     }
                     drawerLayout.closeDrawer(GravityCompat.START)
-//                    supportActionBar?.title = "Offers Near Me"
                 }
                 
                 R.id.nav_all_offers -> {
-//                    getProductSubcategoryFragment()
                     val fragment = AllOffersFragment.newInstance(userModel)
                     if (fragment != null) {
                         supportFragmentManager.commit {
@@ -113,7 +106,6 @@ class HomePageActivity : AppCompatActivity() {
                         }
                     }
                     drawerLayout.closeDrawer(GravityCompat.START)
-//                    supportActionBar?.title = "All Offers"
                 }
                 
                 R.id.nav_profile -> {
@@ -125,7 +117,6 @@ class HomePageActivity : AppCompatActivity() {
                             addToBackStack(null)
                         }
                         drawerLayout.closeDrawer(GravityCompat.START)
-//                        supportActionBar?.title = "Profile"
                     }
                 }
                 
@@ -138,7 +129,6 @@ class HomePageActivity : AppCompatActivity() {
                             addToBackStack(null)
                         }
                         drawerLayout.closeDrawer(GravityCompat.START)
-//                        supportActionBar?.title = "Profile"
                     }
                 }
                 
@@ -152,7 +142,6 @@ class HomePageActivity : AppCompatActivity() {
                             addToBackStack(null)
                         }
                         drawerLayout.closeDrawer(GravityCompat.START)
-//                        supportActionBar?.title = "Add Product"
                     }
                     
                 }
@@ -167,7 +156,6 @@ class HomePageActivity : AppCompatActivity() {
                             addToBackStack("EditOffer")
                         }
                         drawerLayout.closeDrawer(GravityCompat.START)
-//                        supportActionBar?.title = "Add Product"
                     }
         
                 }
@@ -209,9 +197,7 @@ class HomePageActivity : AppCompatActivity() {
     private fun updateNavHeader() {
         val navView : NavigationView = binding.navView
         val headerView = navView.getHeaderView(0)
-//        val navUserName = headerView.findViewById<TextView>(R.id.navHeaderUsernameTxt)
         val navUserEmail = headerView.findViewById<TextView>(R.id.navHeaderEmailTxt)
-    
     
         navHeaderChangeNotify = ViewModelProvider(this)[NavigationHeaderViewModel::class.java]
         navHeaderChangeNotify.setUserName(userModel.customerName!!)
@@ -220,7 +206,6 @@ class HomePageActivity : AppCompatActivity() {
             navUserName.text = userModel.customerName
         
         }
-//        navUserName.text = userModel.cName
         navUserEmail.text = userModel.customerEmail
         
         val profileMenu = navView.menu.findItem(R.id.nav_profile)
@@ -233,9 +218,6 @@ class HomePageActivity : AppCompatActivity() {
             merchantProductMenu.isVisible = true
         }
         
-//        getProductSubcategoryFragment()
-//        supportActionBar?.title = "Offers Near Me"
-    
         val fragment = OfferNearMeFragment.newInstance(userModel)
         if (fragment != null) {
             supportFragmentManager.commit {
@@ -245,18 +227,6 @@ class HomePageActivity : AppCompatActivity() {
             }
         }
         
-    }
-    
-    
-    private fun getProductSubcategoryFragment() {
-        val fragment = ProductSubcategoryFragment.newInstance(userModel)
-        if (fragment != null) {
-            supportFragmentManager.commit {
-                setReorderingAllowed(true)
-                replace(R.id.nav_host_fragment_content_home_page, fragment)
-                addToBackStack(null)
-            }
-        }
     }
     
     override fun onBackPressed() {

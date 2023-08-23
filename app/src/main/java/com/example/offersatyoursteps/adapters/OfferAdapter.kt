@@ -30,15 +30,12 @@ class OfferAdapter(
             
             Glide.with(context).load(offerDetails.productImgName).into(offerImage)
             prodName.text = offerDetails.productName
-//            actPrice.text = RUPEE_SYMBOL + "${offerDetails.actualPrice}"
             "$RUPEE_SYMBOL ${offerDetails.productActualPrice}".also { actPrice.text =  it }
             actPrice.paintFlags = STRIKE_THRU_TEXT_FLAG
             "$RUPEE_SYMBOL ${offerDetails.productDiscountPrice}".also { discPrice.text =  it }
             offerDetails.productDiscountPercentage.also { discPercentage.text = it }
             
-            
-            offerImage.setOnClickListener {
-                prodItemClick(offerDetails) }
+            offerImage.setOnClickListener { prodItemClick(offerDetails) }
             
         }
     }

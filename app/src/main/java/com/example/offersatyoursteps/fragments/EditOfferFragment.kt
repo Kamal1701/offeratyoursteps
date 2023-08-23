@@ -79,7 +79,6 @@ class EditOfferFragment : Fragment() {
         val userId = mAuth.currentUser?.uid!!
     
         DatabaseServices.getProductDetailByUserId(
-            PRODUCT_INFO_TABLE,
             productList,
             userId
         ) { isGetComplete ->

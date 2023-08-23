@@ -29,7 +29,7 @@ import com.google.firebase.auth.FirebaseAuth
  * create an instance of this fragment.
  */
 class CustomerProfileFragment : Fragment() {
-
+    
     private lateinit var binding : FragmentCustomerProfileBinding
     private lateinit var backPressedCallback : OnBackPressedCallback
     private val navHeaderChangeNotify : NavigationHeaderViewModel by activityViewModels<NavigationHeaderViewModel>()
@@ -43,7 +43,9 @@ class CustomerProfileFragment : Fragment() {
     private lateinit var updateBtn : Button
     private lateinit var profileProgress : ProgressBar
     
-    private var userModel = UserModel("", "", "", "", "", "","","","")
+    private lateinit var mAuth : FirebaseAuth
+    
+    private var userModel = UserModel("", "", "", "", "", "", "", "", "")
     
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,9 +72,11 @@ class CustomerProfileFragment : Fragment() {
         updateBtn = binding.updateProfileBtn
         profileProgress = binding.profileProgressBar
         profileProgress.visibility = View.INVISIBLE
-    
+        
         val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
         toolbar?.title = PROFILE_TITLE
+    
+        mAuth = FirebaseAuth.getInstance()
         
         return view
     }
@@ -82,7 +86,7 @@ class CustomerProfileFragment : Fragment() {
         fun newInstance(userModel : UserModel) =
             CustomerProfileFragment().apply {
                 arguments = Bundle().apply {
-                putParcelable(USER_INFO, userModel)
+                    putParcelable(USER_INFO, userModel)
                 }
             }
     }
@@ -101,10 +105,10 @@ class CustomerProfileFragment : Fragment() {
         val stateList = resources.getStringArray(R.array.StateList)
         val stateAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_list, stateList)
         binding!!.profileState.setAdapter(stateAdapter)
-    
+        
         updateCustomerInfoUI()
-   
-        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+        
+        val userId = mAuth.currentUser!!.uid
         
         updateBtn.setOnClickListener {
             
@@ -117,40 +121,40 @@ class CustomerProfileFragment : Fragment() {
             userModel.customerPincode = custPincode.text.toString()
             profileProgress.visibility = View.VISIBLE
             updateBtn.visibility = View.INVISIBLE
-    
             
-            
-            DatabaseServices.updateCustomerInfoRecord(userId, userModel){isUpdateSuccess ->
-                if (isUpdateSuccess){
+            DatabaseServices.updateCustomerInfoRecord(userId, userModel) { isUpdateSuccess ->
+                if (isUpdateSuccess) {
                     profileProgress.visibility = View.INVISIBLE
                     updateBtn.visibility = View.VISIBLE
                     navHeaderChangeNotify.setUserName(userModel.customerName!!)
                     Toast.makeText(activity, "User profile updated successfully", Toast.LENGTH_LONG)
                         .show()
-                } else{
+                } else {
                     profileProgress.visibility = View.INVISIBLE
                     updateBtn.visibility = View.VISIBLE
-                    Toast.makeText(activity, "Unable to update now, please try later", Toast.LENGTH_LONG)
+                    Toast.makeText(
+                        activity,
+                        "Unable to update now, please try later",
+                        Toast.LENGTH_LONG
+                    )
                         .show()
                 }
-            
+                
             }
         }
         
-    
         backPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                requireActivity().supportFragmentManager.popBackStack("NearMe",0)
+                requireActivity().supportFragmentManager.popBackStack("NearMe", 0)
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             backPressedCallback
         )
-        
     }
     
-    fun updateCustomerInfoUI(){
+    fun updateCustomerInfoUI() {
         custUserName.setText(userModel.customerName)
         custStreetName.setText(userModel.customerStreetName)
         custCity.setText(userModel.customerCity, false)
@@ -163,5 +167,4 @@ class CustomerProfileFragment : Fragment() {
         super.onDestroyView()
         backPressedCallback.remove()
     }
-    
 }
