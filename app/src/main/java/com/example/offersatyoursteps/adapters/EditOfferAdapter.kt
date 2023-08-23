@@ -24,16 +24,16 @@ class EditOfferAdapter(val context : Context,
         var editOfferStartDt = binding.editOfferStartDate
         var editOfferEndDt = binding.editOfferEndDate
         fun bindingOffers(context : Context, offerDetails : OfferProductDetails) {
-            Glide.with(context).load(offerDetails.imgName).into(editImage)
+            Glide.with(context).load(offerDetails.productImgName).into(editImage)
             editProdName.text = offerDetails.productName
-            editBrandName.text = offerDetails.brandName
-            "$RUPEE_SYMBOL ${offerDetails.actualPrice}".also { editActualPrice.text =  it }
+            editBrandName.text = offerDetails.productBrandName
+            "$RUPEE_SYMBOL ${offerDetails.productActualPrice}".also { editActualPrice.text =  it }
             editActualPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-            "$RUPEE_SYMBOL ${offerDetails.discountPrice}".also { editDiscPrice.text =  it }
+            "$RUPEE_SYMBOL ${offerDetails.productDiscountPrice}".also { editDiscPrice.text =  it }
 //            editActualPrice.text = offerDetails.actualPrice
 //            editDiscPrice.text = offerDetails.discountPrice
-            editOfferStartDt.text = offerDetails.offerStDate
-            editOfferEndDt.text = offerDetails.offerEdDate
+            editOfferStartDt.text = offerDetails.productOfferStDate
+            editOfferEndDt.text = offerDetails.productOfferEdDate
     
             editImage.setOnClickListener { prodItemClick(offerDetails) }
             editBrandName.setOnClickListener { prodItemClick(offerDetails) }

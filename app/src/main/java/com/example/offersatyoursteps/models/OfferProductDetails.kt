@@ -5,23 +5,34 @@ import android.os.Parcelable
 import com.google.firebase.firestore.QueryDocumentSnapshot
 
 
-data class OfferProductDetails(var docId:String,
-    var imgName : String,
+data class OfferProductDetails(
+    var docId : String,
+    var productImgName : String,
     var productName : String,
-    var brandName : String,
-    var prodCategory : String,
-    var prodSubcategory : String,
-    var actualPrice : String,
-    var discountPrice : String,
-    var offerStDate : String,
-    var offerEdDate : String,
-    var discountPercentage : String,
-    var prodWeight : String,
-    var prodDesc : String,
-    var location : String
-//    var shopName : String
-):Parcelable {
+    var productBrandName : String,
+    var productCategory : String,
+    var productSubcategory : String,
+    var productActualPrice : String,
+    var productDiscountPrice : String,
+    var productOfferStDate : String,
+    var productOfferEdDate : String,
+    var productDiscountPercentage : String,
+    var productWeight : String,
+    var productDesc : String,
+    var shopName : String,
+    var shopStreetName : String,
+    var shopCity : String,
+    var shopDistrict : String,
+    var shopState : String,
+    var shopPincode : String,
+    
+    ) : Parcelable {
     constructor(parcel : Parcel) : this(
+        parcel.readString().toString(),
+        parcel.readString().toString(),
+        parcel.readString().toString(),
+        parcel.readString().toString(),
+        parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readString().toString(),
@@ -39,44 +50,28 @@ data class OfferProductDetails(var docId:String,
     ) {
     }
     
-//    companion object {
-//        fun fromQuerySnapshot(subDocSnapshot : QueryDocumentSnapshot) : OfferProductDetails {
-//
-//            return OfferProductDetails(
-//                subDocSnapshot.data["Product_Image"].toString(),
-//                subDocSnapshot.data["Product_Name"].toString(),
-//                subDocSnapshot.data["Product_Brand"].toString(),
-//                subDocSnapshot.data["Product_Category"].toString(),
-//                subDocSnapshot.data["Product_Subcategory"].toString(),
-//                subDocSnapshot.data["Product_ActualPrice"].toString(),
-//                subDocSnapshot.data["Product_DiscountPrice"].toString(),
-//                subDocSnapshot.data["Offer_StartDate"].toString(),
-//                subDocSnapshot.data["Offer_EndDate"].toString(),
-//                "2%",
-//                subDocSnapshot.data["Product_Weight"].toString(),
-//                subDocSnapshot.data["Product_Desc"].toString(),
-//                subDocSnapshot.data["Location"].toString()
-////subDocSnapshot.data["Shop_Name"].toString(),
-//            )
-//        }
-//
-//    }
     
     override fun writeToParcel(parcel : Parcel, flags : Int) {
         parcel.writeString(docId)
-        parcel.writeString(imgName)
+        parcel.writeString(productImgName)
         parcel.writeString(productName)
-        parcel.writeString(brandName)
-        parcel.writeString(prodCategory)
-        parcel.writeString(prodSubcategory)
-        parcel.writeString(actualPrice)
-        parcel.writeString(discountPrice)
-        parcel.writeString(offerStDate)
-        parcel.writeString(offerEdDate)
-        parcel.writeString(discountPercentage)
-        parcel.writeString(prodWeight)
-        parcel.writeString(prodDesc)
-        parcel.writeString(location)
+        parcel.writeString(productBrandName)
+        parcel.writeString(productCategory)
+        parcel.writeString(productSubcategory)
+        parcel.writeString(productActualPrice)
+        parcel.writeString(productDiscountPrice)
+        parcel.writeString(productOfferStDate)
+        parcel.writeString(productOfferEdDate)
+        parcel.writeString(productDiscountPercentage)
+        parcel.writeString(productWeight)
+        parcel.writeString(productDesc)
+        parcel.writeString(shopName)
+        parcel.writeString(shopStreetName)
+        parcel.writeString(shopCity)
+        parcel.writeString(shopDistrict)
+        parcel.writeString(shopState)
+        parcel.writeString(shopPincode)
+
     }
     
     override fun describeContents() : Int {
@@ -91,25 +86,29 @@ data class OfferProductDetails(var docId:String,
         override fun newArray(size : Int) : Array<OfferProductDetails?> {
             return arrayOfNulls(size)
         }
-    
-        fun fromQuerySnapshot(subDocSnapshot : QueryDocumentSnapshot) : OfferProductDetails {
         
+        fun fromQuerySnapshot(subDocSnapshot : QueryDocumentSnapshot) : OfferProductDetails {
+            
             return OfferProductDetails(
-                subDocSnapshot.data["_id"].toString(),
-                subDocSnapshot.data["Product_Image"].toString(),
-                subDocSnapshot.data["Product_Name"].toString(),
-                subDocSnapshot.data["Product_Brand"].toString(),
-                subDocSnapshot.data["Product_Category"].toString(),
-                subDocSnapshot.data["Product_Subcategory"].toString(),
-                subDocSnapshot.data["Product_ActualPrice"].toString(),
-                subDocSnapshot.data["Product_DiscountPrice"].toString(),
-                subDocSnapshot.data["Offer_StartDate"].toString(),
-                subDocSnapshot.data["Offer_EndDate"].toString(),
-                subDocSnapshot.data["Discount_Percentage"].toString(),
-                subDocSnapshot.data["Product_Weight"].toString(),
-                subDocSnapshot.data["Product_Desc"].toString(),
-                subDocSnapshot.data["Location"].toString()
-//subDocSnapshot.data["Shop_Name"].toString(),
+                subDocSnapshot.data["docId"].toString(),
+                subDocSnapshot.data["productImgName"].toString(),
+                subDocSnapshot.data["productName"].toString(),
+                subDocSnapshot.data["productBrandName"].toString(),
+                subDocSnapshot.data["productCategory"].toString(),
+                subDocSnapshot.data["productSubcategory"].toString(),
+                subDocSnapshot.data["productActualPrice"].toString(),
+                subDocSnapshot.data["productDiscountPrice"].toString(),
+                subDocSnapshot.data["productOfferStDate"].toString(),
+                subDocSnapshot.data["productOfferEdDate"].toString(),
+                subDocSnapshot.data["productDiscountPercentage"].toString(),
+                subDocSnapshot.data["productWeight"].toString(),
+                subDocSnapshot.data["productDesc"].toString(),
+                subDocSnapshot.data["shopName"].toString(),
+                subDocSnapshot.data["shopStreetName"].toString(),
+                subDocSnapshot.data["shopCity"].toString(),
+                subDocSnapshot.data["shopDistrict"].toString(),
+                subDocSnapshot.data["shopState"].toString(),
+                subDocSnapshot.data["shopPincode"].toString()
             )
         }
     }

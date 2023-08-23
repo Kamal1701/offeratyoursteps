@@ -118,18 +118,6 @@ class MerchantRegisterFragment : Fragment() {
                 || mShopName.isNotEmpty() || mCity.isNotEmpty() || mState.isNotEmpty()
             ) {
                 
-//                val merchantMap = HashMap<String, String>()
-//                merchantMap["User_Name"] = mName
-//                merchantMap["User_EmailId"] = mEmail
-//                merchantMap["User_Password"] = mPassword
-//                merchantMap["Shop_Name"] = mShopName
-//                merchantMap["IsMerchant"] = "Y"
-//                merchantMap["Street_Name"] = mStreetName
-//                merchantMap["City"] = mCity
-//                merchantMap["District"] = mDistrict
-//                merchantMap["State"] = mState
-//                merchantMap["Pincode"] = mPincode
-    
                 val merchant = UserModel(mName,
                     mEmail,
                     mShopName,

@@ -68,7 +68,6 @@ object DatabaseServices {
         val custJson = gson.toJson(userModel)
         val userMap = gson.fromJson(custJson, Map::class.java) as Map<String, Any>
         
-        
         fStore.collection(collectPath).document(userId).set(userMap)
             .addOnSuccessListener {
                 complete(true)
@@ -85,16 +84,7 @@ object DatabaseServices {
         userModel : UserModel,
         complete : (Boolean) -> Unit
     ) {
-    
-//        val custMap = HashMap<String, String>()
-//        custMap["customerName"] = userModel.customerName.toString()
-//        custMap["customerShopName"] = userModel.customerShopName.toString()
-//        custMap["customerStreetName"] = userModel.customerStreetName.toString()
-//        custMap["customerCity"] = userModel.customerCity.toString()
-//        custMap["customerDistrict"] = userModel.customerDistrict.toString()
-//        custMap["customerState"] = userModel.customerState.toString()
-//        custMap["customerPincode"] = userModel.customerPincode.toString()
-    
+        
         val gson = Gson()
         val custJson = gson.toJson(userModel)
         val custMap = gson.fromJson(custJson, Map::class.java) as Map<String, Any>
@@ -112,19 +102,22 @@ object DatabaseServices {
     fun createProductDetailsRecord(
         collectPath : String,
         userId : String,
-        productMap : HashMap<String, String>,
+        offerProduct : OfferProductDetails,
         complete : (Boolean) -> Unit
     ) {
+    
+        val gson = Gson()
+        val offerJson = gson.toJson(offerProduct)
+        val productMap = gson.fromJson(offerJson, Map::class.java) as Map<String, Any>
         
         fStore.collection(collectPath)
             .document(userId).set(mapOf("_id" to userId))
         
-    
         val subcollectionDocId = fStore.collection(collectPath)
             .document(userId)
             .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
             .document().id
-    
+        
         fStore.collection(collectPath)
             .document(userId)
             .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
@@ -137,12 +130,12 @@ object DatabaseServices {
                 Log.d("DEBUG", it.localizedMessage)
                 complete(false)
             }
-    
+        
         fStore.collection(collectPath)
             .document(userId)
             .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
             .document(subcollectionDocId)
-            .update(mapOf("_id" to subcollectionDocId))
+            .update(mapOf("docId" to subcollectionDocId))
             .addOnSuccessListener {
                 complete(true)
             }
@@ -159,11 +152,10 @@ object DatabaseServices {
         complete : (Boolean) -> Unit
     ) {
         
-      
         fStore.collection(collectPath)
             .document(userId)
             .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
-            .document(productMap["_id"].toString())
+            .document(productMap["docId"].toString())
             .update(productMap as Map<String, Any>)
             .addOnSuccessListener {
                 complete(true)
@@ -174,7 +166,7 @@ object DatabaseServices {
             }
     }
     
-    fun deleteProductDetails(userId : String, documentId : String, complete : (Boolean) -> Unit){
+    fun deleteProductDetails(userId : String, documentId : String, complete : (Boolean) -> Unit) {
         fStore.collection(PRODUCT_INFO_TABLE)
             .document(userId)
             .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
@@ -205,12 +197,13 @@ object DatabaseServices {
         println(collectPath)
         GlobalScope.launch(Dispatchers.IO) {
             parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
+                println("parentcollect is empty")
+                println(parentCollectionSnapshot.isEmpty)
                 if (!parentCollectionSnapshot.isEmpty) {
                     for (parentDoc in parentCollectionSnapshot.documents) {
                         val subcollectionRef : Query =
                             parentDoc.reference.collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
-                                .whereEqualTo("customerCity", location)
-                                .whereGreaterThanOrEqualTo("Offer_EndDate", formattedDate)
+                                .whereEqualTo("Location", location)
                         subcollectionRef
                             .get().addOnSuccessListener { querySnapshot ->
                                 if (!querySnapshot.isEmpty) {
@@ -254,7 +247,8 @@ object DatabaseServices {
             parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
                 if (!parentCollectionSnapshot.isEmpty) {
                     for (parentDoc in parentCollectionSnapshot.documents) {
-                        val subcollectionRef = parentDoc.reference.collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
+                        val subcollectionRef =
+                            parentDoc.reference.collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
                         subcollectionRef
                             .get().addOnSuccessListener { querySnapshot ->
                                 if (!querySnapshot.isEmpty) {

@@ -43,6 +43,8 @@ class HomePageActivity : AppCompatActivity() {
     
     private lateinit var userModel : UserModel
     
+    
+    private lateinit var drawerLayout : DrawerLayout
     override fun onSaveInstanceState(outState : Bundle) {
         super.onSaveInstanceState(outState)
         outState?.putParcelable(USER_INFO, userModel)
@@ -61,7 +63,8 @@ class HomePageActivity : AppCompatActivity() {
         
         setSupportActionBar(binding.appBarHomePage.toolbar)
         
-        val drawerLayout : DrawerLayout = binding.drawerLayout
+//        val drawerLayout : DrawerLayout = binding.drawerLayout
+        drawerLayout = binding.drawerLayout
         val navView : NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_home_page)
 //        val fragmentContainerView  = findViewById<FragmentContainerView>(R.id.mainFragmentContainer)
@@ -253,6 +256,15 @@ class HomePageActivity : AppCompatActivity() {
                 replace(R.id.nav_host_fragment_content_home_page, fragment)
                 addToBackStack(null)
             }
+        }
+    }
+    
+    override fun onBackPressed() {
+        
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
         }
     }
 }

@@ -41,6 +41,7 @@ class ProductDetailsFragment : Fragment() {
     private lateinit var shopName: TextView
     private lateinit var shopStName: TextView
     private lateinit var shopCity: TextView
+    private lateinit var shopDistrict: TextView
     private lateinit var shopState: TextView
     
     private lateinit var backPressedCallback : OnBackPressedCallback
@@ -73,6 +74,7 @@ class ProductDetailsFragment : Fragment() {
         shopName = binding.prodDetailShopName
         shopStName = binding.prodStreetName
         shopCity = binding.prodDetailCity
+        shopDistrict = binding.prodDetailDistrict
         shopState = binding.prodDetailState
     
         val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
@@ -85,31 +87,32 @@ class ProductDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         Glide.with(this)
-            .load(offerProductDetails.imgName)
+            .load(offerProductDetails.productImgName)
             .into(prodImage)
         
-        brandName.text = offerProductDetails.brandName
+        brandName.text = offerProductDetails.productBrandName
         prodName.text = offerProductDetails.productName
-        "$RUPEE_SYMBOL ${offerProductDetails.actualPrice}".also { actualPrice.text = it }
+        "$RUPEE_SYMBOL ${offerProductDetails.productActualPrice}".also { actualPrice.text = it }
         actualPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-        "$RUPEE_SYMBOL ${offerProductDetails.discountPrice}".also { discountPrice.text = it }
-        if (offerProductDetails.discountPercentage !="null"){
-            "${offerProductDetails.discountPercentage}".also { discountPercentage.text = it }
+        "$RUPEE_SYMBOL ${offerProductDetails.productDiscountPrice}".also { discountPrice.text = it }
+        if (offerProductDetails.productDiscountPercentage !="null"){
+            "${offerProductDetails.productDiscountPercentage}".also { discountPercentage.text = it }
         } else{
             discountPercentage.text = "0%"
         }
         
-        prodWeight.text = offerProductDetails.prodWeight
-        if(offerProductDetails.offerEdDate != "null"){
-            offerEndDate.text = offerProductDetails.offerEdDate
+        prodWeight.text = offerProductDetails.productWeight
+        if(offerProductDetails.productOfferEdDate != "null"){
+            offerEndDate.text = offerProductDetails.productOfferEdDate
         } else{
             offerEndDate.text = ""
         }
         
-        shopName.text = userModel.customerShopName
-        shopStName.text = userModel.customerStreetName
-        shopCity.text = userModel.customerCity
-        shopState.text = userModel.customerState
+        shopName.text = offerProductDetails.shopName
+        shopStName.text = offerProductDetails.shopStreetName
+        shopCity.text = offerProductDetails.shopCity
+        shopDistrict.text = offerProductDetails.shopDistrict
+        shopState.text = offerProductDetails.shopState
     
         backPressedCallback = object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {

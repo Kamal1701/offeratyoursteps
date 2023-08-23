@@ -172,6 +172,19 @@
         app:layout_constraintTop_toBottomOf="@+id/prodStreetName" />
 
     <TextView
+        android:id="@+id/prodDetailDistrict"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Chennai"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/prodDetailCity"
+        app:layout_constraintTop_toBottomOf="@+id/prodDetailCity" />
+
+    <TextView
         android:id="@+id/prodDetailState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -181,8 +194,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/prodDetailCity"
-        app:layout_constraintTop_toBottomOf="@+id/prodDetailCity" />
+        app:layout_constraintStart_toStartOf="@+id/prodDetailDistrict"
+        app:layout_constraintTop_toBottomOf="@+id/prodDetailDistrict" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

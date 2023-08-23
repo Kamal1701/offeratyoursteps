@@ -1,16 +1,11 @@
 package com.example.offersatyoursteps.adapters
 
 import android.content.Context
-import android.graphics.Paint
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.offersatyoursteps.models.OfferDetails
 import com.example.offersatyoursteps.databinding.OfferListViewBinding
 import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.utilities.RUPEE_SYMBOL
@@ -33,16 +28,17 @@ class OfferAdapter(
         
         fun bindingOffers(context : Context, offerDetails : OfferProductDetails) {
             
-            Glide.with(context).load(offerDetails.imgName).into(offerImage)
+            Glide.with(context).load(offerDetails.productImgName).into(offerImage)
             prodName.text = offerDetails.productName
 //            actPrice.text = RUPEE_SYMBOL + "${offerDetails.actualPrice}"
-            "$RUPEE_SYMBOL ${offerDetails.actualPrice}".also { actPrice.text =  it }
+            "$RUPEE_SYMBOL ${offerDetails.productActualPrice}".also { actPrice.text =  it }
             actPrice.paintFlags = STRIKE_THRU_TEXT_FLAG
-            "$RUPEE_SYMBOL ${offerDetails.discountPrice}".also { discPrice.text =  it }
-            "${offerDetails.discountPercentage}".also { discPercentage.text = it }
+            "$RUPEE_SYMBOL ${offerDetails.productDiscountPrice}".also { discPrice.text =  it }
+            offerDetails.productDiscountPercentage.also { discPercentage.text = it }
             
             
-            offerImage.setOnClickListener { prodItemClick(offerDetails) }
+            offerImage.setOnClickListener {
+                prodItemClick(offerDetails) }
             
         }
     }

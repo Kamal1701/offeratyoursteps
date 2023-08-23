@@ -22,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.databinding.FragmentAddOfferBinding
+import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.ADD_PRODUCT_TITLE
@@ -32,6 +33,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -43,6 +45,7 @@ class AddOfferFragment : Fragment() {
     
     private lateinit var binding : FragmentAddOfferBinding
     private var userModel = UserModel("", "", "", "", "", "","", "","")
+    private lateinit var offerProduct : OfferProductDetails
     private lateinit var backPressedCallback : OnBackPressedCallback
     
     private lateinit var productImage : ImageView
@@ -189,21 +192,24 @@ class AddOfferFragment : Fragment() {
                 && prodDesc.isNotEmpty()
             ) {
                 
-                val prodMap = HashMap<String, String>()
-                
-                prodMap["Product_Name"] = prodName
-                prodMap["Product_Brand"] = prodBrand
-                prodMap["Product_Category"] = prodCategory
-                prodMap["Product_Subcategory"] = prodSubcategory
-                prodMap["Product_ActualPrice"] = prodActualPrice
-                prodMap["Product_DiscountPrice"] = prodDiscountPrice
-                prodMap["Discount_Percentage"] = prodDiscountPerc
-                prodMap["Offer_StartDate"] = ofrStartDate
-                prodMap["Offer_EndDate"] = ofrEndDate
-                prodMap["Product_Weight"] = prodWeight
-                prodMap["Product_Desc"] = prodDesc
-                prodMap["Location"] = userModel.customerCity.toString()
-                prodMap["Shop_Name"] = userModel.customerShopName.toString()
+//                val prodMap = HashMap<String, String>()
+//
+//                prodMap["Product_Name"] = prodName
+//                prodMap["Product_Brand"] = prodBrand
+//                prodMap["Product_Category"] = prodCategory
+//                prodMap["Product_Subcategory"] = prodSubcategory
+//                prodMap["Product_ActualPrice"] = prodActualPrice
+//                prodMap["Product_DiscountPrice"] = prodDiscountPrice
+//                prodMap["Discount_Percentage"] = prodDiscountPerc
+//                prodMap["Offer_StartDate"] = ofrStartDate
+//                prodMap["Offer_EndDate"] = ofrEndDate
+//                prodMap["Product_Weight"] = prodWeight
+//                prodMap["Product_Desc"] = prodDesc
+//                prodMap["Location"] = userModel.customerCity.toString()
+//                prodMap["customerDistrict"] = userModel.customerDistrict.toString()
+//                prodMap["customerState"] = userModel.customerState.toString()
+//                prodMap["customerPincode"] = userModel.customerPincode.toString()
+//                prodMap["Shop_Name"] = userModel.customerShopName.toString()
                 
                 storageRef.getReference(FIREBASE_IMAGE_LOCATION)
                     .child(System.currentTimeMillis().toString())
@@ -212,12 +218,32 @@ class AddOfferFragment : Fragment() {
                         task.metadata!!.reference!!.downloadUrl
                             .addOnSuccessListener {
                                 Log.d("DEBUG", "Image upload")
-                                prodMap["Product_Image"] = it.toString()
+//                                prodMap["Product_Image"] = it.toString()
+                                offerProduct = OfferProductDetails("",
+                                    it.toString(),
+                                    prodName,
+                                    prodBrand,
+                                    prodCategory,
+                                    prodSubcategory,
+                                    prodActualPrice,
+                                    prodDiscountPrice,
+                                    ofrStartDate,
+                                    ofrEndDate,
+                                    prodDiscountPerc,
+                                    prodWeight,
+                                    prodDesc,
+                                    userModel.customerShopName.toString(),
+                                    userModel.customerStreetName.toString(),
+                                    userModel.customerCity.toString(),
+                                    userModel.customerDistrict.toString(),
+                                    userModel.customerState.toString(),
+                                    userModel.customerPincode.toString()
+                                    )
                                 val userId = FirebaseAuth.getInstance().currentUser!!.uid
                                 DatabaseServices.createProductDetailsRecord(
                                     PRODUCT_INFO_TABLE,
                                     userId,
-                                    prodMap
+                                    offerProduct
                                 ) { isProdCreateComplete ->
                                     if (isProdCreateComplete) {
                                         Toast.makeText(

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +25,6 @@ import com.example.offersatyoursteps.databinding.FragmentEditOfferPageBinding
 import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
-import com.example.offersatyoursteps.utilities.ADD_PRODUCT_TITLE
 import com.example.offersatyoursteps.utilities.EDIT_PRODUCT_TITLE
 import com.example.offersatyoursteps.utilities.EXTRA_PRODUCT
 import com.example.offersatyoursteps.utilities.FIREBASE_IMAGE_LOCATION
@@ -224,18 +222,18 @@ class EditOfferPageFragment : Fragment() {
             ) {
                 
                 val prodMap = HashMap<String, String>()
-                prodMap["_id"] = offerProductDetails.docId
-                prodMap["Product_Name"] = prodName
-                prodMap["Product_Brand"] = prodBrand
-                prodMap["Product_Category"] = prodCategory
-                prodMap["Product_Subcategory"] = prodSubcategory
-                prodMap["Product_ActualPrice"] = prodActualPrice
-                prodMap["Product_DiscountPrice"] = prodDiscountPrice
-                prodMap["Discount_Percentage"] = prodDiscountPerc
-                prodMap["Offer_StartDate"] = ofrStartDate
-                prodMap["Offer_EndDate"] = ofrEndDate
-                prodMap["Product_Weight"] = prodWeight
-                prodMap["Product_Desc"] = prodDesc
+                prodMap["docId"] = offerProductDetails.docId
+                prodMap["productName"] = prodName
+                prodMap["productBrandName"] = prodBrand
+                prodMap["productCategory"] = prodCategory
+                prodMap["productSubcategory"] = prodSubcategory
+                prodMap["productActualPrice"] = prodActualPrice
+                prodMap["productDiscountPrice"] = prodDiscountPrice
+                prodMap["productDiscountPercentage"] = prodDiscountPerc
+                prodMap["productOfferStDate"] = ofrStartDate
+                prodMap["productOfferEdDate"] = ofrEndDate
+                prodMap["productWeight"] = prodWeight
+                prodMap["productDesc"] = prodDesc
     
                 val userId = FirebaseAuth.getInstance().currentUser!!.uid
                 
@@ -248,7 +246,7 @@ class EditOfferPageFragment : Fragment() {
                                 .addOnSuccessListener {
                                     println("Image upload")
                                     println(it.toString())
-                                    prodMap["Product_Image"] = it.toString()
+                                    prodMap["productImgName"] = it.toString()
     
                                     DatabaseServices.updateProductDetailsRecord(
                                         PRODUCT_INFO_TABLE,
@@ -360,20 +358,20 @@ class EditOfferPageFragment : Fragment() {
     
     fun updateEditPageUI() {
         Glide.with(this)
-            .load(offerProductDetails.imgName)
+            .load(offerProductDetails.productImgName)
             .into(productImage)
         
         productName.setText(offerProductDetails.productName)
-        productBrand.setText(offerProductDetails.brandName)
-        productCategory.setText(offerProductDetails.prodCategory)
-        productSubcategory.setText(offerProductDetails.prodSubcategory)
-        productActualPrice.setText(offerProductDetails.actualPrice)
-        productDiscountPrice.setText(offerProductDetails.discountPrice)
-        offerStartDate.setText(offerProductDetails.offerStDate)
-        offerEndDate.setText(offerProductDetails.offerEdDate)
-        productWeight.setText(offerProductDetails.prodWeight)
-        productDiscountPercentage.text = offerProductDetails.discountPercentage
-        productDesc.setText(offerProductDetails.prodDesc)
+        productBrand.setText(offerProductDetails.productBrandName)
+        productCategory.setText(offerProductDetails.productCategory)
+        productSubcategory.setText(offerProductDetails.productSubcategory)
+        productActualPrice.setText(offerProductDetails.productActualPrice)
+        productDiscountPrice.setText(offerProductDetails.productDiscountPrice)
+        offerStartDate.setText(offerProductDetails.productOfferStDate)
+        offerEndDate.setText(offerProductDetails.productOfferEdDate)
+        productWeight.setText(offerProductDetails.productWeight)
+        productDiscountPercentage.text = offerProductDetails.productDiscountPercentage
+        productDesc.setText(offerProductDetails.productDesc)
         
     }
     

@@ -76,7 +76,8 @@ class OfferNearMeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     
 //        noOffersToday.visibility = View.INVISIBLE
-        
+        println("OfferNearMe - Location ")
+        println(userModel.customerCity.toString())
         DatabaseServices.getLocationProductDetails(
             PRODUCT_INFO_TABLE,
             productList,
