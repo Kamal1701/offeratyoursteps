@@ -3,15 +3,12 @@ package com.example.offersatyoursteps.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PatternMatcher
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.databinding.ActivityForgotPasswordBinding
 import com.google.firebase.auth.FirebaseAuth
-import java.util.regex.Pattern
 
 class ForgotPasswordActivity : AppCompatActivity() {
     
@@ -43,8 +40,8 @@ class ForgotPasswordActivity : AppCompatActivity() {
     fun onResetBtnClicked(view:View) {
         val emailAddress = emailTxt.text.toString()
         if (emailAddress.isNotEmpty() && isValidEmail(emailAddress)) {
-            mAuth.sendPasswordResetEmail(emailAddress).addOnCompleteListener { Task ->
-                if (Task.isSuccessful) {
+            mAuth.sendPasswordResetEmail(emailAddress).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
                     Toast.makeText(
                         this,
                         "Password Reset email sent to your email address, please check your inbox",
@@ -53,14 +50,14 @@ class ForgotPasswordActivity : AppCompatActivity() {
                     finish()
                 }
             }.addOnFailureListener {
-                Toast.makeText(this, it.localizedMessage.toString(), Toast.LENGTH_LONG).show()
+                Toast.makeText(this, it.localizedMessage?.toString() , Toast.LENGTH_LONG).show()
             }
         } else {
             Toast.makeText(this, "Please enter your valid email address", Toast.LENGTH_LONG).show()
         }
     }
     
-    fun isValidEmail(email : String) : Boolean {
+    private fun isValidEmail(email : String) : Boolean {
         val regex = Regex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z]{2,6}$")
         return regex.matches(email)
     }

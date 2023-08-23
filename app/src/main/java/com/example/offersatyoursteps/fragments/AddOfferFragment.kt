@@ -73,9 +73,7 @@ class AddOfferFragment : Fragment() {
     
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            userModel = it?.getParcelable<UserModel>(USER_INFO)!!
-        }
+        arguments?.let { userModel = it.getParcelable<UserModel>(USER_INFO)!! }
     }
     
     override fun onCreateView(
@@ -168,9 +166,10 @@ class AddOfferFragment : Fragment() {
         
         
         addProductBtn.setOnClickListener {
-            progressBar.visibility = View.VISIBLE
-            addProductBtn.visibility = View.INVISIBLE
-            cancelProductBtn.visibility = View.INVISIBLE
+//            progressBar.visibility = View.VISIBLE
+//            addProductBtn.visibility = View.INVISIBLE
+//            cancelProductBtn.visibility = View.INVISIBLE
+            enableSpinner(true)
             
             val prodImage = productImage.tag.toString()
             val prodName = productName.text.toString()
@@ -251,9 +250,10 @@ class AddOfferFragment : Fragment() {
                     }
                 
             } else {
-                progressBar.visibility = View.INVISIBLE
-                addProductBtn.visibility = View.VISIBLE
-                cancelProductBtn.visibility = View.VISIBLE
+                enableSpinner(false)
+//                progressBar.visibility = View.INVISIBLE
+//                addProductBtn.visibility = View.VISIBLE
+//                cancelProductBtn.visibility = View.VISIBLE
                 Toast.makeText(activity, "Please fill all the fields", Toast.LENGTH_LONG).show()
             }
             
@@ -313,6 +313,17 @@ class AddOfferFragment : Fragment() {
             (((actualPrice - discountPrice) / actualPrice) * 100).roundToInt()
         return "${discPercentage}%"
         
+    }
+    
+    private fun enableSpinner(enabled:Boolean){
+        if(enabled){
+            progressBar.visibility = View.VISIBLE
+        } else{
+            progressBar.visibility = View.INVISIBLE
+        }
+        
+        addProductBtn.isEnabled = !enabled
+        cancelProductBtn.isEnabled = !enabled
     }
     
 }

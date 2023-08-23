@@ -104,18 +104,21 @@ class MerchantProfileFragment : Fragment() {
             userModel.customerDistrict = mtDistrict.text.toString()
             userModel.customerState = mtState.text.toString()
             userModel.customerPincode = mtPincode.text.toString()
-            profileProgress.visibility = View.VISIBLE
-            updateBtn.visibility = View.INVISIBLE
+//            profileProgress.visibility = View.VISIBLE
+//            updateBtn.visibility = View.INVISIBLE
+            enableSpinner(true)
             DatabaseServices.updateCustomerInfoRecord(userId, userModel){ isUpdateSuccess ->
                 if (isUpdateSuccess){
-                    profileProgress.visibility = View.INVISIBLE
-                    updateBtn.visibility = View.VISIBLE
+//                    profileProgress.visibility = View.INVISIBLE
+//                    updateBtn.visibility = View.VISIBLE
+                    enableSpinner(false)
                     navHeaderChangeNotify.setUserName(userModel.customerName!!)
                     Toast.makeText(activity, "User profile updated successfully", Toast.LENGTH_LONG)
                         .show()
                 } else{
-                    profileProgress.visibility = View.INVISIBLE
-                    updateBtn.visibility = View.VISIBLE
+//                    profileProgress.visibility = View.INVISIBLE
+//                    updateBtn.visibility = View.VISIBLE
+                    enableSpinner(false)
                     Toast.makeText(activity, "Unable to update now, please try later", Toast.LENGTH_LONG)
                         .show()
                 }
@@ -158,5 +161,16 @@ class MerchantProfileFragment : Fragment() {
         mtDistrict.setText(userModel.customerDistrict)
         mtState.setText(userModel.customerState)
         mtPincode.setText(userModel.customerPincode)
+    }
+    
+    private fun enableSpinner(enabled:Boolean){
+        if(enabled){
+            profileProgress.visibility = View.VISIBLE
+        } else {
+            profileProgress.visibility = View.INVISIBLE
+        }
+        
+        updateBtn.isEnabled = !enabled
+        
     }
 }

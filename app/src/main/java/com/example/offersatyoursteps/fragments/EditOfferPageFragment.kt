@@ -393,4 +393,15 @@ class EditOfferPageFragment : Fragment() {
                 }
             }
     }
+    
+    private fun enableSpinner(enabled:Boolean){
+        if(enabled){
+            progressBar.visibility = View.VISIBLE
+        } else{
+            progressBar.visibility = View.INVISIBLE
+        }
+        
+        deleteProductBtn.isEnabled = !enabled
+        updateProductBtn.isEnabled = !enabled
+    }
 }

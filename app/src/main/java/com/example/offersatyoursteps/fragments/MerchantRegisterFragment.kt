@@ -111,8 +111,9 @@ class MerchantRegisterFragment : Fragment() {
             val mState = merchantState.text.toString()
             val mPincode = merchantPincode.text.toString()
             
-            registerBtn.visibility = View.INVISIBLE
-            progressBar.visibility = View.VISIBLE
+//            registerBtn.visibility = View.INVISIBLE
+//            progressBar.visibility = View.VISIBLE
+            enableSpinner(true)
             
             if (mName.isNotEmpty() || mEmail.isNotEmpty() || mPassword.isNotEmpty()
                 || mShopName.isNotEmpty() || mCity.isNotEmpty() || mState.isNotEmpty()
@@ -138,6 +139,7 @@ class MerchantRegisterFragment : Fragment() {
                                 merchant
                             ) { isSetComplete ->
                                 if (isSetComplete) {
+                                    enableSpinner(false)
                                     Toast.makeText(
                                         activity,
                                         "User registered successfully",
@@ -158,9 +160,9 @@ class MerchantRegisterFragment : Fragment() {
             } else {
                 Toast.makeText(activity, "Please fill all the fields", Toast.LENGTH_SHORT)
                     .show()
-                
-                registerBtn.visibility = View.VISIBLE
-                progressBar.visibility = View.INVISIBLE
+                enableSpinner(false)
+//                registerBtn.visibility = View.VISIBLE
+//                progressBar.visibility = View.INVISIBLE
             }
             
         }
@@ -184,5 +186,15 @@ class MerchantRegisterFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 //        backPressedCallback.remove()
+    }
+    
+    private fun enableSpinner(enabled:Boolean){
+        if(enabled){
+            progressBar.visibility = View.VISIBLE
+        } else{
+            progressBar.visibility = View.INVISIBLE
+        }
+        
+        registerBtn.isEnabled = !enabled
     }
 }

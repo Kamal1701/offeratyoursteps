@@ -43,7 +43,6 @@ class HomePageActivity : AppCompatActivity() {
     
     private lateinit var userModel : UserModel
     
-    
     private lateinit var drawerLayout : DrawerLayout
     override fun onSaveInstanceState(outState : Bundle) {
         super.onSaveInstanceState(outState)

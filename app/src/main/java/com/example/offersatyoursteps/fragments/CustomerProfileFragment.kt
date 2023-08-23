@@ -167,4 +167,15 @@ class CustomerProfileFragment : Fragment() {
         super.onDestroyView()
         backPressedCallback.remove()
     }
+    
+    private fun enableSpinner(enabled:Boolean){
+        if(enabled){
+            profileProgress.visibility = View.VISIBLE
+        } else{
+            profileProgress.visibility = View.INVISIBLE
+        }
+        
+        updateBtn.isEnabled = !enabled
+        
+    }
 }

@@ -1,9 +1,12 @@
 package com.example.offersatyoursteps.activities
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
+import android.hardware.input.InputManager
+import android.inputmethodservice.InputMethodService
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -14,6 +17,7 @@ import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -86,7 +90,7 @@ class LoginActivity : AppCompatActivity() {
         val registerBtn = loginBinding.loginRegisterBtn
         val colorSpan = SetTextColorSpan(registerBtn.text.toString())
         registerBtn.text = colorSpan.setTextColorSpan()
-        
+
 //        forgotPassword.setOnClickListener {
 //            val builder = AlertDialog.Builder(this)
 //            val dialogView = layoutInflater.inflate(R.layout.activity_forgot_password, null)
@@ -143,18 +147,20 @@ class LoginActivity : AppCompatActivity() {
     }
     
     fun onUserLoginBtnClicked(view : View) {
-        loginProBar.visibility = View.VISIBLE
-        loginBtn.visibility = View.INVISIBLE
-        registerBtn.visibility = View.INVISIBLE
+//        loginProBar.visibility = View.VISIBLE
+//        loginBtn.visibility = View.INVISIBLE
+//        registerBtn.visibility = View.INVISIBLE
+        enableSpinner(true)
         
         val email = userEmail.text.toString()
         val password = userPassword.text.toString()
         
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please enter your credential", Toast.LENGTH_LONG).show()
-            loginBtn.visibility = View.VISIBLE
-            loginProBar.visibility = View.INVISIBLE
-            registerBtn.visibility = View.VISIBLE
+//            loginBtn.visibility = View.VISIBLE
+//            loginProBar.visibility = View.INVISIBLE
+//            registerBtn.visibility = View.VISIBLE
+            enableSpinner(false)
             
         } else {
             userSignIn(email, password)
@@ -166,10 +172,10 @@ class LoginActivity : AppCompatActivity() {
         mAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task : Task<AuthResult> ->
                 if (task.isSuccessful) {
-                    loginProBar.visibility = View.INVISIBLE
-                    loginBtn.visibility = View.INVISIBLE
-                    registerBtn.visibility = View.INVISIBLE
-                    
+//                    loginProBar.visibility = View.INVISIBLE
+//                    loginBtn.visibility = View.INVISIBLE
+//                    registerBtn.visibility = View.INVISIBLE
+                    enableSpinner(false)
                     val userId = mAuth.currentUser!!.uid
                     println("Login success")
                     DatabaseServices.getCustomerInfoRecord(userId, userModel) { dbSuccess ->
@@ -181,9 +187,10 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(this, "Login failed, invalid credential", Toast.LENGTH_LONG)
                         .show()
-                    loginProBar.visibility = View.INVISIBLE
-                    loginBtn.visibility = View.VISIBLE
-                    registerBtn.visibility = View.VISIBLE
+//                    loginProBar.visibility = View.INVISIBLE
+//                    loginBtn.visibility = View.VISIBLE
+//                    registerBtn.visibility = View.VISIBLE
+                    enableSpinner(false)
                 }
             }
         
@@ -211,6 +218,24 @@ class LoginActivity : AppCompatActivity() {
     fun isValidEmail(email : String) : Boolean {
         val regex = Regex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z]{2,6}$")
         return regex.matches(email)
+    }
+    
+//    fun hideKeyboard() {
+//        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//        if (inputManager.isAcceptingText) {
+//            inputManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+//        }
+//    }
+    
+    private fun enableSpinner(enabled:Boolean){
+        if (enabled){
+            loginProBar.visibility = View.VISIBLE
+        } else{
+            loginProBar.visibility = View.INVISIBLE
+        }
+        loginBtn.isEnabled = !enabled
+        registerBtn.isEnabled = !enabled
+        forgotPassword.isEnabled = !enabled
     }
 
 //    override fun onStart() {
