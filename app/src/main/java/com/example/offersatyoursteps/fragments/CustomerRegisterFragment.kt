@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentManager
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.activities.LoginActivity
 import com.example.offersatyoursteps.databinding.FragmentCustomerRegisterBinding
+import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.CUSTOMER_INFO_TABLE
 import com.example.offersatyoursteps.utilities.SetTextColorSpan
@@ -26,7 +27,8 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 
-
+private val IS_MERCHANT = "N"
+private val SHOPNAME_NA = "NA"
 class CustomerRegisterFragment : Fragment() {
     
     private lateinit var binding : FragmentCustomerRegisterBinding
@@ -115,28 +117,39 @@ class CustomerRegisterFragment : Fragment() {
                 cCity.isNotEmpty() && cState.isNotEmpty()
             ) {
                 
-                val customerMap = HashMap<String, String>()
-                customerMap["User_Name"] = cName
-                customerMap["User_EmailId"] = cEmail
-                customerMap["User_Password"] = cPassword
-                customerMap["Shop_Name"] = "NA"
-                customerMap["IsMerchant"] = "N"
-                customerMap["Street_Name"] = cStreetName
-                customerMap["City"] = cCity
-                customerMap["District"] = cDistrict
-                customerMap["State"] = cState
-                customerMap["Pincode"] = cPincode
+//                val customerMap = HashMap<String, String>()
+//                customerMap["User_Name"] = cName
+//                customerMap["User_EmailId"] = cEmail
+//                customerMap["User_Password"] = cPassword
+//                customerMap["Shop_Name"] = "NA"
+//                customerMap["IsMerchant"] = "N"
+//                customerMap["Street_Name"] = cStreetName
+//                customerMap["City"] = cCity
+//                customerMap["District"] = cDistrict
+//                customerMap["State"] = cState
+//                customerMap["Pincode"] = cPincode
+                
+                val customer = UserModel(cName,
+                    cEmail,
+                    SHOPNAME_NA,
+                    IS_MERCHANT,
+                    cStreetName,
+                    cCity,
+                    cDistrict,
+                    cState,
+                    cPincode)
                 
                 mAuth.createUserWithEmailAndPassword(cEmail, cPassword)
                     .addOnCompleteListener { task : Task<AuthResult> ->
                         if (task.isSuccessful) {
 //                            Log.d("ERROR", mAuth.currentUser!!.uid)
+                            println("Customer Register Fragment - ")
                             val userId = mAuth.currentUser!!.uid
                             Log.d("DEBUG", userId)
                             DatabaseServices.createCustomerInfoRecord(
                                 CUSTOMER_INFO_TABLE,
                                 userId,
-                                customerMap
+                                customer
                             ) { isSetComplete ->
                                 if (isSetComplete) {
                                     Toast.makeText(
@@ -155,6 +168,16 @@ class CustomerRegisterFragment : Fragment() {
                                 }
                             }
                         }
+                    }
+                    .addOnFailureListener {
+                        Log.d("EXEC", it.localizedMessage)
+                        Toast.makeText(
+                            activity,
+                            it.localizedMessage.toString(),
+                            Toast.LENGTH_LONG
+                        ).show()
+                        registerBtn.visibility = View.VISIBLE
+                        progressBar.visibility = View.INVISIBLE
                     }
             } else {
                 Toast.makeText(activity, "Please fill all the fields", Toast.LENGTH_SHORT)

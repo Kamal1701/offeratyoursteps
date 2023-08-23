@@ -1,23 +1,22 @@
 package com.example.offersatyoursteps.services
 
+import android.os.Build
+import android.os.Parcel
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.utilities.CUSTOMER_INFO_TABLE
 import com.example.offersatyoursteps.utilities.PRODUCT_INFO_SUB_COLLECTION_TABLE
 import com.example.offersatyoursteps.utilities.PRODUCT_INFO_TABLE
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.async
-import kotlinx.coroutines.tasks.await
-import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 object DatabaseServices {
     
@@ -33,15 +32,20 @@ object DatabaseServices {
         fStore.collection(collectPath).document(userId)
             .get().addOnSuccessListener { custDoc ->
                 if (custDoc != null) {
-                    userModel.cName = custDoc.get("User_Name").toString()
-                    userModel.cEmail = custDoc.get("User_EmailId").toString()
-                    userModel.cShopName = custDoc.get("Shop_Name").toString()
-                    userModel.cStreetName = custDoc.get("Street_Name").toString()
-                    userModel.isMerchant = custDoc.get("IsMerchant").toString()
-                    userModel.cCity = custDoc.get("City").toString()
-                    userModel.cDistrict = custDoc.get("District").toString()
-                    userModel.cState = custDoc.get("State").toString()
-                    userModel.cPincode = custDoc.get("Pincode").toString()
+                    println("get customer info record success")
+//                    val userModel = custDoc.toObject(UserModel::class.java)!!
+//                    val parcel = Parcel.obtain()
+//                    userModel.writeToParcel(parcel,0)
+//                    parcel.setDataPosition(0)
+                    userModel.customerName = custDoc.get("customerName").toString()
+                    userModel.customerEmail = custDoc.get("customerEmail").toString()
+                    userModel.customerShopName = custDoc.get("customerShopName").toString()
+                    userModel.customerStreetName = custDoc.get("customerStreetName").toString()
+                    userModel.isCustomerOrMerchant = custDoc.get("isCustomerOrMerchant").toString()
+                    userModel.customerCity = custDoc.get("customerCity").toString()
+                    userModel.customerDistrict = custDoc.get("customerDistrict").toString()
+                    userModel.customerState = custDoc.get("customerState").toString()
+                    userModel.customerPincode = custDoc.get("customerPincode").toString()
                     
                     complete(true)
                 }
@@ -56,9 +60,15 @@ object DatabaseServices {
     fun createCustomerInfoRecord(
         collectPath : String,
         userId : String,
-        userMap : HashMap<String, String>,
+        userModel : UserModel,
         complete : (Boolean) -> Unit
     ) {
+        
+        val gson = Gson()
+        val custJson = gson.toJson(userModel)
+        val userMap = gson.fromJson(custJson, Map::class.java) as Map<String, Any>
+        
+        
         fStore.collection(collectPath).document(userId).set(userMap)
             .addOnSuccessListener {
                 complete(true)
@@ -76,16 +86,20 @@ object DatabaseServices {
         complete : (Boolean) -> Unit
     ) {
     
-        val custMap = HashMap<String, String>()
-        custMap["User_Name"] = userModel.cName.toString()
-        custMap["Shop_Name"] = userModel.cShopName.toString()
-        custMap["Street_Name"] = userModel.cStreetName.toString()
-        custMap["City"] = userModel.cCity.toString()
-        custMap["District"] = userModel.cDistrict.toString()
-        custMap["State"] = userModel.cState.toString()
-        custMap["Pincode"] = userModel.cPincode.toString()
+//        val custMap = HashMap<String, String>()
+//        custMap["customerName"] = userModel.customerName.toString()
+//        custMap["customerShopName"] = userModel.customerShopName.toString()
+//        custMap["customerStreetName"] = userModel.customerStreetName.toString()
+//        custMap["customerCity"] = userModel.customerCity.toString()
+//        custMap["customerDistrict"] = userModel.customerDistrict.toString()
+//        custMap["customerState"] = userModel.customerState.toString()
+//        custMap["customerPincode"] = userModel.customerPincode.toString()
+    
+        val gson = Gson()
+        val custJson = gson.toJson(userModel)
+        val custMap = gson.fromJson(custJson, Map::class.java) as Map<String, Any>
         
-        fStore.collection(CUSTOMER_INFO_TABLE).document(userId).update(custMap as Map<String, Any>)
+        fStore.collection(CUSTOMER_INFO_TABLE).document(userId).update(custMap)
             .addOnSuccessListener {
                 complete(true)
             }
@@ -175,13 +189,17 @@ object DatabaseServices {
             }
     }
     
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getLocationProductDetails(
         collectPath : String,
         productList : MutableList<OfferProductDetails>,
         location : String,
         complete : (Boolean) -> Unit
     ) {
-        
+        val currentDate = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val formattedDate = currentDate.format(formatter)
+        println(formattedDate)
         val parentCollectionRef = fStore.collection(collectPath)
         println("getLocationProductDetails")
         println(collectPath)
@@ -191,8 +209,8 @@ object DatabaseServices {
                     for (parentDoc in parentCollectionSnapshot.documents) {
                         val subcollectionRef : Query =
                             parentDoc.reference.collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
-                                .whereEqualTo("Location", location)
-                                .whereEqualTo("Offer_EndDate", LocalDateTime.now())
+                                .whereEqualTo("customerCity", location)
+                                .whereGreaterThanOrEqualTo("Offer_EndDate", formattedDate)
                         subcollectionRef
                             .get().addOnSuccessListener { querySnapshot ->
                                 if (!querySnapshot.isEmpty) {

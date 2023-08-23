@@ -2,16 +2,17 @@ package com.example.offersatyoursteps.models
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.firebase.firestore.DocumentSnapshot
 
-class UserModel constructor(var cName:String?,
-                            var cEmail:String?,
-                            var cShopName:String?,
-                            var isMerchant:String?,
-                            var cStreetName:String?,
-                            var cCity:String?,
-                            var cDistrict:String?,
-                            var cState:String?,
-                            var cPincode:String?):Parcelable{
+data class UserModel constructor(var customerName:String?,
+                                 var customerEmail:String?,
+                                 var customerShopName:String?,
+                                 var isCustomerOrMerchant:String?,
+                                 var customerStreetName:String?,
+                                 var customerCity:String?,
+                                 var customerDistrict:String?,
+                                 var customerState:String?,
+                                 var customerPincode:String?):Parcelable{
     constructor(parcel : Parcel) : this(
         parcel.readString(),
         parcel.readString(),
@@ -26,15 +27,15 @@ class UserModel constructor(var cName:String?,
     }
     
     override fun writeToParcel(parcel : Parcel, flags : Int) {
-        parcel.writeString(cName)
-        parcel.writeString(cEmail)
-        parcel.writeString(cShopName)
-        parcel.writeString(isMerchant)
-        parcel.writeString(cStreetName)
-        parcel.writeString(cCity)
-        parcel.writeString(cDistrict)
-        parcel.writeString(cState)
-        parcel.writeString(cPincode)
+        parcel.writeString(customerName)
+        parcel.writeString(customerEmail)
+        parcel.writeString(customerShopName)
+        parcel.writeString(isCustomerOrMerchant)
+        parcel.writeString(customerStreetName)
+        parcel.writeString(customerCity)
+        parcel.writeString(customerDistrict)
+        parcel.writeString(customerState)
+        parcel.writeString(customerPincode)
     }
     
     override fun describeContents() : Int {

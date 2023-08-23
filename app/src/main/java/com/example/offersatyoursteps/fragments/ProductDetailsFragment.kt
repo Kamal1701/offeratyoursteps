@@ -8,17 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.databinding.FragmentProductDetailsBinding
 import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.utilities.EXTRA_PRODUCT
-import com.example.offersatyoursteps.utilities.OFFER_NEAR_ME_TITLE
 import com.example.offersatyoursteps.utilities.PRODUCT_DETAIL_TITLE
 import com.example.offersatyoursteps.utilities.RUPEE_SYMBOL
 import com.example.offersatyoursteps.utilities.USER_INFO
@@ -109,10 +106,10 @@ class ProductDetailsFragment : Fragment() {
             offerEndDate.text = ""
         }
         
-        shopName.text = userModel.cShopName
-        shopStName.text = userModel.cStreetName
-        shopCity.text = userModel.cCity
-        shopState.text = userModel.cState
+        shopName.text = userModel.customerShopName
+        shopStName.text = userModel.customerStreetName
+        shopCity.text = userModel.customerCity
+        shopState.text = userModel.customerState
     
         backPressedCallback = object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {

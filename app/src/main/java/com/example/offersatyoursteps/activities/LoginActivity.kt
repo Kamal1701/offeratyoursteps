@@ -136,6 +136,7 @@ class LoginActivity : AppCompatActivity() {
                     registerBtn.visibility = View.INVISIBLE
                     
                     val userId = mAuth.currentUser!!.uid
+                    println("Login success")
                     DatabaseServices.getCustomerInfoRecord(CUSTOMER_INFO_TABLE, userId, userModel){ dbSuccess ->
 
                         if(dbSuccess){

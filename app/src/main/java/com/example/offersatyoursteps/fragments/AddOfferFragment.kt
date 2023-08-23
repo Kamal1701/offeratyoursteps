@@ -4,7 +4,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -27,15 +26,12 @@ import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.ADD_PRODUCT_TITLE
 import com.example.offersatyoursteps.utilities.FIREBASE_IMAGE_LOCATION
-import com.example.offersatyoursteps.utilities.OfferTextWatcher
-import com.example.offersatyoursteps.utilities.PRODUCT_DETAIL_TITLE
 import com.example.offersatyoursteps.utilities.PRODUCT_INFO_TABLE
 import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import java.lang.Math.round
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -206,8 +202,8 @@ class AddOfferFragment : Fragment() {
                 prodMap["Offer_EndDate"] = ofrEndDate
                 prodMap["Product_Weight"] = prodWeight
                 prodMap["Product_Desc"] = prodDesc
-                prodMap["Location"] = userModel.cCity.toString()
-                prodMap["Shop_Name"] = userModel.cShopName.toString()
+                prodMap["Location"] = userModel.customerCity.toString()
+                prodMap["Shop_Name"] = userModel.customerShopName.toString()
                 
                 storageRef.getReference(FIREBASE_IMAGE_LOCATION)
                     .child(System.currentTimeMillis().toString())

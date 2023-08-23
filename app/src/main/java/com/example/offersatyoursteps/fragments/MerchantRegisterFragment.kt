@@ -18,12 +18,15 @@ import androidx.activity.OnBackPressedCallback
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.activities.LoginActivity
 import com.example.offersatyoursteps.databinding.FragmentMerchantRegisterBinding
+import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.CUSTOMER_INFO_TABLE
 import com.example.offersatyoursteps.utilities.SetTextColorSpan
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+
+private val IS_MERCHANT = "Y"
 
 class MerchantRegisterFragment : Fragment() {
     
@@ -115,17 +118,27 @@ class MerchantRegisterFragment : Fragment() {
                 || mShopName.isNotEmpty() || mCity.isNotEmpty() || mState.isNotEmpty()
             ) {
                 
-                val merchantMap = HashMap<String, String>()
-                merchantMap["User_Name"] = mName
-                merchantMap["User_EmailId"] = mEmail
-                merchantMap["User_Password"] = mPassword
-                merchantMap["Shop_Name"] = mShopName
-                merchantMap["IsMerchant"] = "Y"
-                merchantMap["Street_Name"] = mStreetName
-                merchantMap["City"] = mCity
-                merchantMap["District"] = mDistrict
-                merchantMap["State"] = mState
-                merchantMap["Pincode"] = mPincode
+//                val merchantMap = HashMap<String, String>()
+//                merchantMap["User_Name"] = mName
+//                merchantMap["User_EmailId"] = mEmail
+//                merchantMap["User_Password"] = mPassword
+//                merchantMap["Shop_Name"] = mShopName
+//                merchantMap["IsMerchant"] = "Y"
+//                merchantMap["Street_Name"] = mStreetName
+//                merchantMap["City"] = mCity
+//                merchantMap["District"] = mDistrict
+//                merchantMap["State"] = mState
+//                merchantMap["Pincode"] = mPincode
+    
+                val merchant = UserModel(mName,
+                    mEmail,
+                    mShopName,
+                    IS_MERCHANT,
+                    mStreetName,
+                    mCity,
+                    mDistrict,
+                    mState,
+                    mPincode)
                 
                 mAuth.createUserWithEmailAndPassword(mEmail, mPassword)
                     .addOnCompleteListener { task : Task<AuthResult> ->
@@ -136,7 +149,7 @@ class MerchantRegisterFragment : Fragment() {
                             DatabaseServices.createCustomerInfoRecord(
                                 CUSTOMER_INFO_TABLE,
                                 userId,
-                                merchantMap
+                                merchant
                             ) { isSetComplete ->
                                 if (isSetComplete) {
                                     Toast.makeText(

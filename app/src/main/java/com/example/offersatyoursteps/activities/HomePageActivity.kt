@@ -15,9 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.databinding.ActivityHomePageBinding
@@ -213,19 +211,19 @@ class HomePageActivity : AppCompatActivity() {
     
     
         navHeaderChangeNotify = ViewModelProvider(this)[NavigationHeaderViewModel::class.java]
-        navHeaderChangeNotify.setUserName(userModel.cName!!)
+        navHeaderChangeNotify.setUserName(userModel.customerName!!)
         navHeaderChangeNotify.userName.observe(this){
             val navUserName = headerView.findViewById<TextView>(R.id.navHeaderUsernameTxt)
-            navUserName.text = userModel.cName
+            navUserName.text = userModel.customerName
         
         }
 //        navUserName.text = userModel.cName
-        navUserEmail.text = userModel.cEmail
+        navUserEmail.text = userModel.customerEmail
         
         val profileMenu = navView.menu.findItem(R.id.nav_profile)
         val merchantProfileMenu = navView.menu.findItem(R.id.nav_merchant_profile)
         val merchantProductMenu = navView.menu.findItem(R.id.merchantProductMenu)
-        if (userModel.isMerchant == "N") {
+        if (userModel.isCustomerOrMerchant == "N") {
             profileMenu.isVisible = true
         } else {
             merchantProfileMenu.isVisible = true

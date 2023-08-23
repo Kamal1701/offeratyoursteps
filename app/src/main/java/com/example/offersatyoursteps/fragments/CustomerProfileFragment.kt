@@ -14,13 +14,11 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.databinding.FragmentCustomerProfileBinding
 import com.example.offersatyoursteps.models.NavigationHeaderViewModel
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
-import com.example.offersatyoursteps.utilities.PRODUCT_DETAIL_TITLE
 import com.example.offersatyoursteps.utilities.PROFILE_TITLE
 import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.firebase.auth.FirebaseAuth
@@ -110,13 +108,13 @@ class CustomerProfileFragment : Fragment() {
         
         updateBtn.setOnClickListener {
             
-            userModel.cName = custUserName.text.toString()
-            userModel.cShopName = "NA"
-            userModel.cStreetName = custStreetName.text.toString()
-            userModel.cCity = custCity.text.toString()
-            userModel.cDistrict = custDistrict.text.toString()
-            userModel.cState = custState.text.toString()
-            userModel.cPincode = custPincode.text.toString()
+            userModel.customerName = custUserName.text.toString()
+            userModel.customerShopName = "NA"
+            userModel.customerStreetName = custStreetName.text.toString()
+            userModel.customerCity = custCity.text.toString()
+            userModel.customerDistrict = custDistrict.text.toString()
+            userModel.customerState = custState.text.toString()
+            userModel.customerPincode = custPincode.text.toString()
             profileProgress.visibility = View.VISIBLE
             updateBtn.visibility = View.INVISIBLE
     
@@ -126,7 +124,7 @@ class CustomerProfileFragment : Fragment() {
                 if (isUpdateSuccess){
                     profileProgress.visibility = View.INVISIBLE
                     updateBtn.visibility = View.VISIBLE
-                    navHeaderChangeNotify.setUserName(userModel.cName!!)
+                    navHeaderChangeNotify.setUserName(userModel.customerName!!)
                     Toast.makeText(activity, "User profile updated successfully", Toast.LENGTH_LONG)
                         .show()
                 } else{
@@ -153,12 +151,12 @@ class CustomerProfileFragment : Fragment() {
     }
     
     fun updateCustomerInfoUI(){
-        custUserName.setText(userModel.cName)
-        custStreetName.setText(userModel.cStreetName)
-        custCity.setText(userModel.cCity, false)
-        custDistrict.setText(userModel.cDistrict, false)
-        custState.setText(userModel.cState, false)
-        custPincode.setText(userModel.cPincode)
+        custUserName.setText(userModel.customerName)
+        custStreetName.setText(userModel.customerStreetName)
+        custCity.setText(userModel.customerCity, false)
+        custDistrict.setText(userModel.customerDistrict, false)
+        custState.setText(userModel.customerState, false)
+        custPincode.setText(userModel.customerPincode)
     }
     
     override fun onDestroyView() {
