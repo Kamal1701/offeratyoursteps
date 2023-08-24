@@ -42,7 +42,7 @@ class MerchantRegisterFragment : Fragment() {
     private lateinit var merchantPincode : EditText
     private lateinit var progressBar : ProgressBar
     private lateinit var registerBtn : Button
-    
+
 //    private lateinit var backPressedCallback : OnBackPressedCallback
     
     private lateinit var mAuth : FirebaseAuth
@@ -68,6 +68,8 @@ class MerchantRegisterFragment : Fragment() {
         registerBtn = binding.regMercUserRegisterBtn
         
         progressBar.visibility = View.INVISIBLE
+        
+        merchantName.requestFocus()
         
         mAuth = FirebaseAuth.getInstance()
         
@@ -110,7 +112,7 @@ class MerchantRegisterFragment : Fragment() {
             val mDistrict = merchantDistrict.text.toString()
             val mState = merchantState.text.toString()
             val mPincode = merchantPincode.text.toString()
-            
+
 //            registerBtn.visibility = View.INVISIBLE
 //            progressBar.visibility = View.VISIBLE
             enableSpinner(true)
@@ -119,44 +121,54 @@ class MerchantRegisterFragment : Fragment() {
                 || mShopName.isNotEmpty() || mCity.isNotEmpty() || mState.isNotEmpty()
             ) {
                 
-                val merchant = UserModel(mName,
-                    mEmail,
-                    mShopName,
-                    IS_MERCHANT,
-                    mStreetName,
-                    mCity,
-                    mDistrict,
-                    mState,
-                    mPincode)
-                
-                mAuth.createUserWithEmailAndPassword(mEmail, mPassword)
-                    .addOnCompleteListener { task : Task<AuthResult> ->
-                        if (task.isSuccessful) {
-                            val userId = mAuth.currentUser!!.uid
-                            Log.d("DEBUG", userId)
-                            DatabaseServices.createCustomerInfoRecord(
-                                userId,
-                                merchant
-                            ) { isSetComplete ->
-                                if (isSetComplete) {
-                                    enableSpinner(false)
-                                    Toast.makeText(
-                                        activity,
-                                        "User registered successfully",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                    loadHomePage()
-                                } else {
-                                    Toast.makeText(
-                                        activity,
-                                        "Unable to register, please try again",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                    
+                if (isValidEmail(mEmail)) {
+                    val merchant = UserModel(
+                        mName,
+                        mEmail,
+                        mShopName,
+                        IS_MERCHANT,
+                        mStreetName,
+                        mCity,
+                        mDistrict,
+                        mState,
+                        mPincode
+                    )
+                    
+                    mAuth.createUserWithEmailAndPassword(mEmail, mPassword)
+                        .addOnCompleteListener { task : Task<AuthResult> ->
+                            if (task.isSuccessful) {
+                                val userId = mAuth.currentUser!!.uid
+                                Log.d("DEBUG", userId)
+                                DatabaseServices.createCustomerInfoRecord(
+                                    userId,
+                                    merchant
+                                ) { isSetComplete ->
+                                    if (isSetComplete) {
+                                        enableSpinner(false)
+                                        Toast.makeText(
+                                            activity,
+                                            "User registered successfully",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        loadHomePage()
+                                    } else {
+                                        Toast.makeText(
+                                            activity,
+                                            "Unable to register, please try again",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        
+                                    }
                                 }
                             }
                         }
-                    }
+                } else {
+                    enableSpinner(false)
+                    merchantEmail.requestFocus()
+                    Toast.makeText(activity, "Please enter valid email address", Toast.LENGTH_LONG)
+                        .show()
+                }
+                
             } else {
                 Toast.makeText(activity, "Please fill all the fields", Toast.LENGTH_SHORT)
                     .show()
@@ -166,7 +178,7 @@ class MerchantRegisterFragment : Fragment() {
             }
             
         }
-        
+
 //        backPressedCallback = object : OnBackPressedCallback(true) {
 //            override fun handleOnBackPressed() {
 //                requireActivity().supportFragmentManager.popBackStack()
@@ -177,6 +189,7 @@ class MerchantRegisterFragment : Fragment() {
 //            backPressedCallback
 //        )
     }
+    
     private fun loadHomePage() {
         
         val loginActivity = Intent(activity, LoginActivity::class.java)
@@ -188,13 +201,18 @@ class MerchantRegisterFragment : Fragment() {
 //        backPressedCallback.remove()
     }
     
-    private fun enableSpinner(enabled:Boolean){
-        if(enabled){
+    private fun enableSpinner(enabled : Boolean) {
+        if (enabled) {
             progressBar.visibility = View.VISIBLE
-        } else{
+        } else {
             progressBar.visibility = View.INVISIBLE
         }
         
         registerBtn.isEnabled = !enabled
+    }
+    
+    private fun isValidEmail(email : String) : Boolean {
+        val regex = Regex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z]{2,6}$")
+        return regex.matches(email)
     }
 }

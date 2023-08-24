@@ -74,21 +74,25 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         loginBinding = ActivityLoginBinding.inflate(layoutInflater)
         val loginView = loginBinding.root
-        if(!App.sharedPrefs.isLoggedIn) {
+        if (!App.sharedPrefs.isLoggedIn) {
             setContentView(loginView)
-    
-    
+            
+            
             userEmail = loginBinding.loginUserEmailTxt
             userPassword = loginBinding.loginPasswordTxt
             loginProBar = loginBinding.loginProgressBar
             loginBtn = loginBinding.loginUserLoginBtn
             registerBtn = loginBinding.loginRegisterBtn
             forgotPassword = loginBinding.loginForgotPwdBtn
-    
+            
             mAuth = FirebaseAuth.getInstance()
-    
+            
             loginProBar.visibility = View.INVISIBLE
-    
+            
+            userEmail.requestFocus()
+            
+            hideKeyboard()
+            
             val registerBtn = loginBinding.loginRegisterBtn
             val colorSpan = SetTextColorSpan(registerBtn.text.toString())
             registerBtn.text = colorSpan.setTextColorSpan()
@@ -150,7 +154,7 @@ class LoginActivity : AppCompatActivity() {
     }
     
     fun onUserLoginBtnClicked(view : View) {
-
+        
         enableSpinner(true)
         
         val email = userEmail.text.toString()
@@ -161,7 +165,14 @@ class LoginActivity : AppCompatActivity() {
             enableSpinner(false)
             
         } else {
-            userSignIn(email, password)
+            if (isValidEmail(email)) {
+                userSignIn(email, password)
+            } else {
+                enableSpinner(false)
+                userEmail.requestFocus()
+                Toast.makeText(this, "Please enter valid email address", Toast.LENGTH_LONG).show()
+                
+            }
         }
     }
     
@@ -217,29 +228,29 @@ class LoginActivity : AppCompatActivity() {
         val regex = Regex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z]{2,6}$")
         return regex.matches(email)
     }
+
+    fun hideKeyboard() {
+        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if (inputManager.isAcceptingText) {
+            inputManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        }
+    }
     
-//    fun hideKeyboard() {
-//        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//        if (inputManager.isAcceptingText) {
-//            inputManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-//        }
-//    }
-    
-    private fun enableSpinner(enabled:Boolean){
-        if (enabled){
+    private fun enableSpinner(enabled : Boolean) {
+        if (enabled) {
             loginProBar.visibility = View.VISIBLE
-        } else{
+        } else {
             loginProBar.visibility = View.INVISIBLE
         }
         loginBtn.isEnabled = !enabled
         registerBtn.isEnabled = !enabled
         forgotPassword.isEnabled = !enabled
     }
-
+    
     override fun onStart() {
         super.onStart()
-
-        if(App.sharedPrefs.isLoggedIn) {
+        
+        if (App.sharedPrefs.isLoggedIn) {
             if (App.sharedPrefs.userId != null) {
                 DatabaseServices.getCustomerInfoRecord(
                     App.sharedPrefs.userId.toString(),
