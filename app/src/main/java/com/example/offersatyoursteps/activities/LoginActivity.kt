@@ -176,6 +176,7 @@ class LoginActivity : AppCompatActivity() {
 //                    loginBtn.visibility = View.INVISIBLE
 //                    registerBtn.visibility = View.INVISIBLE
                     enableSpinner(false)
+                    App.sharedPrefs.isLoggedIn = true
                     val userId = mAuth.currentUser!!.uid
                     println("Login success")
                     DatabaseServices.getCustomerInfoRecord(userId, userModel) { dbSuccess ->

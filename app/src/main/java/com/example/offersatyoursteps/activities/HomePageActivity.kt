@@ -65,7 +65,7 @@ class HomePageActivity : AppCompatActivity() {
         drawerLayout = binding.drawerLayout
         val navView : NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_home_page)
-
+        
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home_page,
@@ -78,92 +78,102 @@ class HomePageActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        updateNavHeader()
         
-        navView.setNavigationItemSelectedListener { item ->
-            val fragment : Fragment
-            when (item.itemId) {
-                R.id.nav_offer_near_me -> {
-                    val fragment = OfferNearMeFragment.newInstance(userModel)
-                    if (fragment != null) {
-                        supportFragmentManager.commit {
-                            setReorderingAllowed(true)
-                            replace(R.id.nav_host_fragment_content_home_page, fragment,"NearMe")
-                            addToBackStack("NearMe")
-                        }
-                    }
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                }
-                
-                R.id.nav_all_offers -> {
-                    val fragment = AllOffersFragment.newInstance(userModel)
-                    if (fragment != null) {
-                        supportFragmentManager.commit {
-                            setReorderingAllowed(true)
-                            replace(R.id.nav_host_fragment_content_home_page, fragment)
-                            addToBackStack(null)
-                        }
-                    }
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                }
-                
-                R.id.nav_profile -> {
-                    fragment = CustomerProfileFragment.newInstance(userModel)
-                    if (fragment != null) {
-                        supportFragmentManager.commit {
-                            setReorderingAllowed(true)
-                            replace(R.id.nav_host_fragment_content_home_page, fragment)
-                            addToBackStack(null)
-                        }
-                        drawerLayout.closeDrawer(GravityCompat.START)
-                    }
-                }
-                
-                R.id.nav_merchant_profile -> {
-                    fragment = MerchantProfileFragment.newInstance(userModel)
-                    if (fragment != null) {
-                        supportFragmentManager.commit {
-                            setReorderingAllowed(true)
-                            replace(R.id.nav_host_fragment_content_home_page, fragment)
-                            addToBackStack(null)
-                        }
-                        drawerLayout.closeDrawer(GravityCompat.START)
-                    }
-                }
-                
-                R.id.addOfferProduct -> {
-                    
-                    fragment = AddOfferFragment.newInstance(userModel)
-                    if (fragment != null) {
-                        supportFragmentManager.commit {
-                            setReorderingAllowed(true)
-                            replace(R.id.nav_host_fragment_content_home_page, fragment)
-                            addToBackStack(null)
-                        }
-                        drawerLayout.closeDrawer(GravityCompat.START)
-                    }
-                    
-                }
+        if(App.sharedPrefs.isLoggedIn) {
+            updateNavHeader()
     
-                R.id.editOfferProduct -> {
-        
-                    fragment =EditOfferFragment.newInstance(userModel)
-                    if (fragment != null) {
-                        supportFragmentManager.commit {
-                            setReorderingAllowed(true)
-                            replace(R.id.nav_host_fragment_content_home_page, fragment, "EditOffer")
-                            addToBackStack("EditOffer")
+            navView.setNavigationItemSelectedListener { item ->
+                val fragment : Fragment
+                when (item.itemId) {
+                    R.id.nav_offer_near_me -> {
+                        val fragment = OfferNearMeFragment.newInstance(userModel)
+                        if (fragment != null) {
+                            supportFragmentManager.commit {
+                                setReorderingAllowed(true)
+                                replace(
+                                    R.id.nav_host_fragment_content_home_page,
+                                    fragment,
+                                    "NearMe"
+                                )
+                                addToBackStack("NearMe")
+                            }
                         }
                         drawerLayout.closeDrawer(GravityCompat.START)
                     }
-        
-                }
-            }
             
-            true
-        }
-        navView.setCheckedItem(R.id.nav_offer_near_me)
+                    R.id.nav_all_offers -> {
+                        val fragment = AllOffersFragment.newInstance(userModel)
+                        if (fragment != null) {
+                            supportFragmentManager.commit {
+                                setReorderingAllowed(true)
+                                replace(R.id.nav_host_fragment_content_home_page, fragment)
+                                addToBackStack(null)
+                            }
+                        }
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                    }
+            
+                    R.id.nav_profile -> {
+                        fragment = CustomerProfileFragment.newInstance(userModel)
+                        if (fragment != null) {
+                            supportFragmentManager.commit {
+                                setReorderingAllowed(true)
+                                replace(R.id.nav_host_fragment_content_home_page, fragment)
+                                addToBackStack(null)
+                            }
+                            drawerLayout.closeDrawer(GravityCompat.START)
+                        }
+                    }
+            
+                    R.id.nav_merchant_profile -> {
+                        fragment = MerchantProfileFragment.newInstance(userModel)
+                        if (fragment != null) {
+                            supportFragmentManager.commit {
+                                setReorderingAllowed(true)
+                                replace(R.id.nav_host_fragment_content_home_page, fragment)
+                                addToBackStack(null)
+                            }
+                            drawerLayout.closeDrawer(GravityCompat.START)
+                        }
+                    }
+            
+                    R.id.addOfferProduct -> {
+                
+                        fragment = AddOfferFragment.newInstance(userModel)
+                        if (fragment != null) {
+                            supportFragmentManager.commit {
+                                setReorderingAllowed(true)
+                                replace(R.id.nav_host_fragment_content_home_page, fragment)
+                                addToBackStack(null)
+                            }
+                            drawerLayout.closeDrawer(GravityCompat.START)
+                        }
+                
+                    }
+            
+                    R.id.editOfferProduct -> {
+                
+                        fragment = EditOfferFragment.newInstance(userModel)
+                        if (fragment != null) {
+                            supportFragmentManager.commit {
+                                setReorderingAllowed(true)
+                                replace(
+                                    R.id.nav_host_fragment_content_home_page,
+                                    fragment,
+                                    "EditOffer"
+                                )
+                                addToBackStack("EditOffer")
+                            }
+                            drawerLayout.closeDrawer(GravityCompat.START)
+                        }
+                
+                    }
+                }
         
+                true
+            }
+            navView.setCheckedItem(R.id.nav_offer_near_me)
+        }
         
     }
     
@@ -177,14 +187,16 @@ class HomePageActivity : AppCompatActivity() {
         
         when (item.itemId) {
             R.id.action_logout -> {
-                FirebaseAuth.getInstance().signOut()
-                val loginIntent = Intent(this, LoginActivity::class.java)
-                startActivity(loginIntent)
-                finish()
+                if (App.sharedPrefs.isLoggedIn) {
+                    FirebaseAuth.getInstance().signOut()
+                    val loginIntent = Intent(this, LoginActivity::class.java)
+                    startActivity(loginIntent)
+                    finish()
+                }
             }
         }
-        
         return super.onOptionsItemSelected(item)
+        
     }
     
     
@@ -197,13 +209,13 @@ class HomePageActivity : AppCompatActivity() {
         val navView : NavigationView = binding.navView
         val headerView = navView.getHeaderView(0)
         val navUserEmail = headerView.findViewById<TextView>(R.id.navHeaderEmailTxt)
-    
+        
         navHeaderChangeNotify = ViewModelProvider(this)[NavigationHeaderViewModel::class.java]
         navHeaderChangeNotify.setUserName(userModel.customerName!!)
-        navHeaderChangeNotify.userName.observe(this){
+        navHeaderChangeNotify.userName.observe(this) {
             val navUserName = headerView.findViewById<TextView>(R.id.navHeaderUsernameTxt)
             navUserName.text = userModel.customerName
-        
+            
         }
         navUserEmail.text = userModel.customerEmail
         
@@ -221,7 +233,7 @@ class HomePageActivity : AppCompatActivity() {
         if (fragment != null) {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
-                replace(R.id.nav_host_fragment_content_home_page, fragment,"NearMe")
+                replace(R.id.nav_host_fragment_content_home_page, fragment, "NearMe")
                 addToBackStack("NearMe")
             }
         }
@@ -230,7 +242,7 @@ class HomePageActivity : AppCompatActivity() {
     
     override fun onBackPressed() {
         
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
