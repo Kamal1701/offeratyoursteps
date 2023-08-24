@@ -1,7 +1,6 @@
 package com.example.offersatyoursteps.services
 
 import android.os.Build
-import android.os.Parcel
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.offersatyoursteps.models.OfferProductDetails
@@ -15,6 +14,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -100,7 +100,7 @@ object DatabaseServices {
         offerProduct : OfferProductDetails,
         complete : (Boolean) -> Unit
     ) {
-    
+        
         val gson = Gson()
         val offerJson = gson.toJson(offerProduct)
         val productMap = gson.fromJson(offerJson, Map::class.java) as Map<String, Any>
@@ -200,10 +200,27 @@ object DatabaseServices {
                                 if (!querySnapshot.isEmpty) {
                                     for ((prodCount, doc) in querySnapshot.withIndex()) {
 //                                        if (doc.data["Location"].toString() == location) {
-                                        productList.add(
-                                            prodCount,
-                                            OfferProductDetails.fromQuerySnapshot(doc)
-                                        )
+                                        
+                                        val endDateString = doc.getString("productOfferEdDate")
+                                        if (endDateString != null) {
+//                                            val dateFormatter =
+//                                                DateTimeFormatter.ofPattern("dd/MM/yyyy")
+//                                            val offerEndDt : LocalDate =
+//                                                LocalDate.parse(endDateString, dateFormatter)
+//                                            val currentDate : LocalDate = LocalDate.now()
+//                                            val compareDate : Int =
+//                                                offerEndDt.compareTo(currentDate)
+//                                            println(offerEndDt)
+//                                            println(currentDate)
+//                                            println(compareDate)
+                                            
+                                            if (isOfferActive(endDateString)) {
+                                                productList.add(
+                                                    prodCount,
+                                                    OfferProductDetails.fromQuerySnapshot(doc)
+                                                )
+                                            }
+                                        }
 //                                        }
                                     }
                                     complete(true)
@@ -227,6 +244,7 @@ object DatabaseServices {
         
     }
     
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getAllProductDetails(
         productList : MutableList<OfferProductDetails>,
         complete : (Boolean) -> Unit
@@ -243,10 +261,22 @@ object DatabaseServices {
                             .get().addOnSuccessListener { querySnapshot ->
                                 if (!querySnapshot.isEmpty) {
                                     for ((prodCount, doc) in querySnapshot.withIndex()) {
-                                        productList.add(
-                                            prodCount,
-                                            OfferProductDetails.fromQuerySnapshot(doc)
-                                        )
+                                        
+                                        val endDateString = doc.getString("productOfferEdDate")
+                                        if (endDateString != null) {
+                                            
+                                            if (isOfferActive(endDateString)) {
+                                                productList.add(
+                                                    prodCount,
+                                                    OfferProductDetails.fromQuerySnapshot(doc)
+                                                )
+                                            }
+                                        }
+
+//                                        productList.add(
+//                                            prodCount,
+//                                            OfferProductDetails.fromQuerySnapshot(doc)
+//                                        )
                                     }
                                     complete(true)
                                 } else {
@@ -301,5 +331,22 @@ object DatabaseServices {
                     }
             }
         }
+    }
+    
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun isOfferActive(offerDate : String?) : Boolean {
+//        var isActive = false
+        val dateFormatter =
+            DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val offerEndDt : LocalDate =
+            LocalDate.parse(offerDate, dateFormatter)
+        val currentDate : LocalDate = LocalDate.now()
+        val compareDate : Int =
+            offerEndDt.compareTo(currentDate)
+        println(offerEndDt)
+        println(currentDate)
+        println(compareDate)
+    
+        return compareDate >= 0
     }
 }

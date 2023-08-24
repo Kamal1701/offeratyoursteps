@@ -3,6 +3,7 @@ package com.example.offersatyoursteps.models
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.firebase.firestore.QueryDocumentSnapshot
+import java.util.Date
 
 
 data class OfferProductDetails(
