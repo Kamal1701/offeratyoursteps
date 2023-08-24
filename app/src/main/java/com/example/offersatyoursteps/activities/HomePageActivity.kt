@@ -28,6 +28,7 @@ import com.example.offersatyoursteps.fragments.EditOfferFragment
 import com.example.offersatyoursteps.fragments.ProductSubcategoryFragment
 import com.example.offersatyoursteps.models.NavigationHeaderViewModel
 import com.example.offersatyoursteps.models.UserModel
+import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -188,6 +189,8 @@ class HomePageActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.action_logout -> {
                 if (App.sharedPrefs.isLoggedIn) {
+                    App.sharedPrefs.isLoggedIn = false
+                    App.sharedPrefs.userId = ""
                     FirebaseAuth.getInstance().signOut()
                     val loginIntent = Intent(this, LoginActivity::class.java)
                     startActivity(loginIntent)
@@ -248,6 +251,7 @@ class HomePageActivity : AppCompatActivity() {
             super.onBackPressed()
         }
     }
+    
 }
 
 

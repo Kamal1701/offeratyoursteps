@@ -193,14 +193,19 @@ object DatabaseServices {
                         subcollectionRef
                             .get().addOnSuccessListener { querySnapshot ->
                                 if (!querySnapshot.isEmpty) {
-                                    for ((prodCount, doc) in querySnapshot.withIndex()) {
+                                    var prodCount = 0
+                                    for (doc in querySnapshot) {
                                         val endDateString = doc.getString("productOfferEdDate")
+                                        println("Database services")
+                                        println(endDateString)
                                         if (endDateString != null) {
                                             if (isOfferActive(endDateString)) {
                                                 productList.add(
                                                     prodCount,
                                                     OfferProductDetails.fromQuerySnapshot(doc)
                                                 )
+                                                prodCount++
+                                                println(productList)
                                             }
                                         }
                                     }
@@ -210,7 +215,7 @@ object DatabaseServices {
                                 }
                             }
                             .addOnFailureListener {
-                                Log.d("EXEC", it.localizedMessage)
+                                Log.d("EXEC", it.localizedMessage.toString())
                                 complete(false)
                             }
                     }
@@ -218,7 +223,7 @@ object DatabaseServices {
                     complete(false)
                 }
             }.addOnFailureListener {
-                Log.d("EXEC", it.localizedMessage)
+                Log.d("EXEC", it.localizedMessage.toString())
                 complete(false)
             }
         }
@@ -240,16 +245,16 @@ object DatabaseServices {
                         subcollectionRef
                             .get().addOnSuccessListener { querySnapshot ->
                                 if (!querySnapshot.isEmpty) {
-                                    for ((prodCount, doc) in querySnapshot.withIndex()) {
-                                        
+                                    var prodCount = 0
+                                    for (doc in querySnapshot) {
                                         val endDateString = doc.getString("productOfferEdDate")
                                         if (endDateString != null) {
-                                            
                                             if (isOfferActive(endDateString)) {
                                                 productList.add(
                                                     prodCount,
                                                     OfferProductDetails.fromQuerySnapshot(doc)
                                                 )
+                                                prodCount++
                                             }
                                         }
                                     }

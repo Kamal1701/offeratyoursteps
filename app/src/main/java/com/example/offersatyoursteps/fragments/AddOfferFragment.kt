@@ -28,7 +28,12 @@ import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.ADD_PRODUCT_TITLE
 import com.example.offersatyoursteps.utilities.FIREBASE_IMAGE_LOCATION
 import com.example.offersatyoursteps.utilities.PRODUCT_INFO_TABLE
+import com.example.offersatyoursteps.utilities.PastDateValidator
 import com.example.offersatyoursteps.utilities.USER_INFO
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.CalendarConstraints.DateValidator
+import com.google.android.material.datepicker.DateValidatorPointBackward
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
@@ -133,8 +138,17 @@ class AddOfferFragment : Fragment() {
         }
         
         offerStartDate.setOnClickListener {
+      
+            val yesterday = Calendar.getInstance().timeInMillis-86400000
+//            val constraintBuilder = CalendarConstraints.Builder()
+//                .setValidator(PastDateValidator())
             val builder = MaterialDatePicker.Builder.datePicker()
+                .setCalendarConstraints(
+                    CalendarConstraints.Builder()
+                    .setValidator(DateValidatorPointForward.from(yesterday)).build())
+            //                .setCalendarConstraints(constraintBuilder.build())
             val datePicker = builder.build()
+            
             
             datePicker.addOnPositiveButtonClickListener {
                 val selectedDate = Calendar.getInstance()
@@ -151,7 +165,11 @@ class AddOfferFragment : Fragment() {
         }
         
         offerEndDate.setOnClickListener {
+            val yesterday = Calendar.getInstance().timeInMillis-86400000
             val builder = MaterialDatePicker.Builder.datePicker()
+                .setCalendarConstraints(
+                    CalendarConstraints.Builder()
+                        .setValidator(DateValidatorPointForward.from(yesterday)).build())
             val datePicker = builder.build()
             
             datePicker.addOnPositiveButtonClickListener {
@@ -261,6 +279,7 @@ class AddOfferFragment : Fragment() {
         
         cancelProductBtn.setOnClickListener {
             clearProducts()
+            requireActivity().supportFragmentManager.popBackStack("NearMe", 0)
         }
         
         backPressedCallback = object : OnBackPressedCallback(true) {

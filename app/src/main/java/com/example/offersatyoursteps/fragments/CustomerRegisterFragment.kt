@@ -110,9 +110,8 @@ class CustomerRegisterFragment : Fragment() {
             val cDistrict = custDistrict.text.toString()
             val cState = custState.text.toString()
             val cPincode = custPincode.text.toString()
-            
-            registerBtn.visibility = View.INVISIBLE
-            progressBar.visibility = View.VISIBLE
+    
+            enableSpinner(true)
             
             if (cName.isNotEmpty() && cEmail.isNotEmpty() && cPassword.isNotEmpty() &&
                 cCity.isNotEmpty() && cState.isNotEmpty()
@@ -142,6 +141,7 @@ class CustomerRegisterFragment : Fragment() {
                                         "User registered successfully",
                                         Toast.LENGTH_LONG
                                     ).show()
+                                    enableSpinner(false)
                                     loadHomePage()
                                 } else {
                                     Toast.makeText(
@@ -149,7 +149,7 @@ class CustomerRegisterFragment : Fragment() {
                                         "Unable to register, please try again",
                                         Toast.LENGTH_LONG
                                     ).show()
-                                    
+                                    enableSpinner(false)
                                 }
                             }
                         }
@@ -161,15 +161,13 @@ class CustomerRegisterFragment : Fragment() {
                             it.localizedMessage.toString(),
                             Toast.LENGTH_LONG
                         ).show()
-                        registerBtn.visibility = View.VISIBLE
-                        progressBar.visibility = View.INVISIBLE
+                        enableSpinner(false)
                     }
             } else {
                 Toast.makeText(activity, "Please fill all the fields", Toast.LENGTH_SHORT)
                     .show()
-                
-                registerBtn.visibility = View.VISIBLE
-                progressBar.visibility = View.INVISIBLE
+    
+                enableSpinner(false)
             }
         }
     

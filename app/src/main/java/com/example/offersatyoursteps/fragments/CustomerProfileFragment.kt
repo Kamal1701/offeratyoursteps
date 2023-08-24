@@ -119,19 +119,16 @@ class CustomerProfileFragment : Fragment() {
             userModel.customerDistrict = custDistrict.text.toString()
             userModel.customerState = custState.text.toString()
             userModel.customerPincode = custPincode.text.toString()
-            profileProgress.visibility = View.VISIBLE
-            updateBtn.visibility = View.INVISIBLE
+            enableSpinner(true)
             
             DatabaseServices.updateCustomerInfoRecord(userId, userModel) { isUpdateSuccess ->
                 if (isUpdateSuccess) {
-                    profileProgress.visibility = View.INVISIBLE
-                    updateBtn.visibility = View.VISIBLE
+                    enableSpinner(false)
                     navHeaderChangeNotify.setUserName(userModel.customerName!!)
                     Toast.makeText(activity, "User profile updated successfully", Toast.LENGTH_LONG)
                         .show()
                 } else {
-                    profileProgress.visibility = View.INVISIBLE
-                    updateBtn.visibility = View.VISIBLE
+                    enableSpinner(false)
                     Toast.makeText(
                         activity,
                         "Unable to update now, please try later",

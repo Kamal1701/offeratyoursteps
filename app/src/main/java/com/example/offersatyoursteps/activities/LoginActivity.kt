@@ -70,26 +70,29 @@ class LoginActivity : AppCompatActivity() {
     }
     
     override fun onCreate(savedInstanceState : Bundle?) {
+        
         super.onCreate(savedInstanceState)
         loginBinding = ActivityLoginBinding.inflate(layoutInflater)
         val loginView = loginBinding.root
-        setContentView(loginView)
-        
-        userEmail = loginBinding.loginUserEmailTxt
-        userPassword = loginBinding.loginPasswordTxt
-        loginProBar = loginBinding.loginProgressBar
-        loginBtn = loginBinding.loginUserLoginBtn
-        registerBtn = loginBinding.loginRegisterBtn
-        forgotPassword = loginBinding.loginForgotPwdBtn
-        
-        mAuth = FirebaseAuth.getInstance()
-//        fStore = FirebaseFirestore.getInstance()
-        
-        loginProBar.visibility = View.INVISIBLE
-        
-        val registerBtn = loginBinding.loginRegisterBtn
-        val colorSpan = SetTextColorSpan(registerBtn.text.toString())
-        registerBtn.text = colorSpan.setTextColorSpan()
+        if(!App.sharedPrefs.isLoggedIn) {
+            setContentView(loginView)
+    
+    
+            userEmail = loginBinding.loginUserEmailTxt
+            userPassword = loginBinding.loginPasswordTxt
+            loginProBar = loginBinding.loginProgressBar
+            loginBtn = loginBinding.loginUserLoginBtn
+            registerBtn = loginBinding.loginRegisterBtn
+            forgotPassword = loginBinding.loginForgotPwdBtn
+    
+            mAuth = FirebaseAuth.getInstance()
+    
+            loginProBar.visibility = View.INVISIBLE
+    
+            val registerBtn = loginBinding.loginRegisterBtn
+            val colorSpan = SetTextColorSpan(registerBtn.text.toString())
+            registerBtn.text = colorSpan.setTextColorSpan()
+        }
 
 //        forgotPassword.setOnClickListener {
 //            val builder = AlertDialog.Builder(this)
@@ -147,9 +150,7 @@ class LoginActivity : AppCompatActivity() {
     }
     
     fun onUserLoginBtnClicked(view : View) {
-//        loginProBar.visibility = View.VISIBLE
-//        loginBtn.visibility = View.INVISIBLE
-//        registerBtn.visibility = View.INVISIBLE
+
         enableSpinner(true)
         
         val email = userEmail.text.toString()
@@ -157,9 +158,6 @@ class LoginActivity : AppCompatActivity() {
         
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please enter your credential", Toast.LENGTH_LONG).show()
-//            loginBtn.visibility = View.VISIBLE
-//            loginProBar.visibility = View.INVISIBLE
-//            registerBtn.visibility = View.VISIBLE
             enableSpinner(false)
             
         } else {
@@ -172,12 +170,11 @@ class LoginActivity : AppCompatActivity() {
         mAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task : Task<AuthResult> ->
                 if (task.isSuccessful) {
-//                    loginProBar.visibility = View.INVISIBLE
-//                    loginBtn.visibility = View.INVISIBLE
-//                    registerBtn.visibility = View.INVISIBLE
                     enableSpinner(false)
-                    App.sharedPrefs.isLoggedIn = true
+                    
                     val userId = mAuth.currentUser!!.uid
+                    App.sharedPrefs.isLoggedIn = true
+                    App.sharedPrefs.userId = userId
                     println("Login success")
                     DatabaseServices.getCustomerInfoRecord(userId, userModel) { dbSuccess ->
                         
@@ -239,13 +236,22 @@ class LoginActivity : AppCompatActivity() {
         forgotPassword.isEnabled = !enabled
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        val user = mAuth.currentUserā
-//        if(user != null){
-//            updateUI()
-//        }
-//    }
+    override fun onStart() {
+        super.onStart()
+
+        if(App.sharedPrefs.isLoggedIn) {
+            if (App.sharedPrefs.userId != null) {
+                DatabaseServices.getCustomerInfoRecord(
+                    App.sharedPrefs.userId.toString(),
+                    userModel
+                ) { dbSuccess ->
+                    if (dbSuccess) {
+                        loadHomePage()
+                    }
+                }
+            }
+        }
+    }
 
 //    override fun onBackPressed() {
 //        super.onBackPressed()

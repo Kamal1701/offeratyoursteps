@@ -30,6 +30,8 @@ import com.example.offersatyoursteps.utilities.EXTRA_PRODUCT
 import com.example.offersatyoursteps.utilities.FIREBASE_IMAGE_LOCATION
 import com.example.offersatyoursteps.utilities.PRODUCT_INFO_TABLE
 import com.example.offersatyoursteps.utilities.USER_INFO
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
@@ -157,7 +159,11 @@ class EditOfferPageFragment : Fragment() {
         
         
         offerStartDate.setOnClickListener {
+            val yesterday = Calendar.getInstance().timeInMillis-86400000
             val builder = MaterialDatePicker.Builder.datePicker()
+                .setCalendarConstraints(
+                    CalendarConstraints.Builder()
+                        .setValidator(DateValidatorPointForward.from(yesterday)).build())
             val datePicker = builder.build()
             
             datePicker.addOnPositiveButtonClickListener {
@@ -180,7 +186,11 @@ class EditOfferPageFragment : Fragment() {
         }
         
         offerEndDate.setOnClickListener {
+            val yesterday = Calendar.getInstance().timeInMillis-86400000
             val builder = MaterialDatePicker.Builder.datePicker()
+                .setCalendarConstraints(
+                    CalendarConstraints.Builder()
+                        .setValidator(DateValidatorPointForward.from(yesterday)).build())
             val datePicker = builder.build()
             
             datePicker.addOnPositiveButtonClickListener {
@@ -195,9 +205,7 @@ class EditOfferPageFragment : Fragment() {
         
         
         updateProductBtn.setOnClickListener {
-            progressBar.visibility = View.VISIBLE
-            updateProductBtn.visibility = View.INVISIBLE
-            deleteProductBtn.visibility = View.INVISIBLE
+            enableSpinner(true)
             
             val prodImage = productImage.tag.toString()
             val prodName = productName.text.toString()
@@ -259,18 +267,14 @@ class EditOfferPageFragment : Fragment() {
                                                 "Offer Product updated successfully",
                                                 Toast.LENGTH_LONG
                                             ).show()
-                                            progressBar.visibility = View.INVISIBLE
-                                            updateProductBtn.visibility = View.VISIBLE
-                                            deleteProductBtn.visibility = View.VISIBLE
+                                            enableSpinner(false)
                                         } else {
                                             Toast.makeText(
                                                 activity,
                                                 "Unable to update product now, please try again later",
                                                 Toast.LENGTH_LONG
                                             ).show()
-                                            progressBar.visibility = View.INVISIBLE
-                                            updateProductBtn.visibility = View.VISIBLE
-                                            deleteProductBtn.visibility = View.VISIBLE
+                                            enableSpinner(false)
                                         }
                                     }
                                 }
@@ -287,25 +291,20 @@ class EditOfferPageFragment : Fragment() {
                                 "Offer Product updated successfully",
                                 Toast.LENGTH_LONG
                             ).show()
-                            progressBar.visibility = View.INVISIBLE
-                            updateProductBtn.visibility = View.VISIBLE
-                            deleteProductBtn.visibility = View.VISIBLE
+                            enableSpinner(false)
                         } else {
                             Toast.makeText(
                                 activity,
                                 "Unable to update product now, please try again later",
                                 Toast.LENGTH_LONG
                             ).show()
-                            progressBar.visibility = View.INVISIBLE
-                            updateProductBtn.visibility = View.VISIBLE
-                            deleteProductBtn.visibility = View.VISIBLE
+                            enableSpinner(false)
+
                         }
                     }
                 }
             } else {
-                progressBar.visibility = View.INVISIBLE
-                updateProductBtn.visibility = View.VISIBLE
-                deleteProductBtn.visibility = View.VISIBLE
+                enableSpinner(false)
                 Toast.makeText(activity, "Please update the missing fields", Toast.LENGTH_LONG)
                     .show()
             }
