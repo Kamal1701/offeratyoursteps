@@ -25,6 +25,7 @@ class OfferAdapter(
         private var actPrice = binding.offerActualPrice
         private var discPrice = binding.offerDiscountPrice
         private var discPercentage = binding.offerSavePercentage
+        private var offerEndDate = binding.offerEndDt
         
         fun bindingOffers(context : Context, offerDetails : OfferProductDetails) {
             
@@ -34,6 +35,8 @@ class OfferAdapter(
             actPrice.paintFlags = STRIKE_THRU_TEXT_FLAG
             "$RUPEE_SYMBOL ${offerDetails.productDiscountPrice}".also { discPrice.text =  it }
             offerDetails.productDiscountPercentage.also { discPercentage.text = it }
+    
+            offerEndDate.text = offerDetails.productOfferEdDate
             
             offerImage.setOnClickListener { prodItemClick(offerDetails) }
             

@@ -181,15 +181,10 @@ object DatabaseServices {
         location : String,
         complete : (Boolean) -> Unit
     ) {
-        val currentDate = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-        val formattedDate = currentDate.format(formatter)
-        println(formattedDate)
+ 
         val parentCollectionRef = fStore.collection(PRODUCT_INFO_TABLE)
         GlobalScope.launch(Dispatchers.IO) {
             parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
-                println("parentcollect is empty")
-                println(parentCollectionSnapshot.isEmpty)
                 if (!parentCollectionSnapshot.isEmpty) {
                     for (parentDoc in parentCollectionSnapshot.documents) {
                         val subcollectionRef : Query =
@@ -199,21 +194,8 @@ object DatabaseServices {
                             .get().addOnSuccessListener { querySnapshot ->
                                 if (!querySnapshot.isEmpty) {
                                     for ((prodCount, doc) in querySnapshot.withIndex()) {
-//                                        if (doc.data["Location"].toString() == location) {
-                                        
                                         val endDateString = doc.getString("productOfferEdDate")
                                         if (endDateString != null) {
-//                                            val dateFormatter =
-//                                                DateTimeFormatter.ofPattern("dd/MM/yyyy")
-//                                            val offerEndDt : LocalDate =
-//                                                LocalDate.parse(endDateString, dateFormatter)
-//                                            val currentDate : LocalDate = LocalDate.now()
-//                                            val compareDate : Int =
-//                                                offerEndDt.compareTo(currentDate)
-//                                            println(offerEndDt)
-//                                            println(currentDate)
-//                                            println(compareDate)
-                                            
                                             if (isOfferActive(endDateString)) {
                                                 productList.add(
                                                     prodCount,
@@ -221,7 +203,6 @@ object DatabaseServices {
                                                 )
                                             }
                                         }
-//                                        }
                                     }
                                     complete(true)
                                 } else {
@@ -241,7 +222,6 @@ object DatabaseServices {
                 complete(false)
             }
         }
-        
     }
     
     @RequiresApi(Build.VERSION_CODES.O)
@@ -272,11 +252,6 @@ object DatabaseServices {
                                                 )
                                             }
                                         }
-
-//                                        productList.add(
-//                                            prodCount,
-//                                            OfferProductDetails.fromQuerySnapshot(doc)
-//                                        )
                                     }
                                     complete(true)
                                 } else {
@@ -346,7 +321,7 @@ object DatabaseServices {
         println(offerEndDt)
         println(currentDate)
         println(compareDate)
-    
+        
         return compareDate >= 0
     }
 }

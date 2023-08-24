@@ -11,12 +11,12 @@
         android:id="@+id/productDetailImg"
         android:layout_width="170dp"
         android:layout_height="170dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         tools:src="@tools:sample/avatars" />
 
     <TextView
@@ -75,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
-        android:background="#9C27B0"
+        android:background="@color/appColor"
         android:text="00%"
         android:textStyle="bold"
         android:textColor="@color/white"
@@ -115,7 +115,8 @@
         android:id="@+id/prodDetailOfferEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="9dp"
+        android:background="@color/edittextcolor"
         android:text="21/08/2023"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -129,7 +130,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="192dp" />
+        app:layout_constraintGuide_begin="188dp" />
 
 
     <TextView
@@ -141,7 +142,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintHorizontal_bias="0.197"
+        app:layout_constraintHorizontal_bias="0.19"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productDetailImg" />
 
