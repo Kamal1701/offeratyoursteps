@@ -20,11 +20,12 @@ class OfferAdapter(
         val binding : OfferListViewBinding,
         val prodItemClick : (OfferProductDetails) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
-        var offerImage = binding.offerProductImg
-        var prodName = binding.offerProductName
+        private var offerImage = binding.offerProductImg
+        private var prodName = binding.offerProductName
         private var actPrice = binding.offerActualPrice
         private var discPrice = binding.offerDiscountPrice
         private var discPercentage = binding.offerSavePercentage
+        private var lastDate = binding.LastDate
         private var offerEndDate = binding.offerEndDt
         
         fun bindingOffers(context : Context, offerDetails : OfferProductDetails) {
@@ -39,6 +40,12 @@ class OfferAdapter(
             offerEndDate.text = offerDetails.productOfferEdDate
             
             offerImage.setOnClickListener { prodItemClick(offerDetails) }
+            prodName.setOnClickListener { prodItemClick(offerDetails) }
+            actPrice.setOnClickListener { prodItemClick(offerDetails) }
+            discPrice.setOnClickListener { prodItemClick(offerDetails) }
+            discPercentage.setOnClickListener { prodItemClick(offerDetails) }
+            lastDate.setOnClickListener { prodItemClick(offerDetails) }
+            offerEndDate.setOnClickListener { prodItemClick(offerDetails) }
             
         }
     }

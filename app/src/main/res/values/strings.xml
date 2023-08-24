@@ -21,6 +21,12 @@
     <string name="menu_theme">Theme</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="last_date">Last Date:</string>
+    <string name="discount_percentage">10%</string>
+    <string name="offer_price">Offer Price</string>
+    <string name="actual_price">Actual Price</string>
+    <string name="product_name">Product Name</string>
+    <string name="offer_end_date">offer end date</string>
 
 
     <string-array name="CityList">

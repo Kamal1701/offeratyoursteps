@@ -3,19 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="3dp"
+    android:padding="2dp"
+    android:background="@drawable/recycle_border_layout">
 
     <ImageView
         android:id="@+id/offerProductImg"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:scaleType="centerCrop"
-        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@drawable/phone" />
@@ -24,11 +23,11 @@
         android:id="@+id/offerProductName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Product Name"
-        android:textSize="18sp"
+        android:hint="@string/product_name"
+        android:textSize="16sp"
         android:textStyle="bold"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/offerProductImg" />
 
@@ -36,67 +35,69 @@
         android:id="@+id/offerActualPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="8dp"
-        android:text="Actual Price"
-        android:textSize="18sp"
+        android:hint="@string/actual_price"
+        android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/offerProductName"
-        app:layout_constraintTop_toBottomOf="@+id/offerProductName"
-        app:layout_constraintVertical_bias="0" />
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/offerProductName" />
 
     <TextView
         android:id="@+id/offerDiscountPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Offer Price"
-        android:textSize="18sp"
+        android:hint="@string/offer_price"
+        android:layout_marginTop="4dp"
+        android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/offerActualPrice"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.55"
-        app:layout_constraintStart_toEndOf="@+id/offerActualPrice" />
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/offerSavePercentage" />
 
     <TextView
         android:id="@+id/offerSavePercentage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:background="@color/appColor"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:text="10%"
+        android:hint="@string/discount_percentage"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.27"
-        app:layout_constraintStart_toEndOf="@+id/offerProductName"
-        app:layout_constraintTop_toTopOf="@+id/offerProductName" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/offerProductImg" />
 
     <TextView
         android:id="@+id/LastDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="50dp"
-        android:text="Last Date: "
-        android:textSize="18sp"
+        android:text="@string/last_date"
+        android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/offerActualPrice"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/offerActualPrice" />
+        app:layout_constraintStart_toStartOf="@+id/offerActualPrice"
+        app:layout_constraintTop_toBottomOf="@+id/offerActualPrice"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/offerEndDt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="offer end date"
-        android:textSize="18sp"
+        android:layout_marginTop="4dp"
+        android:hint="@string/offer_end_date"
+        android:textColor="@color/appColor"
+        android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
-        android:background="@color/edittextcolor"
-        app:layout_constraintStart_toStartOf="@+id/offerDiscountPrice"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/offerActualPrice" />
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/offerDiscountPrice" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="91dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
