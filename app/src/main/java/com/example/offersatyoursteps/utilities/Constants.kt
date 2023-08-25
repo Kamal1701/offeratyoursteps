@@ -23,3 +23,6 @@ const val PRODUCT_INFO_SUB_COLLECTION_TABLE = "OfferProductDetails"
 const val RUPEE_SYMBOL = "\u20B9"
 
 const val SPAN_COUNT = 2
+
+const val PUSH_CHANNEL_ID = "notification_channel"
+const val PUSH_CHANNEL_NAME = "com.example.offersatyoursteps"
