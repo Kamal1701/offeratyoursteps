@@ -37,6 +37,11 @@ class OfferNearMeFragment : Fragment() {
     
     private lateinit var backPressedCallback : OnBackPressedCallback
     
+    override fun onSaveInstanceState(outState : Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(USER_INFO, userModel)
+    }
+    
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -128,6 +133,12 @@ class OfferNearMeFragment : Fragment() {
         )
     }
     
+    override fun onViewStateRestored(savedInstanceState : Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if(savedInstanceState != null) {
+            userModel = savedInstanceState.getParcelable(USER_INFO)!!
+        }
+    }
     
     override fun onResume() {
         super.onResume()
