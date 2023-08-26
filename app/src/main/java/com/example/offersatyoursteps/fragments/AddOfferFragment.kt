@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -49,11 +50,12 @@ class AddOfferFragment : Fragment() {
     // TODO: Rename and change types of parameters
     
     private lateinit var binding : FragmentAddOfferBinding
-    private var userModel = UserModel("", "", "", "", "", "","", "","")
+    private var userModel = UserModel("", "", "", "", "", "", "", "", "")
     private lateinit var offerProduct : OfferProductDetails
     private lateinit var backPressedCallback : OnBackPressedCallback
     
     private lateinit var productImage : ImageView
+    private lateinit var noProductImage : CheckBox
     private lateinit var productName : EditText
     private lateinit var productBrand : EditText
     private lateinit var productCategory : EditText
@@ -68,6 +70,7 @@ class AddOfferFragment : Fragment() {
     private lateinit var addProductBtn : Button
     private lateinit var cancelProductBtn : Button
     private lateinit var progressBar : ProgressBar
+    private var isImageAvail : Boolean = false
     
     private lateinit var mAuth : FirebaseAuth
     
@@ -98,6 +101,7 @@ class AddOfferFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         productImage = binding.addProductImage
+        noProductImage = binding.noProductImage
         productName = binding.addProductTitleTxt
         productBrand = binding.addProductBrandTxt
         productCategory = binding.addProductCategoryTxt
@@ -125,27 +129,56 @@ class AddOfferFragment : Fragment() {
                 uri = data?.data!!
                 productImage.setImageURI(uri)
                 productImage.tag = "image_added"
+                isImageAvail = true
             } else {
                 productImage.tag = ""
             }
         }
         
         productImage.setOnClickListener {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                type = "image/*"
+            
+            if (!noProductImage.isChecked) {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                    type = "image/*"
+                }
+                imagePickerLauncher.launch(intent)
+            } else {
+                Toast.makeText(activity, "Please deselect the no product image", Toast.LENGTH_LONG)
+                    .show()
             }
-            imagePickerLauncher.launch(intent)
+        }
+        
+        
+        noProductImage.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                val resourceId = resources.getIdentifier(
+                    "no_image_availablev1",
+                    "drawable",
+                    requireActivity().packageName
+                )
+                binding.addProductImage.setImageResource(resourceId)
+            } else {
+                val resourceId = resources.getIdentifier(
+                    "upload_image",
+                    "drawable",
+                    requireActivity().packageName
+                )
+                binding.addProductImage.setImageResource(resourceId)
+                isImageAvail = false
+            }
+            
         }
         
         offerStartDate.setOnClickListener {
-      
-            val yesterday = Calendar.getInstance().timeInMillis-86400000
+            
+            val yesterday = Calendar.getInstance().timeInMillis - 86400000
 //            val constraintBuilder = CalendarConstraints.Builder()
 //                .setValidator(PastDateValidator())
             val builder = MaterialDatePicker.Builder.datePicker()
                 .setCalendarConstraints(
                     CalendarConstraints.Builder()
-                    .setValidator(DateValidatorPointForward.from(yesterday)).build())
+                        .setValidator(DateValidatorPointForward.from(yesterday)).build()
+                )
             //                .setCalendarConstraints(constraintBuilder.build())
             val datePicker = builder.build()
             
@@ -159,17 +192,23 @@ class AddOfferFragment : Fragment() {
             }
             datePicker.show(requireActivity().supportFragmentManager, "date-picker")
             
-            if(productActualPrice.text.toString().isNotEmpty() && productActualPrice.text.toString().isNotEmpty()){
-                productDiscountPercentage.text = calculatePercentate(productActualPrice.text.toString(), productDiscountPrice.text.toString())
+            if (productActualPrice.text.toString()
+                    .isNotEmpty() && productActualPrice.text.toString().isNotEmpty()
+            ) {
+                productDiscountPercentage.text = calculatePercentate(
+                    productActualPrice.text.toString(),
+                    productDiscountPrice.text.toString()
+                )
             }
         }
         
         offerEndDate.setOnClickListener {
-            val yesterday = Calendar.getInstance().timeInMillis-86400000
+            val yesterday = Calendar.getInstance().timeInMillis - 86400000
             val builder = MaterialDatePicker.Builder.datePicker()
                 .setCalendarConstraints(
                     CalendarConstraints.Builder()
-                        .setValidator(DateValidatorPointForward.from(yesterday)).build())
+                        .setValidator(DateValidatorPointForward.from(yesterday)).build()
+                )
             val datePicker = builder.build()
             
             datePicker.addOnPositiveButtonClickListener {
@@ -190,6 +229,7 @@ class AddOfferFragment : Fragment() {
             enableSpinner(true)
             
             val prodImage = productImage.tag.toString()
+            val noProdImage = isImageAvail
             val prodName = productName.text.toString()
             val prodBrand = productBrand.text.toString()
             val prodCategory = productCategory.text.toString()
@@ -205,68 +245,121 @@ class AddOfferFragment : Fragment() {
             Log.d("DEBUG", "AddOfferFragment")
             Log.d("DEBUG", productImage.tag.toString())
             
-            if (prodImage == "image_added" && prodName.isNotEmpty() && prodBrand.isNotEmpty() && prodCategory.isNotEmpty()
+            if (prodName.isNotEmpty() && prodBrand.isNotEmpty() && prodCategory.isNotEmpty()
                 && prodSubcategory.isNotEmpty() && prodActualPrice.isNotEmpty() && prodDiscountPrice.isNotEmpty()
                 && ofrStartDate.isNotEmpty() && ofrEndDate.isNotEmpty() && prodWeight.isNotEmpty()
                 && prodDesc.isNotEmpty()
             ) {
-                
-                storageRef.getReference(FIREBASE_IMAGE_LOCATION)
-                    .child(System.currentTimeMillis().toString())
-                    .putFile(uri)
-                    .addOnSuccessListener { task ->
-                        task.metadata!!.reference!!.downloadUrl
-                            .addOnSuccessListener {
-                                Log.d("DEBUG", "Image upload")
-
-                                offerProduct = OfferProductDetails("",
-                                    it.toString(),
-                                    prodName,
-                                    prodBrand,
-                                    prodCategory,
-                                    prodSubcategory,
-                                    prodActualPrice,
-                                    prodDiscountPrice,
-                                    ofrStartDate,
-                                    ofrEndDate,
-                                    prodDiscountPerc,
-                                    prodWeight,
-                                    prodDesc,
-                                    userModel.customerShopName.toString(),
-                                    userModel.customerStreetName.toString(),
-                                    userModel.customerCity.toString(),
-                                    userModel.customerDistrict.toString(),
-                                    userModel.customerState.toString(),
-                                    userModel.customerPincode.toString()
+                if (prodImage == "image_added" && isImageAvail) {
+                    storageRef.getReference(FIREBASE_IMAGE_LOCATION)
+                        .child(System.currentTimeMillis().toString())
+                        .putFile(uri)
+                        .addOnSuccessListener { task ->
+                            task.metadata!!.reference!!.downloadUrl
+                                .addOnSuccessListener {
+                                    Log.d("DEBUG", "Image upload")
+                                    
+                                    offerProduct = OfferProductDetails(
+                                        "",
+                                        it.toString(),
+                                        noProdImage,
+                                        prodName,
+                                        prodBrand,
+                                        prodCategory,
+                                        prodSubcategory,
+                                        prodActualPrice,
+                                        prodDiscountPrice,
+                                        ofrStartDate,
+                                        ofrEndDate,
+                                        prodDiscountPerc,
+                                        prodWeight,
+                                        prodDesc,
+                                        userModel.customerShopName.toString(),
+                                        userModel.customerStreetName.toString(),
+                                        userModel.customerCity.toString(),
+                                        userModel.customerDistrict.toString(),
+                                        userModel.customerState.toString(),
+                                        userModel.customerPincode.toString()
                                     )
-                                val userId = mAuth.currentUser!!.uid
-                                DatabaseServices.createProductDetailsRecord(
-                                    userId,
-                                    offerProduct
-                                ) { isProdCreateComplete ->
-                                    if (isProdCreateComplete) {
-                                        Toast.makeText(
-                                            activity,
-                                            "Offer Product added successfully",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                        progressBar.visibility = View.INVISIBLE
-                                        addProductBtn.visibility = View.VISIBLE
-                                        cancelProductBtn.visibility = View.VISIBLE
-                                        clearProducts()
-                                        
-                                    } else {
-                                        Toast.makeText(
-                                            activity,
-                                            "Unable to add product now, please try again",
-                                            Toast.LENGTH_LONG
-                                        ).show()
+                                    val userId = mAuth.currentUser!!.uid
+                                    DatabaseServices.createProductDetailsRecord(
+                                        userId,
+                                        offerProduct
+                                    ) { isProdCreateComplete ->
+                                        if (isProdCreateComplete) {
+                                            Toast.makeText(
+                                                activity,
+                                                "Offer Product added successfully",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                            progressBar.visibility = View.INVISIBLE
+                                            addProductBtn.visibility = View.VISIBLE
+                                            cancelProductBtn.visibility = View.VISIBLE
+                                            clearProducts()
+                                            
+                                        } else {
+                                            Toast.makeText(
+                                                activity,
+                                                "Unable to add product now, please try again",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        }
                                     }
                                 }
-                            }
-                        
+                        }
+                } else if (noProductImage.isChecked) {
+                    offerProduct = OfferProductDetails(
+                        "",
+                        "",
+                        noProdImage,
+                        prodName,
+                        prodBrand,
+                        prodCategory,
+                        prodSubcategory,
+                        prodActualPrice,
+                        prodDiscountPrice,
+                        ofrStartDate,
+                        ofrEndDate,
+                        prodDiscountPerc,
+                        prodWeight,
+                        prodDesc,
+                        userModel.customerShopName.toString(),
+                        userModel.customerStreetName.toString(),
+                        userModel.customerCity.toString(),
+                        userModel.customerDistrict.toString(),
+                        userModel.customerState.toString(),
+                        userModel.customerPincode.toString()
+                    )
+                    val userId = mAuth.currentUser!!.uid
+                    DatabaseServices.createProductDetailsRecord(
+                        userId,
+                        offerProduct
+                    ) { isProdCreateComplete ->
+                        if (isProdCreateComplete) {
+                            Toast.makeText(
+                                activity,
+                                "Offer Product added successfully",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            progressBar.visibility = View.INVISIBLE
+                            addProductBtn.visibility = View.VISIBLE
+                            cancelProductBtn.visibility = View.VISIBLE
+                            clearProducts()
+                            
+                        } else {
+                            Toast.makeText(
+                                activity,
+                                "Unable to add product now, please try again",
+                                Toast.LENGTH_LONG
+                            ).show()
+                           
+                        }
+                        enableSpinner(false)
                     }
-                
+                } else {
+                    enableSpinner(false)
+                    Toast.makeText(activity, "Please upload the product image", Toast.LENGTH_LONG).show()
+                }
             } else {
                 enableSpinner(false)
 //                progressBar.visibility = View.INVISIBLE
@@ -296,7 +389,8 @@ class AddOfferFragment : Fragment() {
     
     private fun clearProducts() {
         productImage.tag = ""
-        productImage.setImageResource(R.drawable.baseline_image_search_24)
+        productImage.setImageResource(R.drawable.upload_image)
+        noProductImage.isChecked = false
         productName.text.clear()
         productBrand.text.clear()
         productCategory.text.clear()
@@ -325,7 +419,7 @@ class AddOfferFragment : Fragment() {
         backPressedCallback.remove()
     }
     
-    private fun calculatePercentate(actPrice : String, discPric: String) : String{
+    private fun calculatePercentate(actPrice : String, discPric : String) : String {
         val actualPrice : Float = actPrice.toFloat()
         val discountPrice : Float = discPric.toFloat()
         val discPercentage : Int =
@@ -334,10 +428,10 @@ class AddOfferFragment : Fragment() {
         
     }
     
-    private fun enableSpinner(enabled:Boolean){
-        if(enabled){
+    private fun enableSpinner(enabled : Boolean) {
+        if (enabled) {
             progressBar.visibility = View.VISIBLE
-        } else{
+        } else {
             progressBar.visibility = View.INVISIBLE
         }
         

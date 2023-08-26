@@ -30,7 +30,12 @@ class OfferAdapter(
         
         fun bindingOffers(context : Context, offerDetails : OfferProductDetails) {
             
-            Glide.with(context).load(offerDetails.productImgName).into(offerImage)
+            if(offerDetails.isImageAvailable) {
+                Glide.with(context).load(offerDetails.productImgName).into(offerImage)
+            } else{
+                val resourceId = context.resources.getIdentifier("no_image_availablev1", "drawable", context.packageName)
+                offerImage.setImageResource(resourceId)
+            }
             prodName.text = offerDetails.productName
             "$RUPEE_SYMBOL ${offerDetails.productActualPrice}".also { actPrice.text =  it }
             actPrice.paintFlags = STRIKE_THRU_TEXT_FLAG

@@ -1,7 +1,9 @@
 package com.example.offersatyoursteps.models
 
+import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.annotation.RequiresApi
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import java.util.Date
 
@@ -9,6 +11,7 @@ import java.util.Date
 data class OfferProductDetails(
     var docId : String,
     var productImgName : String,
+    var isImageAvailable : Boolean,
     var productName : String,
     var productBrandName : String,
     var productCategory : String,
@@ -31,6 +34,7 @@ data class OfferProductDetails(
     constructor(parcel : Parcel) : this(
         parcel.readString().toString(),
         parcel.readString().toString(),
+        parcel.readString().toBoolean(),
         parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readString().toString(),
@@ -52,9 +56,11 @@ data class OfferProductDetails(
     }
     
     
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun writeToParcel(parcel : Parcel, flags : Int) {
         parcel.writeString(docId)
         parcel.writeString(productImgName)
+        parcel.writeBoolean(isImageAvailable)
         parcel.writeString(productName)
         parcel.writeString(productBrandName)
         parcel.writeString(productCategory)
@@ -93,6 +99,8 @@ data class OfferProductDetails(
             return OfferProductDetails(
                 subDocSnapshot.data["docId"].toString(),
                 subDocSnapshot.data["productImgName"].toString(),
+                subDocSnapshot.getBoolean("isImageAvailable")?:false,
+//                subDocSnapshot.data["isImageAvailable"].toString(),
                 subDocSnapshot.data["productName"].toString(),
                 subDocSnapshot.data["productBrandName"].toString(),
                 subDocSnapshot.data["productCategory"].toString(),

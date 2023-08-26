@@ -86,9 +86,14 @@ class ProductDetailsFragment : Fragment() {
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        Glide.with(this)
-            .load(offerProductDetails.productImgName)
-            .into(prodImage)
+        if(offerProductDetails.isImageAvailable) {
+            Glide.with(this)
+                .load(offerProductDetails.productImgName)
+                .into(prodImage)
+        } else{
+            val resourceId = resources.getIdentifier("no_image_availablev1", "drawable", requireActivity().packageName)
+            prodImage.setImageResource(resourceId)
+        }
         
         brandName.text = offerProductDetails.productBrandName
         prodName.text = offerProductDetails.productName

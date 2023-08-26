@@ -25,8 +25,14 @@ class EditOfferAdapter(val context : Context,
         var editOfferStartDt = binding.editOfferStartDate
         var editOfferEndDt = binding.editOfferEndDate
         fun bindingOffers(context : Context, offerDetails : OfferProductDetails) {
-           
-            Glide.with(context).load(offerDetails.productImgName).into(editImage)
+    
+            if(offerDetails.isImageAvailable) {
+    
+                Glide.with(context).load(offerDetails.productImgName).into(editImage)
+            } else{
+                val resourceId = context.resources.getIdentifier("no_image_availablev1", "drawable", context.packageName)
+                editImage.setImageResource(resourceId)
+            }
             editProdName.text = offerDetails.productName
             editBrandName.text = offerDetails.productBrandName
             "$RUPEE_SYMBOL ${offerDetails.productActualPrice}".also { editActualPrice.text =  it }

@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -50,6 +51,7 @@ class EditOfferPageFragment : Fragment() {
     private lateinit var backPressedCallback : OnBackPressedCallback
     
     private lateinit var productImage : ImageView
+    private lateinit var noProductImage : CheckBox
     private lateinit var productName : EditText
     private lateinit var productBrand : EditText
     private lateinit var productCategory : EditText
@@ -64,6 +66,8 @@ class EditOfferPageFragment : Fragment() {
     private lateinit var updateProductBtn : Button
     private lateinit var deleteProductBtn : Button
     private lateinit var progressBar : ProgressBar
+    
+    private var isImageAvail : Boolean = false
     
     private lateinit var mAuth : FirebaseAuth
     
@@ -98,6 +102,7 @@ class EditOfferPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         productImage = binding.editProductImage
+        noProductImage = binding.editNoProductImage
         productName = binding.editProductTitleTxt
         productBrand = binding.editProductBrandTxt
         productCategory = binding.editProductCategoryTxt
@@ -129,19 +134,57 @@ class EditOfferPageFragment : Fragment() {
                 uri = data?.data!!
                 productImage.setImageURI(uri)
                 productImage.tag = "image_changed"
-
+                isImageAvail = true
+                
             } else {
                 productImage.tag = ""
+                if (!offerProductDetails.isImageAvailable) {
+                    noProductImage.isChecked = true
+                }
             }
         }
         
         productImage.setOnClickListener {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                type = "image/*"
+            if (!noProductImage.isChecked) {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                    type = "image/*"
+                }
+                imagePickerLauncher.launch(intent)
+            } else {
+                Toast.makeText(activity, "Please deselect the no product image", Toast.LENGTH_LONG)
+                    .show()
             }
-            imagePickerLauncher.launch(intent)
         }
         
+        noProductImage.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                val resourceId = resources.getIdentifier(
+                    "no_image_availablev1",
+                    "drawable",
+                    requireActivity().packageName
+                )
+                binding.editProductImage.setImageResource(resourceId)
+            } else {
+                if (offerProductDetails.isImageAvailable) {
+                    Glide.with(this)
+                        .load(offerProductDetails.productImgName)
+                        .into(productImage)
+                    isImageAvail = true
+                    
+                } else {
+                    val resourceId = resources.getIdentifier(
+                        "no_image_availablev1",
+                        "drawable",
+                        requireActivity().packageName
+                    )
+                    binding.editProductImage.setImageResource(resourceId)
+                    println("no image set")
+                    isImageAvail = false
+                }
+            }
+            
+        }
+
 //        productDiscountPrice.setOnFocusChangeListener { _, hasFocus ->
 //            if(!hasFocus){
 //                if (productActualPrice.text.toString()
@@ -157,13 +200,13 @@ class EditOfferPageFragment : Fragment() {
 //            }
 //        }
         
-        
         offerStartDate.setOnClickListener {
-            val yesterday = Calendar.getInstance().timeInMillis-86400000
+            val yesterday = Calendar.getInstance().timeInMillis - 86400000
             val builder = MaterialDatePicker.Builder.datePicker()
                 .setCalendarConstraints(
                     CalendarConstraints.Builder()
-                        .setValidator(DateValidatorPointForward.from(yesterday)).build())
+                        .setValidator(DateValidatorPointForward.from(yesterday)).build()
+                )
             val datePicker = builder.build()
             
             datePicker.addOnPositiveButtonClickListener {
@@ -186,11 +229,12 @@ class EditOfferPageFragment : Fragment() {
         }
         
         offerEndDate.setOnClickListener {
-            val yesterday = Calendar.getInstance().timeInMillis-86400000
+            val yesterday = Calendar.getInstance().timeInMillis - 86400000
             val builder = MaterialDatePicker.Builder.datePicker()
                 .setCalendarConstraints(
                     CalendarConstraints.Builder()
-                        .setValidator(DateValidatorPointForward.from(yesterday)).build())
+                        .setValidator(DateValidatorPointForward.from(yesterday)).build()
+                )
             val datePicker = builder.build()
             
             datePicker.addOnPositiveButtonClickListener {
@@ -208,6 +252,7 @@ class EditOfferPageFragment : Fragment() {
             enableSpinner(true)
             
             val prodImage = productImage.tag.toString()
+            val noProdImage = isImageAvail
             val prodName = productName.text.toString()
             val prodBrand = productBrand.text.toString()
             val prodCategory = productCategory.text.toString()
@@ -230,8 +275,9 @@ class EditOfferPageFragment : Fragment() {
                 && prodDesc.isNotEmpty()
             ) {
                 
-                val prodMap = HashMap<String, String>()
+                val prodMap = HashMap<String, Any>()
                 prodMap["docId"] = offerProductDetails.docId
+                prodMap["isImageAvailable"] = noProdImage
                 prodMap["productName"] = prodName
                 prodMap["productBrandName"] = prodBrand
                 prodMap["productCategory"] = prodCategory
@@ -243,7 +289,7 @@ class EditOfferPageFragment : Fragment() {
                 prodMap["productOfferEdDate"] = ofrEndDate
                 prodMap["productWeight"] = prodWeight
                 prodMap["productDesc"] = prodDesc
-    
+                
                 val userId = mAuth.currentUser!!.uid
                 
                 if (prodImage == "image_changed") {
@@ -256,7 +302,7 @@ class EditOfferPageFragment : Fragment() {
                                     println("Image upload")
                                     println(it.toString())
                                     prodMap["productImgName"] = it.toString()
-    
+                                    
                                     DatabaseServices.updateProductDetailsRecord(
                                         userId,
                                         prodMap
@@ -268,6 +314,10 @@ class EditOfferPageFragment : Fragment() {
                                                 Toast.LENGTH_LONG
                                             ).show()
                                             enableSpinner(false)
+                                            requireActivity().supportFragmentManager.popBackStack(
+                                                "EditOffer",
+                                                0
+                                            )
                                         } else {
                                             Toast.makeText(
                                                 activity,
@@ -279,8 +329,8 @@ class EditOfferPageFragment : Fragment() {
                                     }
                                 }
                         }
-                }
-                else {
+                } else if (noProductImage.isChecked) {
+                    prodMap["productImgName"] = ""
                     DatabaseServices.updateProductDetailsRecord(
                         userId,
                         prodMap
@@ -291,17 +341,51 @@ class EditOfferPageFragment : Fragment() {
                                 "Offer Product updated successfully",
                                 Toast.LENGTH_LONG
                             ).show()
-                            enableSpinner(false)
+//                            enableSpinner(false)
+//                            requireActivity().supportFragmentManager.popBackStack("EditOffer", 0)
                         } else {
                             Toast.makeText(
                                 activity,
                                 "Unable to update product now, please try again later",
                                 Toast.LENGTH_LONG
                             ).show()
-                            enableSpinner(false)
-
+//                            enableSpinner(false)
+//                            requireActivity().supportFragmentManager.popBackStack("EditOffer", 0)
+                        
                         }
+                        enableSpinner(false)
+                        requireActivity().supportFragmentManager.popBackStack("EditOffer", 0)
                     }
+                } else if (!noProductImage.isChecked && offerProductDetails.productImgName != "") {
+                    prodMap["productImgName"] = offerProductDetails.productImgName
+                    prodMap["isImageAvailable"] = offerProductDetails.isImageAvailable
+                    DatabaseServices.updateProductDetailsRecord(
+                        userId,
+                        prodMap
+                    ) { isProdUpdateComplete ->
+                        if (isProdUpdateComplete) {
+                            Toast.makeText(
+                                activity,
+                                "Offer Product updated successfully",
+                                Toast.LENGTH_LONG
+                            ).show()
+//                            enableSpinner(false)
+                            requireActivity().supportFragmentManager.popBackStack("EditOffer", 0)
+                        } else {
+                            Toast.makeText(
+                                activity,
+                                "Unable to update product now, please try again later",
+                                Toast.LENGTH_LONG
+                            ).show()
+//                            enableSpinner(false)
+                        
+                        }
+                        enableSpinner(false)
+                    }
+                } else {
+                    enableSpinner(false)
+                    Toast.makeText(activity, "Please update the product image", Toast.LENGTH_LONG)
+                        .show()
                 }
             } else {
                 enableSpinner(false)
@@ -313,12 +397,19 @@ class EditOfferPageFragment : Fragment() {
         
         deleteProductBtn.setOnClickListener {
             val userId = FirebaseAuth.getInstance().currentUser!!.uid
-            DatabaseServices.deleteProductDetails(userId, offerProductDetails.docId.toString()){
-                isDeleteSuccess ->
+            DatabaseServices.deleteProductDetails(
+                userId,
+                offerProductDetails.docId.toString()
+            ) { isDeleteSuccess ->
                 if (isDeleteSuccess) {
-                    clearProducts()
-                } else{
-                    Toast.makeText(activity, "unable to delete the product now", Toast.LENGTH_LONG)
+//                    clearProducts()
+                    requireActivity().supportFragmentManager.popBackStack("EditOffer", 0)
+                } else {
+                    Toast.makeText(
+                        activity,
+                        "unable to delete the product now, please try later",
+                        Toast.LENGTH_LONG
+                    )
                         .show()
                 }
             }
@@ -339,7 +430,8 @@ class EditOfferPageFragment : Fragment() {
     
     private fun clearProducts() {
         productImage.tag = ""
-        productImage.setImageResource(R.drawable.baseline_image_search_24)
+        productImage.setImageResource(R.drawable.upload_image)
+        noProductImage.isChecked = false
         productName.text.clear()
         productBrand.text.clear()
         productCategory.text.clear()
@@ -354,10 +446,24 @@ class EditOfferPageFragment : Fragment() {
     }
     
     fun updateEditPageUI() {
-        Glide.with(this)
-            .load(offerProductDetails.productImgName)
-            .into(productImage)
         
+        println("updateEditPageUI")
+        println(offerProductDetails.isImageAvailable)
+        if (offerProductDetails.isImageAvailable) {
+            Glide.with(this)
+                .load(offerProductDetails.productImgName)
+                .into(productImage)
+        } else {
+            val resourceId = resources.getIdentifier(
+                "no_image_availablev1",
+                "drawable",
+                requireActivity().packageName
+            )
+            binding.editProductImage.setImageResource(resourceId)
+            println("no image set")
+        }
+        
+        noProductImage.isChecked = !offerProductDetails.isImageAvailable
         productName.setText(offerProductDetails.productName)
         productBrand.setText(offerProductDetails.productBrandName)
         productCategory.setText(offerProductDetails.productCategory)
@@ -393,10 +499,10 @@ class EditOfferPageFragment : Fragment() {
             }
     }
     
-    private fun enableSpinner(enabled:Boolean){
-        if(enabled){
+    private fun enableSpinner(enabled : Boolean) {
+        if (enabled) {
             progressBar.visibility = View.VISIBLE
-        } else{
+        } else {
             progressBar.visibility = View.INVISIBLE
         }
         

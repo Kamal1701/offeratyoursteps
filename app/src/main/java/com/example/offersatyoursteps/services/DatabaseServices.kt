@@ -142,7 +142,7 @@ object DatabaseServices {
     
     fun updateProductDetailsRecord(
         userId : String,
-        productMap : HashMap<String, String>,
+        productMap : HashMap<String, Any>,
         complete : (Boolean) -> Unit
     ) {
         
