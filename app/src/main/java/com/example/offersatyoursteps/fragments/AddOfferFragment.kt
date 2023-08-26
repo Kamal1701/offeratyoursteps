@@ -345,6 +345,7 @@ class AddOfferFragment : Fragment() {
                             addProductBtn.visibility = View.VISIBLE
                             cancelProductBtn.visibility = View.VISIBLE
                             clearProducts()
+                            enableSpinner(false)
                             
                         } else {
                             Toast.makeText(
@@ -352,9 +353,9 @@ class AddOfferFragment : Fragment() {
                                 "Unable to add product now, please try again",
                                 Toast.LENGTH_LONG
                             ).show()
-                           
+                            enableSpinner(false)
                         }
-                        enableSpinner(false)
+//                        enableSpinner(false)
                     }
                 } else {
                     enableSpinner(false)

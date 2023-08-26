@@ -8,12 +8,16 @@ import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.utilities.CUSTOMER_INFO_TABLE
 import com.example.offersatyoursteps.utilities.PRODUCT_INFO_SUB_COLLECTION_TABLE
 import com.example.offersatyoursteps.utilities.PRODUCT_INFO_TABLE
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.gson.Gson
+import com.google.type.DateTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.sql.Timestamp
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -36,6 +40,18 @@ object DatabaseServices {
         val userMap = gson.fromJson(custJson, Map::class.java) as Map<String, Any>
         
         fStore.collection(CUSTOMER_INFO_TABLE).document(userId).set(userMap)
+            .addOnSuccessListener {
+                complete(true)
+            }
+            .addOnFailureListener {
+                Log.d("DEBUG", it.localizedMessage)
+                complete(false)
+            }
+    
+        fStore.collection(CUSTOMER_INFO_TABLE)
+            .document(userId)
+            .update(mapOf("createTimeStamp" to FieldValue.serverTimestamp(),
+                "updateTimeStamp" to FieldValue.serverTimestamp()))
             .addOnSuccessListener {
                 complete(true)
             }
@@ -93,6 +109,17 @@ object DatabaseServices {
                 Log.d("DEBUG", it.localizedMessage)
                 complete(false)
             }
+    
+        fStore.collection(CUSTOMER_INFO_TABLE)
+            .document(userId)
+            .update(mapOf("updateTimeStamp" to FieldValue.serverTimestamp()))
+            .addOnSuccessListener {
+                complete(true)
+            }
+            .addOnFailureListener {
+                Log.d("DEBUG", it.localizedMessage)
+                complete(false)
+            }
     }
     
     fun createProductDetailsRecord(
@@ -103,7 +130,11 @@ object DatabaseServices {
         
         val gson = Gson()
         val offerJson = gson.toJson(offerProduct)
+        
         val productMap = gson.fromJson(offerJson, Map::class.java) as Map<String, Any>
+        
+        println("createproduct details")
+        println(productMap)
         
         fStore.collection(PRODUCT_INFO_TABLE)
             .document(userId).set(mapOf("_id" to userId))
@@ -130,7 +161,9 @@ object DatabaseServices {
             .document(userId)
             .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
             .document(subcollectionDocId)
-            .update(mapOf("docId" to subcollectionDocId))
+            .update(mapOf("docId" to subcollectionDocId,
+                "createTimeStamp" to FieldValue.serverTimestamp(),
+                "updateTimeStamp" to FieldValue.serverTimestamp()))
             .addOnSuccessListener {
                 complete(true)
             }
@@ -145,7 +178,8 @@ object DatabaseServices {
         productMap : HashMap<String, Any>,
         complete : (Boolean) -> Unit
     ) {
-        
+    
+        productMap["updateTimeStamp"] = FieldValue.serverTimestamp()
         fStore.collection(PRODUCT_INFO_TABLE)
             .document(userId)
             .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
@@ -187,19 +221,37 @@ object DatabaseServices {
             parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
                 if (!parentCollectionSnapshot.isEmpty) {
                     for (parentDoc in parentCollectionSnapshot.documents) {
-                        val subcollectionRef : Query =
+//                        val year = 2023
+//                        val month = 8
+//                        val day = 20
+//                        val hour = 12
+//                        val minute = 30
+//
+//                        val instant = Instant.ofEpochSecond(
+//                            LocalDateTime.of(year, month, day, hour, minute).toEpochSecond(java.time.ZoneOffset.UTC)
+//                        )
+//                        val minTimestamp = Timestamp.from(instant)
+                        val sortedSubcollectionRef : Query =
                             parentDoc.reference.collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
-                                .whereEqualTo("shopCity", location)
-                        subcollectionRef
+//                                .whereGreaterThan("timeStamp",minTimestamp).orderBy("timeStamp", Query.Direction.DESCENDING)
+                                .orderBy("updateTimeStamp", Query.Direction.DESCENDING)
+                                
+//                                .orderBy("shopCity")
+//                                .whereNotEqualTo("timeStamp",null)
+//                                .orderBy("timeStamp", Query.Direction.DESCENDING)
+    
+//                        val subcollectionRef : Query = sortedSubcollectionRef.whereEqualTo("shopCity", location)
+    
+                        sortedSubcollectionRef
                             .get().addOnSuccessListener { querySnapshot ->
+                                println(querySnapshot.isEmpty)
                                 if (!querySnapshot.isEmpty) {
                                     var prodCount = 0
                                     for (doc in querySnapshot) {
                                         val endDateString = doc.getString("productOfferEdDate")
-                                        println("Database services")
-                                        println(endDateString)
-                                        if (endDateString != null) {
-                                            if (isOfferActive(endDateString)) {
+                                        val shopLocation = doc.getString("shopCity")
+                                        if (endDateString != null && shopLocation != null) {
+                                            if (isOfferActive(endDateString) && shopLocation == location) {
                                                 productList.add(
                                                     prodCount,
                                                     OfferProductDetails.fromQuerySnapshot(doc)
@@ -241,7 +293,7 @@ object DatabaseServices {
                 if (!parentCollectionSnapshot.isEmpty) {
                     for (parentDoc in parentCollectionSnapshot.documents) {
                         val subcollectionRef =
-                            parentDoc.reference.collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
+                            parentDoc.reference.collection(PRODUCT_INFO_SUB_COLLECTION_TABLE).orderBy("updateTimeStamp", Query.Direction.DESCENDING)
                         subcollectionRef
                             .get().addOnSuccessListener { querySnapshot ->
                                 if (!querySnapshot.isEmpty) {
@@ -290,7 +342,7 @@ object DatabaseServices {
         GlobalScope.launch(Dispatchers.IO) {
             parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
                 val subcollectionRef : Query =
-                    parentCollectionSnapshot.reference.collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
+                    parentCollectionSnapshot.reference.collection(PRODUCT_INFO_SUB_COLLECTION_TABLE).orderBy("updateTimeStamp", Query.Direction.DESCENDING)
                 subcollectionRef
                     .get().addOnSuccessListener { querySnapshot ->
                         if (!querySnapshot.isEmpty) {
