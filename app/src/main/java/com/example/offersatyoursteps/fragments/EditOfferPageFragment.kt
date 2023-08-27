@@ -403,6 +403,12 @@ class EditOfferPageFragment : Fragment() {
             ) { isDeleteSuccess ->
                 if (isDeleteSuccess) {
 //                    clearProducts()
+                    Toast.makeText(
+                        activity,
+                        "Product deleted successfully",
+                        Toast.LENGTH_LONG
+                    )
+                        .show()
                     requireActivity().supportFragmentManager.popBackStack("EditOffer", 0)
                 } else {
                     Toast.makeText(

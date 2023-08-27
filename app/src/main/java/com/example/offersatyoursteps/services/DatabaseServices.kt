@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.utilities.CUSTOMER_INFO_TABLE
+import com.example.offersatyoursteps.utilities.DELETED_PRODUCT_INFO_TABLE
 import com.example.offersatyoursteps.utilities.PRODUCT_INFO_SUB_COLLECTION_TABLE
 import com.example.offersatyoursteps.utilities.PRODUCT_INFO_TABLE
 import com.google.firebase.firestore.FieldValue
@@ -204,8 +205,18 @@ object DatabaseServices {
                 complete(true)
             }
             .addOnFailureListener {
-                Log.d("DEBUG", it.localizedMessage)
+                Log.d("DEBUG", it.localizedMessage.toString())
                 complete(false)
+            }
+        
+        fStore.collection(DELETED_PRODUCT_INFO_TABLE)
+            .document(documentId)
+            .set(mapOf("userId" to userId, "deleteTimestamp" to FieldValue.serverTimestamp()))
+            .addOnSuccessListener {
+                Log.d("DEBUG", "Delete tracker updated successfully")
+            }
+            .addOnFailureListener {
+                Log.d("DEBUG", it.localizedMessage.toString())
             }
     }
     
