@@ -183,21 +183,41 @@ class EditOfferPageFragment : Fragment() {
             }
             
         }
+    
+        productDiscountPrice.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                if (productActualPrice.text.toString().isNotEmpty()) {
+                    if (productDiscountPrice.text.toString().isNotEmpty()) {
+                        val actualPrice = productActualPrice.text.toString().toFloat()
+                        val discountPrice = productDiscountPrice.text.toString().toFloat()
+                    
+                        if (discountPrice <= actualPrice) {
+                        
+                            productDiscountPercentage.text = calculatePercentate(
+                                actualPrice,
+                                discountPrice
+                            )
+                        } else {
+                            productDiscountPrice.text.clear()
+                            Toast.makeText(
+                                activity,
+                                "Discount price should be less than or equal to actual price",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    
+                    } else {
+                        productDiscountPrice.setSelection(productDiscountPrice.text.length)
+                        Toast.makeText(
+                            activity,
+                            "Please update the discount price",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+        }
 
-//        productDiscountPrice.setOnFocusChangeListener { _, hasFocus ->
-//            if(!hasFocus){
-//                if (productActualPrice.text.toString()
-//                        .isNotEmpty() && productActualPrice.text.toString().isNotEmpty()
-//                ) {
-//                    productDiscountPercentage.text = calculatePercentate(
-//                        productActualPrice.text.toString(),
-//                        productDiscountPrice.text.toString()
-//                    )
-//                } else{
-//                    Toast.makeText(activity, "please fill actual price and discount price", Toast.LENGTH_LONG).show()
-//                }
-//            }
-//        }
         
         offerStartDate.setOnClickListener {
             val yesterday = Calendar.getInstance().timeInMillis - 86400000
@@ -217,14 +237,6 @@ class EditOfferPageFragment : Fragment() {
             }
             datePicker.show(requireActivity().supportFragmentManager, "date-picker")
             
-            if (productActualPrice.text.toString()
-                    .isNotEmpty() && productActualPrice.text.toString().isNotEmpty()
-            ) {
-                productDiscountPercentage.text = calculatePercentate(
-                    productActualPrice.text.toString(),
-                    productDiscountPrice.text.toString()
-                )
-            }
         }
         
         offerEndDate.setOnClickListener {
@@ -348,9 +360,6 @@ class EditOfferPageFragment : Fragment() {
                                 "Unable to update product now, please try again later",
                                 Toast.LENGTH_LONG
                             ).show()
-//                            enableSpinner(false)
-//                            requireActivity().supportFragmentManager.popBackStack("EditOffer", 0)
-                        
                         }
                         enableSpinner(false)
                         requireActivity().supportFragmentManager.popBackStack("EditOffer", 0)
@@ -499,11 +508,11 @@ class EditOfferPageFragment : Fragment() {
         
     }
     
-    fun calculatePercentate(actPrice : String, discPric : String) : String {
-        val actualPrice : Float = actPrice.toFloat()
-        val discountPrice : Float = discPric.toFloat()
+   
+    private fun calculatePercentate(actPrice : Float, discPric : Float) : String {
+
         val discPercentage : Int =
-            (((actualPrice - discountPrice) / actualPrice) * 100).roundToInt()
+            (((actPrice - discPric) / actPrice) * 100).roundToInt()
         return "${discPercentage}%"
         
     }

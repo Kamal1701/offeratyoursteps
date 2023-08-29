@@ -186,15 +186,15 @@ class AddOfferFragment : Fragment() {
                 offerStartDate.setText(formattedDate)
             }
             datePicker.show(requireActivity().supportFragmentManager, "date-picker")
-            
-            if (productActualPrice.text.toString()
-                    .isNotEmpty() && productActualPrice.text.toString().isNotEmpty()
-            ) {
-                productDiscountPercentage.text = calculatePercentate(
-                    productActualPrice.text.toString(),
-                    productDiscountPrice.text.toString()
-                )
-            }
+
+//            if (productActualPrice.text.toString()
+//                    .isNotEmpty() && productActualPrice.text.toString().isNotEmpty()
+//            ) {
+//                productDiscountPercentage.text = calculatePercentate(
+//                    productActualPrice.text.toString(),
+//                    productDiscountPrice.text.toString()
+//                )
+//            }
         }
         
         offerEndDate.setOnClickListener {
@@ -216,11 +216,43 @@ class AddOfferFragment : Fragment() {
             datePicker.show(requireActivity().supportFragmentManager, "date-picker")
         }
         
+        productDiscountPrice.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                if (productActualPrice.text.toString().isNotEmpty()) {
+                    if (productDiscountPrice.text.toString().isNotEmpty()) {
+                        val actualPrice = productActualPrice.text.toString().toFloat()
+                        val discountPrice = productDiscountPrice.text.toString().toFloat()
+                        
+                        if (discountPrice <= actualPrice) {
+                            
+                            productDiscountPercentage.text = calculatePercentate(
+                                actualPrice,
+                                discountPrice
+                            )
+                        } else {
+                            productDiscountPrice.text.clear()
+                            Toast.makeText(
+                                activity,
+                                "Discount price should be less than or equal to actual price",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        
+                    } else {
+//                        productDiscountPrice.requestFocus()
+                        productDiscountPrice.setSelection(productDiscountPrice.text.length)
+                        Toast.makeText(
+                            activity,
+                            "Please update the discount price",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+        }
         
         addProductBtn.setOnClickListener {
-//            progressBar.visibility = View.VISIBLE
-//            addProductBtn.visibility = View.INVISIBLE
-//            cancelProductBtn.visibility = View.INVISIBLE
+
             enableSpinner(true)
             
             val prodImage = productImage.tag.toString()
@@ -349,17 +381,14 @@ class AddOfferFragment : Fragment() {
                             ).show()
                             enableSpinner(false)
                         }
-//                        enableSpinner(false)
                     }
                 } else {
                     enableSpinner(false)
-                    Toast.makeText(activity, "Please upload the product image", Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, "Please upload the product image", Toast.LENGTH_LONG)
+                        .show()
                 }
             } else {
                 enableSpinner(false)
-//                progressBar.visibility = View.INVISIBLE
-//                addProductBtn.visibility = View.VISIBLE
-//                cancelProductBtn.visibility = View.VISIBLE
                 Toast.makeText(activity, "Please fill all the fields", Toast.LENGTH_LONG).show()
             }
             
@@ -414,11 +443,11 @@ class AddOfferFragment : Fragment() {
         backPressedCallback.remove()
     }
     
-    private fun calculatePercentate(actPrice : String, discPric : String) : String {
-        val actualPrice : Float = actPrice.toFloat()
-        val discountPrice : Float = discPric.toFloat()
+    private fun calculatePercentate(actPrice : Float, discPric : Float) : String {
+//        val actualPrice : Float = actPrice.toFloat()
+//        val discountPrice : Float = discPric.toFloat()
         val discPercentage : Int =
-            (((actualPrice - discountPrice) / actualPrice) * 100).roundToInt()
+            (((actPrice - discPric) / actPrice) * 100).roundToInt()
         return "${discPercentage}%"
         
     }
