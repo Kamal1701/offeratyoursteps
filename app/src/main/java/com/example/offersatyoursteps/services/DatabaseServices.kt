@@ -9,9 +9,12 @@ import com.example.offersatyoursteps.utilities.CUSTOMER_DETAIL_TABLE
 import com.example.offersatyoursteps.utilities.DELETED_PRODUCT_INFO_TABLE
 import com.example.offersatyoursteps.utilities.OFFER_PRODUCT_DETAIL_TABLE
 import com.example.offersatyoursteps.utilities.PRODUCT_DETAIL_TABLE
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -24,6 +27,8 @@ object DatabaseServices {
     private var fStore : FirebaseFirestore
         get() = FirebaseFirestore.getInstance()
         set(value) = TODO()
+    
+    private var storageRef = Firebase.storage
     
     
     fun createCustomerInfoRecord(
@@ -216,6 +221,27 @@ object DatabaseServices {
             }
     }
     
+    fun deleteProductImage(userId:String, imgUrl : String, complete : (Boolean) -> Unit){
+        
+        val imgRef = storageRef.getReferenceFromUrl(imgUrl)
+        val user = FirebaseAuth.getInstance().currentUser
+        println("deleteProductImage")
+        println(imgRef)
+        
+        if(user?.uid == userId) {
+            imgRef.delete()
+                .addOnSuccessListener {
+                    println("image deleted")
+                    Log.d("DEBUG", "Image reference deleted")
+                    complete(true)
+                }
+                .addOnFailureListener {
+                    Log.d("EXEC", it.localizedMessage.toString())
+                    complete(false)
+                }
+        }
+    }
+    
     @RequiresApi(Build.VERSION_CODES.O)
     fun getLocationProductDetails(
         productList : MutableList<OfferProductDetails>,
@@ -323,7 +349,6 @@ object DatabaseServices {
                     complete(false)
                 }
         }
-        
     }
     
     fun getProductDetailByUserId(

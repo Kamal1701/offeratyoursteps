@@ -398,17 +398,32 @@ class EditOfferPageFragment : Fragment() {
             val userId = FirebaseAuth.getInstance().currentUser!!.uid
             DatabaseServices.deleteProductDetails(
                 userId,
-                offerProductDetails.docId.toString(), offerProductDetails.productName
+                offerProductDetails.docId.toString(),
+                offerProductDetails.productName
             ) { isDeleteSuccess ->
                 if (isDeleteSuccess) {
-//                    clearProducts()
-                    Toast.makeText(
-                        activity,
-                        "Product deleted successfully",
-                        Toast.LENGTH_LONG
-                    )
-                        .show()
-                    requireActivity().supportFragmentManager.popBackStack("EditOffer", 0)
+                    if(offerProductDetails.isImageAvailable){
+                        DatabaseServices
+                            .deleteProductImage(userId,offerProductDetails.productImgName){isImgDeleted ->
+                            if(isImgDeleted){
+                                Toast.makeText(
+                                    activity,
+                                    "Product deleted successfully",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                                requireActivity().supportFragmentManager.popBackStack("EditOffer", 0)
+                            }
+                        }
+                    }else{
+                        Toast.makeText(
+                            activity,
+                            "Product deleted successfully",
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                        requireActivity().supportFragmentManager.popBackStack("EditOffer", 0)
+                    }
                 } else {
                     Toast.makeText(
                         activity,
@@ -416,6 +431,7 @@ class EditOfferPageFragment : Fragment() {
                         Toast.LENGTH_LONG
                     )
                         .show()
+                    requireActivity().supportFragmentManager.popBackStack("EditOffer", 0)
                 }
             }
             

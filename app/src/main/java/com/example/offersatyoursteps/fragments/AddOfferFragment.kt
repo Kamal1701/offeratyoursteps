@@ -338,9 +338,6 @@ class AddOfferFragment : Fragment() {
                                 "Offer Product added successfully",
                                 Toast.LENGTH_LONG
                             ).show()
-                            progressBar.visibility = View.INVISIBLE
-                            addProductBtn.visibility = View.VISIBLE
-                            cancelProductBtn.visibility = View.VISIBLE
                             clearProducts()
                             enableSpinner(false)
                             
