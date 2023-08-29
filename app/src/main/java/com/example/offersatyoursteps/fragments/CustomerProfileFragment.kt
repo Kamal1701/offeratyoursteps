@@ -46,7 +46,6 @@ class CustomerProfileFragment : Fragment() {
     private lateinit var mAuth : FirebaseAuth
     
     private var userModel = UserModel("", "", "", "", "", "", "", "", "")
-    
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {

@@ -20,7 +20,6 @@ import com.example.offersatyoursteps.activities.LoginActivity
 import com.example.offersatyoursteps.databinding.FragmentMerchantRegisterBinding
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
-import com.example.offersatyoursteps.utilities.CUSTOMER_INFO_TABLE
 import com.example.offersatyoursteps.utilities.SetTextColorSpan
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult

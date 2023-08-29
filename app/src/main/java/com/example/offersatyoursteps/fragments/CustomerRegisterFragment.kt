@@ -13,16 +13,12 @@ import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.FragmentManager
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.activities.LoginActivity
 import com.example.offersatyoursteps.databinding.FragmentCustomerRegisterBinding
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
-import com.example.offersatyoursteps.utilities.CUSTOMER_INFO_TABLE
 import com.example.offersatyoursteps.utilities.SetTextColorSpan
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult

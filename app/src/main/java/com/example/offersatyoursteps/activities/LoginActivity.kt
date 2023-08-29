@@ -23,30 +23,15 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcher
-import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.utilities.SetTextColorSpan
 import com.example.offersatyoursteps.databinding.ActivityLoginBinding
-import com.example.offersatyoursteps.fragments.OfferNearMeFragment
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
-import com.example.offersatyoursteps.utilities.CUSTOMER_INFO_TABLE
 import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
+
 
 class LoginActivity : AppCompatActivity() {
     

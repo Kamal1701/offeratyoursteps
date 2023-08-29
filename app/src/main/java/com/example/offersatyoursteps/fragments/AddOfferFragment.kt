@@ -28,18 +28,13 @@ import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.ADD_PRODUCT_TITLE
 import com.example.offersatyoursteps.utilities.FIREBASE_IMAGE_LOCATION
-import com.example.offersatyoursteps.utilities.PRODUCT_INFO_TABLE
-import com.example.offersatyoursteps.utilities.PastDateValidator
 import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.CalendarConstraints.DateValidator
-import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -292,9 +287,10 @@ class AddOfferFragment : Fragment() {
                                                 "Offer Product added successfully",
                                                 Toast.LENGTH_LONG
                                             ).show()
-                                            progressBar.visibility = View.INVISIBLE
-                                            addProductBtn.visibility = View.VISIBLE
-                                            cancelProductBtn.visibility = View.VISIBLE
+//                                            progressBar.visibility = View.INVISIBLE
+//                                            addProductBtn.visibility = View.VISIBLE
+//                                            cancelProductBtn.visibility = View.VISIBLE
+                                            enableSpinner(false)
                                             clearProducts()
                                             
                                         } else {
@@ -303,6 +299,7 @@ class AddOfferFragment : Fragment() {
                                                 "Unable to add product now, please try again",
                                                 Toast.LENGTH_LONG
                                             ).show()
+                                            enableSpinner(false)
                                         }
                                     }
                                 }

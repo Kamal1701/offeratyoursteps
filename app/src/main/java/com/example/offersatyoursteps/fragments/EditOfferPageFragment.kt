@@ -29,7 +29,6 @@ import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.EDIT_PRODUCT_TITLE
 import com.example.offersatyoursteps.utilities.EXTRA_PRODUCT
 import com.example.offersatyoursteps.utilities.FIREBASE_IMAGE_LOCATION
-import com.example.offersatyoursteps.utilities.PRODUCT_INFO_TABLE
 import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
@@ -399,7 +398,7 @@ class EditOfferPageFragment : Fragment() {
             val userId = FirebaseAuth.getInstance().currentUser!!.uid
             DatabaseServices.deleteProductDetails(
                 userId,
-                offerProductDetails.docId.toString()
+                offerProductDetails.docId.toString(), offerProductDetails.productName
             ) { isDeleteSuccess ->
                 if (isDeleteSuccess) {
 //                    clearProducts()

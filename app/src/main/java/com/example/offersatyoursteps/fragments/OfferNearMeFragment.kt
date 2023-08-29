@@ -2,6 +2,7 @@ package com.example.offersatyoursteps.fragments
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,9 +12,11 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.commit
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.offersatyoursteps.R
 import com.example.offersatyoursteps.adapters.OfferAdapter
 import com.example.offersatyoursteps.databinding.FragmentOfferNearMeBinding
@@ -21,7 +24,6 @@ import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.OFFER_NEAR_ME_TITLE
-import com.example.offersatyoursteps.utilities.PRODUCT_INFO_TABLE
 import com.example.offersatyoursteps.utilities.SPAN_COUNT
 import com.example.offersatyoursteps.utilities.USER_INFO
 
@@ -77,6 +79,7 @@ class OfferNearMeFragment : Fragment() {
             }
     }
     
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     
@@ -106,8 +109,14 @@ class OfferNearMeFragment : Fragment() {
                         noOffersToday.visibility = View.INVISIBLE
                     }
                 }
+                recProgressBar.visibility = View.INVISIBLE
             } else {
                 recProgressBar.visibility = View.INVISIBLE
+                if(productList.isEmpty()){
+                    noOffersToday.visibility = View.VISIBLE
+                } else {
+                    noOffersToday.visibility = View.INVISIBLE
+                }
                 Log.d("DEBUG", "OfferNearMe - no record returned")
             }
         }

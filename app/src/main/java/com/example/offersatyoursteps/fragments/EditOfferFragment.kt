@@ -19,7 +19,6 @@ import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.EDIT_OFFER_PRODUCT
-import com.example.offersatyoursteps.utilities.PRODUCT_INFO_TABLE
 import com.example.offersatyoursteps.utilities.USER_INFO
 import com.google.firebase.auth.FirebaseAuth
 

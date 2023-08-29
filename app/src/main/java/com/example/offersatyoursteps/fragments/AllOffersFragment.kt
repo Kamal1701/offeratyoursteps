@@ -21,8 +21,6 @@ import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
 import com.example.offersatyoursteps.services.DatabaseServices
 import com.example.offersatyoursteps.utilities.All_OFFERS_TITLE
-import com.example.offersatyoursteps.utilities.PRODUCT_DETAIL_TITLE
-import com.example.offersatyoursteps.utilities.PRODUCT_INFO_TABLE
 import com.example.offersatyoursteps.utilities.SPAN_COUNT
 import com.example.offersatyoursteps.utilities.USER_INFO
 
@@ -99,6 +97,11 @@ class AllOffersFragment : Fragment() {
                 }
             } else {
                 recProgressBar.visibility = View.INVISIBLE
+                if(productList.isEmpty()){
+                    noOfferToday.visibility = View.VISIBLE
+                } else {
+                    noOfferToday.visibility = View.INVISIBLE
+                }
                 Log.d("DEBUG", "OfferNearMe - no record returned")
             }
         }

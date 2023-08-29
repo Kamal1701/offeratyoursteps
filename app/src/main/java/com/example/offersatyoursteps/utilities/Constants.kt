@@ -16,14 +16,13 @@ const val PRODUCT_DETAIL_TITLE = "Product Description"
 const val EDIT_OFFER_PRODUCT = "Edit Product"
 const val EDIT_PRODUCT_TITLE = "Update Product"
 
-const val CUSTOMER_INFO_TABLE = "CustomerInfo"
-const val PRODUCT_INFO_TABLE = "Product_Details"
-const val DELETED_PRODUCT_INFO_TABLE = "snapshotDeletedProduct"
-const val PRODUCT_INFO_SUB_COLLECTION_TABLE = "OfferProductDetails"
+const val CUSTOMER_DETAIL_TABLE = "CustomerDetail"
+const val PRODUCT_DETAIL_TABLE = "ProductDetail"
+const val DELETED_PRODUCT_INFO_TABLE = "DeletedProductSnapshot"
+const val OFFER_PRODUCT_DETAIL_TABLE = "OfferProductDetail"
 
 const val RUPEE_SYMBOL = "\u20B9"
 
 const val SPAN_COUNT = 2
-
 const val PUSH_CHANNEL_ID = "notification_channel"
 const val PUSH_CHANNEL_NAME = "com.example.offersatyoursteps"

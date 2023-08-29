@@ -1,7 +1,9 @@
 package com.example.offersatyoursteps.models
 
+import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.annotation.RequiresApi
 import com.google.firebase.firestore.DocumentSnapshot
 
 data class UserModel constructor(var customerName:String?,
@@ -13,6 +15,7 @@ data class UserModel constructor(var customerName:String?,
                                  var customerDistrict:String?,
                                  var customerState:String?,
                                  var customerPincode:String?):Parcelable{
+    @RequiresApi(Build.VERSION_CODES.Q)
     constructor(parcel : Parcel) : this(
         parcel.readString(),
         parcel.readString(),
@@ -26,6 +29,7 @@ data class UserModel constructor(var customerName:String?,
     ) {
     }
     
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun writeToParcel(parcel : Parcel, flags : Int) {
         parcel.writeString(customerName)
         parcel.writeString(customerEmail)
@@ -43,6 +47,7 @@ data class UserModel constructor(var customerName:String?,
     }
     
     companion object CREATOR : Parcelable.Creator<UserModel> {
+        @RequiresApi(Build.VERSION_CODES.Q)
         override fun createFromParcel(parcel : Parcel) : UserModel {
             return UserModel(parcel)
         }

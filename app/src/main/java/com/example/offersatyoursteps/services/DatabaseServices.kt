@@ -5,22 +5,18 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.offersatyoursteps.models.OfferProductDetails
 import com.example.offersatyoursteps.models.UserModel
-import com.example.offersatyoursteps.utilities.CUSTOMER_INFO_TABLE
+import com.example.offersatyoursteps.utilities.CUSTOMER_DETAIL_TABLE
 import com.example.offersatyoursteps.utilities.DELETED_PRODUCT_INFO_TABLE
-import com.example.offersatyoursteps.utilities.PRODUCT_INFO_SUB_COLLECTION_TABLE
-import com.example.offersatyoursteps.utilities.PRODUCT_INFO_TABLE
+import com.example.offersatyoursteps.utilities.OFFER_PRODUCT_DETAIL_TABLE
+import com.example.offersatyoursteps.utilities.PRODUCT_DETAIL_TABLE
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.gson.Gson
-import com.google.type.DateTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.sql.Timestamp
-import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 object DatabaseServices {
@@ -40,16 +36,16 @@ object DatabaseServices {
         val custJson = gson.toJson(userModel)
         val userMap = gson.fromJson(custJson, Map::class.java) as Map<String, Any>
         
-        fStore.collection(CUSTOMER_INFO_TABLE).document(userId).set(userMap)
+        fStore.collection(CUSTOMER_DETAIL_TABLE).document(userId).set(userMap)
             .addOnSuccessListener {
                 complete(true)
             }
             .addOnFailureListener {
-                Log.d("DEBUG", it.localizedMessage)
+                Log.d("DEBUG", it.localizedMessage.toString())
                 complete(false)
             }
     
-        fStore.collection(CUSTOMER_INFO_TABLE)
+        fStore.collection(CUSTOMER_DETAIL_TABLE)
             .document(userId)
             .update(mapOf("createTimeStamp" to FieldValue.serverTimestamp(),
                 "updateTimeStamp" to FieldValue.serverTimestamp()))
@@ -69,7 +65,7 @@ object DatabaseServices {
         complete : (Boolean) -> Unit
     ) {
         
-        fStore.collection(CUSTOMER_INFO_TABLE).document(userId)
+        fStore.collection(CUSTOMER_DETAIL_TABLE).document(userId)
             .get().addOnSuccessListener { custDoc ->
                 if (custDoc != null) {
                     userModel.customerName = custDoc.get("customerName").toString()
@@ -102,7 +98,7 @@ object DatabaseServices {
         val custJson = gson.toJson(userModel)
         val custMap = gson.fromJson(custJson, Map::class.java) as Map<String, Any>
         
-        fStore.collection(CUSTOMER_INFO_TABLE).document(userId).update(custMap)
+        fStore.collection(CUSTOMER_DETAIL_TABLE).document(userId).update(custMap)
             .addOnSuccessListener {
                 complete(true)
             }
@@ -111,7 +107,7 @@ object DatabaseServices {
                 complete(false)
             }
     
-        fStore.collection(CUSTOMER_INFO_TABLE)
+        fStore.collection(CUSTOMER_DETAIL_TABLE)
             .document(userId)
             .update(mapOf("updateTimeStamp" to FieldValue.serverTimestamp()))
             .addOnSuccessListener {
@@ -137,17 +133,17 @@ object DatabaseServices {
         println("createproduct details")
         println(productMap)
         
-        fStore.collection(PRODUCT_INFO_TABLE)
+        fStore.collection(PRODUCT_DETAIL_TABLE)
             .document(userId).set(mapOf("_id" to userId))
         
-        val subcollectionDocId = fStore.collection(PRODUCT_INFO_TABLE)
+        val subcollectionDocId = fStore.collection(PRODUCT_DETAIL_TABLE)
             .document(userId)
-            .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
+            .collection(OFFER_PRODUCT_DETAIL_TABLE)
             .document().id
         
-        fStore.collection(PRODUCT_INFO_TABLE)
+        fStore.collection(PRODUCT_DETAIL_TABLE)
             .document(userId)
-            .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
+            .collection(OFFER_PRODUCT_DETAIL_TABLE)
             .document(subcollectionDocId)
             .set(productMap)
             .addOnSuccessListener {
@@ -158,9 +154,9 @@ object DatabaseServices {
                 complete(false)
             }
         
-        fStore.collection(PRODUCT_INFO_TABLE)
+        fStore.collection(PRODUCT_DETAIL_TABLE)
             .document(userId)
-            .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
+            .collection(OFFER_PRODUCT_DETAIL_TABLE)
             .document(subcollectionDocId)
             .update(mapOf("docId" to subcollectionDocId,
                 "createTimeStamp" to FieldValue.serverTimestamp(),
@@ -181,9 +177,9 @@ object DatabaseServices {
     ) {
     
         productMap["updateTimeStamp"] = FieldValue.serverTimestamp()
-        fStore.collection(PRODUCT_INFO_TABLE)
+        fStore.collection(PRODUCT_DETAIL_TABLE)
             .document(userId)
-            .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
+            .collection(OFFER_PRODUCT_DETAIL_TABLE)
             .document(productMap["docId"].toString())
             .update(productMap as Map<String, Any>)
             .addOnSuccessListener {
@@ -195,10 +191,10 @@ object DatabaseServices {
             }
     }
     
-    fun deleteProductDetails(userId : String, documentId : String, complete : (Boolean) -> Unit) {
-        fStore.collection(PRODUCT_INFO_TABLE)
+    fun deleteProductDetails(userId : String, documentId : String, productNm:String, complete : (Boolean) -> Unit) {
+        fStore.collection(PRODUCT_DETAIL_TABLE)
             .document(userId)
-            .collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
+            .collection(OFFER_PRODUCT_DETAIL_TABLE)
             .document(documentId)
             .delete()
             .addOnSuccessListener {
@@ -211,7 +207,7 @@ object DatabaseServices {
         
         fStore.collection(DELETED_PRODUCT_INFO_TABLE)
             .document(documentId)
-            .set(mapOf("userId" to userId, "deleteTimestamp" to FieldValue.serverTimestamp()))
+            .set(mapOf("userId" to userId, "deleteTimestamp" to FieldValue.serverTimestamp(), "productName" to productNm))
             .addOnSuccessListener {
                 Log.d("DEBUG", "Delete tracker updated successfully")
             }
@@ -227,31 +223,15 @@ object DatabaseServices {
         complete : (Boolean) -> Unit
     ) {
  
-        val parentCollectionRef = fStore.collection(PRODUCT_INFO_TABLE)
+        val parentCollectionRef = fStore.collection(PRODUCT_DETAIL_TABLE)
         GlobalScope.launch(Dispatchers.IO) {
             parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
                 if (!parentCollectionSnapshot.isEmpty) {
                     for (parentDoc in parentCollectionSnapshot.documents) {
-//                        val year = 2023
-//                        val month = 8
-//                        val day = 20
-//                        val hour = 12
-//                        val minute = 30
-//
-//                        val instant = Instant.ofEpochSecond(
-//                            LocalDateTime.of(year, month, day, hour, minute).toEpochSecond(java.time.ZoneOffset.UTC)
-//                        )
-//                        val minTimestamp = Timestamp.from(instant)
+
                         val sortedSubcollectionRef : Query =
-                            parentDoc.reference.collection(PRODUCT_INFO_SUB_COLLECTION_TABLE)
-//                                .whereGreaterThan("timeStamp",minTimestamp).orderBy("timeStamp", Query.Direction.DESCENDING)
+                            parentDoc.reference.collection(OFFER_PRODUCT_DETAIL_TABLE)
                                 .orderBy("updateTimeStamp", Query.Direction.DESCENDING)
-                                
-//                                .orderBy("shopCity")
-//                                .whereNotEqualTo("timeStamp",null)
-//                                .orderBy("timeStamp", Query.Direction.DESCENDING)
-    
-//                        val subcollectionRef : Query = sortedSubcollectionRef.whereEqualTo("shopCity", location)
     
                         sortedSubcollectionRef
                             .get().addOnSuccessListener { querySnapshot ->
@@ -298,14 +278,17 @@ object DatabaseServices {
         complete : (Boolean) -> Unit
     ) {
         
-        val parentCollectionRef = fStore.collection(PRODUCT_INFO_TABLE)
+        val parentCollectionRef = fStore.collection(PRODUCT_DETAIL_TABLE)
         GlobalScope.launch(Dispatchers.IO) {
             parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
                 if (!parentCollectionSnapshot.isEmpty) {
                     for (parentDoc in parentCollectionSnapshot.documents) {
+                        
                         val subcollectionRef =
-                            parentDoc.reference.collection(PRODUCT_INFO_SUB_COLLECTION_TABLE).orderBy("updateTimeStamp", Query.Direction.DESCENDING)
+                            parentDoc.reference.collection(OFFER_PRODUCT_DETAIL_TABLE)
+                                .orderBy("updateTimeStamp", Query.Direction.DESCENDING)
                         subcollectionRef
+//                            .orderBy("updateTimeStamp", Query.Direction.DESCENDING)
                             .get().addOnSuccessListener { querySnapshot ->
                                 if (!querySnapshot.isEmpty) {
                                     var prodCount = 0
@@ -349,11 +332,12 @@ object DatabaseServices {
         complete : (Boolean) -> Unit
     ) {
         
-        val parentCollectionRef = fStore.collection(PRODUCT_INFO_TABLE).document(userId)
+        val parentCollectionRef = fStore.collection(PRODUCT_DETAIL_TABLE).document(userId)
         GlobalScope.launch(Dispatchers.IO) {
             parentCollectionRef.get().addOnSuccessListener { parentCollectionSnapshot ->
                 val subcollectionRef : Query =
-                    parentCollectionSnapshot.reference.collection(PRODUCT_INFO_SUB_COLLECTION_TABLE).orderBy("updateTimeStamp", Query.Direction.DESCENDING)
+                    parentCollectionSnapshot.reference.collection(OFFER_PRODUCT_DETAIL_TABLE)
+                        .orderBy("updateTimeStamp", Query.Direction.DESCENDING)
                 subcollectionRef
                     .get().addOnSuccessListener { querySnapshot ->
                         if (!querySnapshot.isEmpty) {
@@ -392,4 +376,12 @@ object DatabaseServices {
         
         return compareDate >= 0
     }
+//
+//    private fun getRandomString(length:Int) : String{
+//        val charset = ('a'..'z') + ('A'..'Z')+('0'..'9')
+//
+//        return (1..length)
+//            .map { charset.random() }
+//            .joinToString("")
+//    }
 }
